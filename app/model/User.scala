@@ -5,6 +5,7 @@ import play.api.libs.Crypto
 import play.api.libs.json.{JsString, JsObject}
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import reactivemongo.api.QueryOpts
 
 /**
  * User object
@@ -45,7 +46,9 @@ object User{
     )
   }
 
-  def list(collection:JSONCollection , limit:Int , offset:Int) = {
-    collection.find()
+  def list(collection:JSONCollection , page:Int, item_per_page:Int , offset:Int) = {
+    val query = collection.find().options(QueryOpts((page-1)*item_per_page,item_per_page)).sort()
+    //filter password
+
   }
 }
