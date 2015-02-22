@@ -18,7 +18,7 @@ import scala.concurrent.Await
  * }
  */
 object User extends AbstractObject{
-  val KW_USERNAME = "name"
+  val KW_USERNAME = "username"
   val KW_PASSWORD = "pw"
 
   val collection_name = "user"
@@ -71,8 +71,7 @@ object User extends AbstractObject{
    * @param item_per_page
    * @return
    */
-  override def list(collection:JSONCollection , page:Int, item_per_page:Int):Seq[JsObject] = {
-    
+  override def list(collection:JSONCollection , page:Int, item_per_page:Int)(implicit query : JsValue):Seq[JsObject] = {
     //filter password field
     super.list(collection,page,item_per_page).map(_ - KW_PASSWORD)
   }

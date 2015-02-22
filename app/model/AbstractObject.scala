@@ -1,13 +1,16 @@
 package model
 
+import controllers.UserController._
 import error.MongodbException
 import org.joda.time.DateTime
-import play.api.libs.json.{JsUndefined, Json, JsObject}
+import play.api.libs.iteratee.Enumerator
+import play.api.libs.json._
 import play.modules.reactivemongo.json.BSONFormats
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits._
-import reactivemongo.api.QueryOpts
+import reactivemongo.api.{DefaultDB, QueryOpts}
 import reactivemongo.bson.{BSONObjectID, BSONDateTime}
+import reactivemongo.core.commands.Count
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -51,12 +54,30 @@ abstract class AbstractObject {
   }
 
   //List action
-  def list(collection:JSONCollection , page:Int, item_per_page:Int):Seq[JsObject] = {
-    Await.result(collection.find(Json.obj()).options(QueryOpts((page-1)*item_per_page,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT).map(_ - User.KW_PASSWORD)
+  def list(collection:JSONCollection , page:Int, item_per_page:Int)(implicit query:JsValue = Json.obj()):Seq[JsObject] = {
+    Await.result(collection.find(query).options(QueryOpts((page-1)*item_per_page,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT)
   }
 
   //Delete action
   def delete(collection:JSONCollection, id:String) = {
-    Await.result(collection.remove(Json.obj(KW_ID -> id)),MAX_WAIT)
+    Await.result(collection.remove(Json.obj(KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(id).get))),MAX_WAIT)
+  }
+
+  def bulkInsert(collection:JSONCollection , docs:Seq[JsValue]):Unit ={
+    //TODO: error handle
+    Await.result(collection.bulkInsert(Enumerator.enumerate(docs)),MAX_WAIT)
+  }
+
+  def bulkInsert(collection:JSONCollection , docs:JsArray):Unit ={
+    //TODO: error handle
+    bulkInsert(collection,docs.value)
+  }
+
+  def getCollection(db:DefaultDB):JSONCollection = {
+    db.collection[JSONCollection](collection_name)
+  }
+
+  def count(collection: JSONCollection)(implicit query:JsValue = Json.obj()):Int = {
+    Await.result(collection.db.command(Count(this.collection_name)),MAX_WAIT)
   }
 }

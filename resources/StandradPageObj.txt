@@ -1,0 +1,34 @@
+[
+    {
+        "title":"User Management",
+        "href":"#",
+        "acl":{},
+        "child":
+            [{
+                "title":"Create User",
+                "acl":{},
+                "href":"/user/create",
+                "child":[]
+            },
+            {
+                "title":"List User",
+                "acl":{},
+                "href":"/user",
+                "child":[]
+            }
+
+            ]
+    },
+    {
+            "title":"System",
+            "href":"#",
+            "acl":{},
+            "child":
+                [{
+                    "title":"Logout",
+                    "acl":{},
+                    "href":"/user/logout",
+                    "child":[]
+                }]
+        }
+]

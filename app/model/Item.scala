@@ -1,7 +1,18 @@
 package model
 
 /**
- * Created by fafa on 17/2/15.
+ * {
+ *    name:
+ *    tag:[]
+ *    items:[
+ *      {
+ *         serial:
+ *         comment : \\
+ *         owner : \\owner_id
+ *      }
+ *    ]
+ * }
+ *
  */
 object Item extends AbstractObject{
   override val collection_name: String = "item"
