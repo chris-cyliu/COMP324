@@ -1,7 +1,7 @@
 package controllers
 
 import common.{Util, MissRequestParam}
-import model.{Session, User}
+import model.{AbstractObject, Session, User}
 import play.api.libs.json.{JsArray, JsObject, JsString, Json}
 import play.api.mvc._
 import play.modules.reactivemongo.MongoController
@@ -10,8 +10,6 @@ import play.modules.reactivemongo.json.collection.JSONCollection
 import scala.concurrent.Future
 
 object UserController extends ResourceController{
-
-  val collection = User.getCollection(db)
 
   /**
    * Method: POST
@@ -39,10 +37,6 @@ object UserController extends ResourceController{
     Ok(views.html.layout("Create User",views.html.createUser()))
   }
 
-  def listAction:Action = {
-    implicit request:RequestHeader
-  }
-
   /**
    * Request:
    *  page  :
@@ -55,25 +49,8 @@ object UserController extends ResourceController{
    *  }
    * @return
    */
-  def listUser =Action{
-    implicit request =>
-      render {
-        case Accepts.Json() =>
-          val page = request.getQueryString("page").getOrElse("1").toInt
-          val itemNum = request.getQueryString("itemNum").getOrElse("20").toInt
-          Ok(Json.obj("data" -> JsArray(User.list(collection,page,itemNum)),
-                      "total_num" -> User.count(collection)))
-        case Accepts.Html() =>
-          Ok(views.html.layout("List User",views.html.listUser()))
-      }
-  }
-
-  override def list = Action{
-    implicit  request =>
-      render {
-        case Accepts.Json()=>
-
-      }
+  def listPage() = Action {
+    Ok(views.html.layout("List User",views.html.listUser()))
   }
   /**
    * Method : POST
@@ -101,4 +78,6 @@ object UserController extends ResourceController{
 
 
   def addGroup = ???
+
+  override val obj: AbstractObject = User
 }

@@ -6,6 +6,7 @@ package model
  *    name: //owner name
  *   }
  */
-object Owner extends AbstractObject{
-  override val collection_name: String = "owner"
+object Location extends AbstractObject{
+  override val collection_name: String = "location"
+
 }

@@ -80,4 +80,9 @@ abstract class AbstractObject {
   def count(collection: JSONCollection)(implicit query:JsValue = Json.obj()):Int = {
     Await.result(collection.db.command(Count(this.collection_name)),MAX_WAIT)
   }
+
+  def update(collection:JSONCollection,id:String , update:JsValue) = {
+    val id_obj = BSONFormats.toJSON(BSONObjectID.parse(id).get)
+    Await.result(collection.update(id_obj, update),MAX_WAIT)
+  }
 }

@@ -3,10 +3,14 @@ package model
 /**
  * Transfer log
  * {
- *    from:
- *    to:
- *    item:
+ *    from: location_id
+ *    to: location_id
+ *    items:[{
+ *      item_id:
+ *      serial:
+ *    }]
  *    date:
+ *    status: //pending,approved,denied
  * }
  */
 object Transfer extends AbstractObject {

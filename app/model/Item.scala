@@ -1,5 +1,7 @@
 package model
 
+import play.modules.reactivemongo.json.collection.JSONCollection
+
 /**
  * {
  *    name:
@@ -15,5 +17,10 @@ package model
  *
  */
 object Item extends AbstractObject{
+
   override val collection_name: String = "item"
+
+  def assign(collection:JSONCollection , item_id:String, serial_num:String , owner_id:String) = {
+
+  }
 }

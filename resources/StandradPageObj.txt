@@ -13,7 +13,7 @@
             {
                 "title":"List User",
                 "acl":{},
-                "href":"/user",
+                "href":"/user/listpage",
                 "child":[]
             }
 
