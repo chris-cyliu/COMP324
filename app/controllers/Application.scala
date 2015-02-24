@@ -10,5 +10,3 @@ object Application extends Controller {
   }
 
 }
-
-object Global extends GlobalSettings

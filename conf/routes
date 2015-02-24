@@ -3,10 +3,22 @@
 # ~~~~
 
 # Home page
-GET        /                    controllers.Application.index
-GET        /test          controllers.TestController.testCreateUser(data="{\"name\":\"test\",\"pw\":\"test\"}")
+GET           /                    controllers.SystemController.homepage()
+
+# User
+GET           /user           controllers.UserController.list()
+GET           /user/listpage       controllers.UserController.listPage()
+POST          /user/login          controllers.UserController.login()
+GET           /user/logout         controllers.UserController.logout()
+
+POST          /user/create         controllers.UserController.createUser()
+GET           /user/create         controllers.UserController.pageCreateUser()
+
+DELETE        /user/*id            controllers.UserController.remove(id)
+
+#System
+GET           /system/menu         controllers.SystemController.getMenu()
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.at(path="/public", file)
-
+GET           /assets/*file        controllers.Assets.at(path="/public", file)
     

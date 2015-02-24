@@ -1,18 +1,25 @@
 package model
 
-import error.MongodbException
 import play.api.libs.Crypto
-import play.api.libs.json.{JsString, JsObject}
+import play.api.libs.json._
 import play.modules.reactivemongo.json.collection.JSONCollection
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.concurrent.Execution.Implicits._
+
+import scala.concurrent.Await
 
 /**
- * User object
+ * User object standard structure
+ * {
+ *    _id:"mongodb object id"
+ *
+ *    password:
+ *    usename:
+ *    name:
+ * }
  */
-object User{
-  val KW_USERNAME = "name"
+object User extends AbstractObject{
+  val KW_USERNAME = "username"
   val KW_PASSWORD = "pw"
-  val KW_ID = "ObjectId"
 
   val collection_name = "user"
 
@@ -39,13 +46,42 @@ object User{
     in - User.KW_PASSWORD + (User.KW_PASSWORD -> JsString(Crypto.encryptAES(text)))
   }
 
-  def create(collection:JSONCollection , in:JsObject) = {
-    collection.insert(in).map(err =>
-      throw new MongodbException(err.toString)
-    )
+  /**
+   * Function to create new user
+   * @param collection
+   * @param in
+   * @return
+   */
+  override def create(collection:JSONCollection , in:JsObject) = {
+    //check user name whether it already exist or not
+    val username = in \ KW_USERNAME
+    if(Await.result(collection.find(Json.obj(KW_USERNAME -> username)).cursor[JsObject].collect[List](1),MAX_WAIT).size > 0)
+      throw new Exception(s"Duplicated user name $username")
+    
+    //encrypt password
+    val in_encrypt_pw = User.setPassword(in,(in \ User.KW_PASSWORD).as[JsString].value)
+
+    super.create(collection,in_encrypt_pw)
   }
 
-  def list(collection:JSONCollection , limit:Int , offset:Int) = {
-    collection.find()
+  /**
+   * Paginate list user
+   * @param collection
+   * @param page
+   * @param item_per_page
+   * @return
+   */
+  override def list(collection:JSONCollection , page:Int, item_per_page:Int)(implicit query : JsValue):Seq[JsObject] = {
+    //filter password field
+    super.list(collection,page,item_per_page).map(_ - KW_PASSWORD)
+  }
+
+  def login(collection:JSONCollection,username:String, password_plaintext:String): Option[JsObject] ={
+    val crypto_pw = Crypto.encryptAES(password_plaintext)
+    val ret = Await.result(collection.find(Json.obj("$and"->JsArray(Json.obj(KW_USERNAME->username)::Json.obj(KW_PASSWORD->crypto_pw)::Nil))).cursor[JsObject].collect[List](),MAX_WAIT)
+    if(ret.size == 0)
+      None
+    else
+      Some(ret(0))
   }
 }

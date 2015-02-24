@@ -1,0 +1,18 @@
+<form class="user_create">
+    <div class="input-group">
+        <input data-bind="value:username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group">
+        <input data-bind="value:pw" type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group">
+        <input data-bind="value:confirm" type="password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon1">
+    </div>
+    <button class="btn btn-primary" type="button" data-bind="click:createUser">Create</button>
+</form>
+
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new CreateUserViewModel(),$("form.user_create").get(0))
+    })
+</script>

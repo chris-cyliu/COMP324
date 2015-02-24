@@ -1,0 +1,4 @@
+Base path Setting
+    There is 2 base path setting. 1 for client and 1 for server
+    Server ; common.Util.basePath
+    Client : main.js _base_path
