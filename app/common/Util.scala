@@ -1,6 +1,7 @@
 package common
 
 import play.api.libs.json.{Json, JsObject}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Created by fafa on 20/2/15.
@@ -16,4 +17,10 @@ object Util {
   def getRedirectJsObj(path:String):JsObject={
     Json.obj("redirect"->path)
   }
+
+  val system_group_object =
+}
+
+object MongoUtil {
+  def connect
 }

@@ -48,11 +48,10 @@ object User extends AbstractObject{
 
   /**
    * Function to create new user
-   * @param collection
    * @param in
    * @return
    */
-  override def create(collection:JSONCollection , in:JsObject) = {
+  override def create( in:JsObject) = {
     //check user name whether it already exist or not
     val username = in \ KW_USERNAME
     if(Await.result(collection.find(Json.obj(KW_USERNAME -> username)).cursor[JsObject].collect[List](1),MAX_WAIT).size > 0)
@@ -61,22 +60,26 @@ object User extends AbstractObject{
     //encrypt password
     val in_encrypt_pw = User.setPassword(in,(in \ User.KW_PASSWORD).as[JsString].value)
 
-    super.create(collection,in_encrypt_pw)
+    //create Location object
+    val location = Json.obj(
+
+    )
+
+    super.create(in_encrypt_pw)
   }
 
   /**
    * Paginate list user
-   * @param collection
    * @param page
    * @param item_per_page
    * @return
    */
-  override def list(collection:JSONCollection , page:Int, item_per_page:Int)(implicit query : JsValue):Seq[JsObject] = {
+  override def list( page:Int, item_per_page:Int)(implicit query : JsValue):Seq[JsObject] = {
     //filter password field
-    super.list(collection,page,item_per_page).map(_ - KW_PASSWORD)
+    super.list(page,item_per_page).map(_ - KW_PASSWORD)
   }
 
-  def login(collection:JSONCollection,username:String, password_plaintext:String): Option[JsObject] ={
+  def login(username:String, password_plaintext:String): Option[JsObject] ={
     val crypto_pw = Crypto.encryptAES(password_plaintext)
     val ret = Await.result(collection.find(Json.obj("$and"->JsArray(Json.obj(KW_USERNAME->username)::Json.obj(KW_PASSWORD->crypto_pw)::Nil))).cursor[JsObject].collect[List](),MAX_WAIT)
     if(ret.size == 0)

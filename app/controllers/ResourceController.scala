@@ -4,7 +4,6 @@ import model.{User, AbstractObject}
 import play.api.libs.json.{JsArray, Json, JsObject}
 import play.api.mvc.{Result, Action, Controller}
 import play.modules.reactivemongo.MongoController
-import play.modules.reactivemongo.json.collection.JSONCollection
 
 /**
  * Created by fafa on 22/2/15.
@@ -17,18 +16,13 @@ abstract class ResourceController extends Controller with MongoController {
   val obj:AbstractObject
 
   /**
-   * Get mongo collection
-   */
-  lazy val collection:JSONCollection = obj.getCollection(db)
-
-  /**
    * Method : POST
    * Request Content Type : Json
    * @return
    */
   def create = Action(parse.json) {
     implicit request =>
-      val ret_obj = obj.create(collection,request.body.as[JsObject])
+      val ret_obj = obj.create(request.body.as[JsObject])
       var ret = Json.obj("success"->"","data"->ret_obj)
       Ok(ret)
   }
@@ -44,8 +38,8 @@ abstract class ResourceController extends Controller with MongoController {
     implicit request =>
       val page = request.getQueryString("page").getOrElse("1").toInt
       val itemNum = request.getQueryString("itemNum").getOrElse("1000000").toInt
-      Ok(Json.obj("data" -> JsArray(User.list(collection,page,itemNum)),
-        "total_num" -> User.count(collection)))
+      Ok(Json.obj("data" -> JsArray(obj.list(page,itemNum)),
+        "total_num" -> obj.count()))
   }
 
   /**
@@ -55,7 +49,7 @@ abstract class ResourceController extends Controller with MongoController {
    */
   def remove(id:String) = Action{
     implicit request =>
-      obj.delete(collection , id)
+      obj.delete(id)
       Ok("{\"success\":\"\"}")
   }
 

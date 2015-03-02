@@ -1,5 +1,6 @@
 package model
 
+import play.api.libs.json.{JsObject, JsValue}
 import play.modules.reactivemongo.json.collection.JSONCollection
 
 /**
@@ -20,7 +21,16 @@ object Item extends AbstractObject{
 
   override val collection_name: String = "item"
 
-  def assign(collection:JSONCollection , item_id:String, serial_num:String , owner_id:String) = {
+
+  def addSerial(item_id:String, serial_num:String,)
+  /**
+   * Assign location attr in the object
+   * Add Transfer log
+   * @param item_id
+   * @param serial_num
+   * @param owner_id
+   */
+  def assign(item_id:String, serial_num:String , location_id:String) = {
 
   }
 }

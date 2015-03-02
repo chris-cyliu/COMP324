@@ -1,13 +1,13 @@
 package model
 
-import controllers.UserController._
 import error.MongodbException
-import org.joda.time.DateTime
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json._
+import play.modules.reactivemongo.ReactiveMongoPlugin
 import play.modules.reactivemongo.json.BSONFormats
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits._
+import play.api.Play.current
 import reactivemongo.api.{DefaultDB, QueryOpts}
 import reactivemongo.bson.{BSONObjectID, BSONDateTime}
 import reactivemongo.core.commands.Count
@@ -28,12 +28,15 @@ abstract class AbstractObject {
   val KW_ID = "_id"
   val KW_UPDATED = "updated"
   val KW_CREATED = "created"
+  val KW_ACL = "acl"
   val MAX_WAIT = Duration(50000,MILLISECONDS)
 
   val collection_name:String
 
+  val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collection_name)
+
   //CU action of object
-  def create(collection:JSONCollection , in:JsObject) : JsObject = {
+  def create(in:JsObject) : JsObject = {
 
     //set time
     var save_object = in + (KW_UPDATED -> BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis())))
@@ -54,34 +57,30 @@ abstract class AbstractObject {
   }
 
   //List action
-  def list(collection:JSONCollection , page:Int, item_per_page:Int)(implicit query:JsValue = Json.obj()):Seq[JsObject] = {
+  def list(page:Int, item_per_page:Int)(implicit query:JsValue = Json.obj()):Seq[JsObject] = {
     Await.result(collection.find(query).options(QueryOpts((page-1)*item_per_page,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT)
   }
 
   //Delete action
-  def delete(collection:JSONCollection, id:String) = {
+  def delete(id:String) = {
     Await.result(collection.remove(Json.obj(KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(id).get))),MAX_WAIT)
   }
 
-  def bulkInsert(collection:JSONCollection , docs:Seq[JsValue]):Unit ={
+  def bulkInsert(docs:Seq[JsValue]):Unit ={
     //TODO: error handle
     Await.result(collection.bulkInsert(Enumerator.enumerate(docs)),MAX_WAIT)
   }
 
-  def bulkInsert(collection:JSONCollection , docs:JsArray):Unit ={
+  def bulkInsert(docs:JsArray):Unit ={
     //TODO: error handle
-    bulkInsert(collection,docs.value)
+    bulkInsert(docs.value)
   }
 
-  def getCollection(db:DefaultDB):JSONCollection = {
-    db.collection[JSONCollection](collection_name)
-  }
-
-  def count(collection: JSONCollection)(implicit query:JsValue = Json.obj()):Int = {
+  def count()(implicit query:JsValue = Json.obj()):Int = {
     Await.result(collection.db.command(Count(this.collection_name)),MAX_WAIT)
   }
 
-  def update(collection:JSONCollection,id:String , update:JsValue) = {
+  def update(id:String , update:JsValue) = {
     val id_obj = BSONFormats.toJSON(BSONObjectID.parse(id).get)
     Await.result(collection.update(id_obj, update),MAX_WAIT)
   }

@@ -12,7 +12,7 @@ import play.modules.reactivemongo.MongoController
 object SystemController extends Controller with MongoController{
 
   def getMenu = Action {
-    val menu_items = Page.list(Page.getCollection(db),1,Int.MaxValue)
+    val menu_items = Page.list(1,Int.MaxValue)
     Ok(Json.toJson(menu_items))
   }
 

@@ -29,7 +29,7 @@ object UserController extends ResourceController{
   def createUser = Action(parse.json){
     request =>
       val user_json = request.body.as[JsObject]
-      User.create(collection,user_json)
+      User.create(user_json)
       Ok("{\"success\":\"\"}")
   }
 
@@ -61,7 +61,7 @@ object UserController extends ResourceController{
     request =>
       val username  = (request.body \ ("username")).as[JsString].value
       val password = (request.body \ ("password")).as[JsString].value
-      User.login(collection,username,password) match {
+      User.login(username,password) match {
         case Some(e) =>
           //construct redirect
           Ok(Util.getRedirectJsObj(Util.homePagePath)).withSession(Session.KW_USER_OBJ -> e.toString)

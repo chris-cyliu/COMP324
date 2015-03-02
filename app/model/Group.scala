@@ -8,4 +8,8 @@ object Group extends AbstractObject{
 
   val KW_NAME = "name"
   val KW_MEMBER = "member"
+
+  def getSystemGroup(): Unit ={
+
+  }
 }

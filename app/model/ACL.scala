@@ -1,8 +1,13 @@
 package model
 
 /**
- * Created by Chris on 2/3/15.
+ * type : user , group
+ * id : may be user id , group id depends on type
+ * right: rw, r ,n(non)
  */
-class ACL {
+object ACL {
 
 }
+
+trait AclRight
+case class Write extends AclRight
