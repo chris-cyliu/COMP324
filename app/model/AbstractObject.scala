@@ -33,7 +33,7 @@ abstract class AbstractObject {
 
   val collection_name:String
 
-  val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collection_name)
+  lazy val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collection_name)
 
   //CU action of object
   def create(in:JsObject) : JsObject = {
@@ -82,6 +82,14 @@ abstract class AbstractObject {
 
   def update(id:String , update:JsValue) = {
     val id_obj = BSONFormats.toJSON(BSONObjectID.parse(id).get)
+    var nUpdate = update.as[JsObject]
+
+    //update "UPDATED" timestamp
+    nUpdate = nUpdate + (KW_UPDATED , BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis())))
     Await.result(collection.update(id_obj, update),MAX_WAIT)
+  }
+
+  def get(id:String):JsValue = {
+    this.list(1,1)(Json.obj(KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(id).get)))(0)
   }
 }

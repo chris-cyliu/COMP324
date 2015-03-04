@@ -20,6 +20,7 @@ import scala.concurrent.Await
 object User extends AbstractObject{
   val KW_USERNAME = "username"
   val KW_PASSWORD = "pw"
+  val KW_GROUP = "group"
 
   val collection_name = "user"
 

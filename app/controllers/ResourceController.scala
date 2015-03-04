@@ -56,8 +56,14 @@ abstract class ResourceController extends Controller with MongoController {
   /**
    * Method : PUT
    * Request Content Type : Json
+   *
    * @return
    */
-  def update = ???
+  def update(id:String) = Action(parse.json){
+    implicit request =>
+      val request_data = request.body.as[JsObject]
+      obj.update(id,request_data)
+      Ok("{\"success\":\"\"}")
+  }
 
 }

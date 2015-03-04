@@ -19,9 +19,9 @@ class CreatePageObject extends Specification {
   "User account create" should {
     "successfully inserted" in new WithApplication {
       val user_obj = Json.obj(User.KW_USERNAME -> "foo" , User.KW_PASSWORD -> "123456")
-      val user_collection = db.collection[JSONCollection](User.collection_name)
+      val user_collection = User.collection
 
-      User.create(user_collection , user_obj)
+      User.create(user_obj)
     }
   }
 }

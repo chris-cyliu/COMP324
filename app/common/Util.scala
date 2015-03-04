@@ -1,6 +1,6 @@
 package common
 
-import play.api.libs.json.{Json, JsObject}
+import play.api.libs.json.{JsValue, Json, JsObject}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -18,9 +18,29 @@ object Util {
     Json.obj("redirect"->path)
   }
 
-  val system_group_object =
-}
+  object Mongo{
+    def pushArray(field_name:String, push_data:JsValue):JsValue = {
+      Json.obj({
+        "$push" -> Json.obj(
+          field_name -> push_data
+        )
+      })
+    }
 
-object MongoUtil {
-  def connect
+    def setField(field_name:String, new_value:String):JsValue = {
+      Json.obj({
+        "$set" -> Json.obj(
+          field_name -> new_value
+        )
+      })
+    }
+
+    def setField(field_name:String, new_value:JsValue):JsValue = {
+      Json.obj({
+        "$set" -> Json.obj(
+          field_name -> new_value
+        )
+      })
+    }
+  }
 }
