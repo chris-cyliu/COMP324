@@ -1,6 +1,6 @@
 package common
 
-import play.api.libs.json.{JsValue, Json, JsObject}
+import play.api.libs.json._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -41,6 +41,15 @@ object Util {
           field_name -> new_value
         )
       })
+    }
+
+    def getSortObj(obj:Seq[(String,String)]):JsValue = {
+      var ret = Json.obj()
+      obj.foreach({ x =>
+        val dir = if(x._2 =="desc") -1 else 1
+        ret = ret + (x._1 , JsNumber(dir))
+      })
+      ret
     }
   }
 }

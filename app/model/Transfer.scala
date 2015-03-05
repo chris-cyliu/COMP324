@@ -36,10 +36,15 @@ object Transfer extends AbstractObject {
 
   val KW_DENIED = "denied"
 
-  def transfer(location_id:String, item_id:String, serial:String,status:String) = {
+  def transfer(from_location_id:Option[String], to_location_id:String, item_id:String, serial:String,status:String) = {
     val data = Json.obj(
-      KW_FROM ->JsNull,
-      KW_TO -> JsString(location_id),
+      KW_FROM -> (from_location_id match{
+        case Some(e) =>
+          JsString(e)
+        case None =>
+          JsNull
+      }),
+      KW_TO -> JsString(to_location_id),
       KW_ITEMS -> JsArray(
         Json.obj(
           KW_ITEMS_ID -> item_id,
@@ -49,7 +54,25 @@ object Transfer extends AbstractObject {
       KW_STATUS ->status
     )
 
-    this.create(data)
+    val location_obj = Location.get(to_location_id)
+    val to_user_ids = (location_obj \ Location.KW_PIC).as[JsArray].value.map(_.as[JsString].value)
+
+    //Create transfer record
+    val ret_transfer_obj = this.create(data)
+    val ret_transfer_obj_id = (ret_transfer_obj \ KW_ID).as[JsString].value
+
+    //get common link and attach in message
+    val base_url = common.Util.basePath
+    val transfer_url = common.Util.basePath + "/transfer/"+ ret_transfer_obj_id
+    //CREATE message
+    to_user_ids.foreach({user_id =>
+      Message.create(Json.obj(
+        Message.KW_FROM -> JsNull,
+        Message.KW_TO -> JsString(user_id) ,
+        Message.KW_MSG -> JsString("A new transfer is issued. Please refer to the link: <a href=\""+transfer_url+"\">"+transfer_url+"</a>")
+      ))
+    })
+
   }
 
   /**

@@ -47,7 +47,7 @@ object Item extends AbstractObject{
     this.update(item_id , updateOp)
 
     //add transfer history
-    Transfer.transfer(location_id ,item_id , serial, Transfer.KW_APPROVED)
+    Transfer.transfer(None,location_id ,item_id , serial, Transfer.KW_APPROVED)
   }
 
   /**
@@ -56,7 +56,7 @@ object Item extends AbstractObject{
    * @param item_id
    * @param serial
    */
-  def assign(item_id:String, serial:String , location_id:String) = {
-    Transfer.transfer(location_id ,item_id , serial, Transfer.KW_PENDING)
+  def assign(item_id:String, serial:String , location_id_from:String , location_id_to:String) = {
+    Transfer.transfer(Some(location_id_from), location_id_to ,item_id , serial, Transfer.KW_PENDING)
   }
 }

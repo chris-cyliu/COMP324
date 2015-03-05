@@ -1,7 +1,7 @@
 package controllers
 
 import model.{User, AbstractObject}
-import play.api.libs.json.{JsArray, Json, JsObject}
+import play.api.libs.json.{JsNull, JsArray, Json, JsObject}
 import play.api.mvc.{Result, Action, Controller}
 import play.modules.reactivemongo.MongoController
 
@@ -40,6 +40,29 @@ abstract class ResourceController extends Controller with MongoController {
       val itemNum = request.getQueryString("itemNum").getOrElse("1000000").toInt
       Ok(Json.obj("data" -> JsArray(obj.list(page,itemNum)),
         "total_num" -> obj.count()))
+  }
+
+  def listDataTable() = Action{
+    implicit request =>
+
+      request.queryString.keys
+      val draw = request.getQueryString("draw").getOrElse(throw new Exception("Missing parameter \"draw\"")).toInt
+      val start = request.getQueryString("start").getOrElse(throw new Exception("Missing parameter \"start\"")).toInt
+      val length= request.getQueryString("length").getOrElse(throw new Exception("Missing parameter \"length\"")).toInt
+
+      val search = request.queryString.get("search").getOrElse(None)
+      val order = request.queryString.get("order").getOrElse(None)
+      val column = request.queryString.get("column").getOrElse(None)
+
+      var totalCount = 0//obj.count()
+
+      val ret = Json.obj(
+        "draw" -> draw,
+        "recordTotal" ->totalCount,
+        "recordsFiltered" -> totalCount,
+        "data" -> JsNull
+      )
+      Ok(ret)
   }
 
   /**

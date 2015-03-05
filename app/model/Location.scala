@@ -4,6 +4,7 @@ package model
  * {
  *    type: //can be people, unit, ship
  *    name: //owner name
+ *    pic : [//list of user id]
  *   }
  */
 object Location extends AbstractObject{
@@ -13,5 +14,7 @@ object Location extends AbstractObject{
 
   //Can be user , unit, devision
   val kW_TYPE = "type"
+
+  val KW_PIC = "pic"
 
 }
