@@ -1,9 +1,3 @@
-/*
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
-*/
-
 body {
 	margin: 0px;
 	padding: 0px;
@@ -47,13 +41,13 @@ hr {
 
 #logo {
 	float: left;
-	padding: 30px 0 0 0;
+	padding: 20px 0 0 0;
 }
 
 #logo h1 {
 	margin: 0;
 	letter-spacing: -2px;
-	font-size: 2.2em;
+	font-size: 2.6em;
 	font-weight: normal;
 	color: #FFFFFF;
 }
@@ -93,7 +87,7 @@ hr {
 	float: left;
 	margin-left: 20px;
 	text-decoration: none;
-	font-size: 1.36em;
+	font-size: 1.66em;
 	color: #FFFFFF;
 }
 
@@ -118,6 +112,7 @@ hr {
 #content {
 	float: left;
 	width: 510px;
+	font-size:1.5em;
 }
 
 /* Post */
@@ -203,9 +198,14 @@ hr {
 	padding-left: 20px;
 	background: url(images/img04.gif) no-repeat left center;
 }
-
+#sidebar h3 {
+font-weight: 100; 
+color: #323232;
+font-size: 2.0em;
+}
 #sidebar a {
 	text-decoration: none;
+	font-size:1.8em;
 }
 
 #sidebar a:hover {
@@ -251,12 +251,13 @@ hr {
 
 #wrapper2 {
 	background: #FFFFFF url(images/img02.png) repeat-x;
+	height:142px;
 }
 
 #footer {
 	width: 778px;
 	margin: 0 auto;
-	padding-top: 30px;
+	padding-top: 70px;
 	color: #FFFFFF;
 }
 
@@ -308,7 +309,7 @@ hr {
 #legal {
 	clear: both;
 	margin: 0;
-	padding: 50px 0;
+	padding: 20px 0;
 	text-align: center;
 	color: #FFFFFF;
 }
