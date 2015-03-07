@@ -38,23 +38,23 @@
 	
 	<div id="container">
 		
-		<form action="home.html">
+		<form action="#">
+
+		<label for="username">Username:</label>
 		
-		<label for="name">Username:</label>
+		<input data-bind="value:username" type="name">
 		
-		<input type="name">
-		
-		<label for="username">Password:</label>
+		<label for="password">Password:</label>
 		
 		<p><a href="#">Forgot your password?</a>
 		
-		<input type="password">
+		<input data-bind="value:password" type="password">
 		
 		<div id="lower">
 		
 		<input type="checkbox"><label class="check" for="checkbox">Keep me logged in</label>
 		
-		<input type="submit" value="Login">
+		<input data-bind="click:login" type="submit" value="Login">
 		
 		</div>
 		
@@ -113,6 +113,16 @@
 </body>
 
 </html>
+
+<script src="/assets/js/jquery-1.11.2.min.js"></script>
+<script src="/assets/js/knockout-3.3.0.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new LoginViewModel())
+    })
+</script>
 	
 	
 	

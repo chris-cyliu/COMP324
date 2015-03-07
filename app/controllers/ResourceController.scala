@@ -1,5 +1,6 @@
 package controllers
 
+import common.ArrayQueryParam
 import model.{User, AbstractObject}
 import play.api.libs.json.{JsNull, JsArray, Json, JsObject}
 import play.api.mvc.{Result, Action, Controller}
@@ -36,31 +37,34 @@ abstract class ResourceController extends Controller with MongoController {
    */
   def list() = Action{
     implicit request =>
-      val page = request.getQueryString("page").getOrElse("1").toInt
-      val itemNum = request.getQueryString("itemNum").getOrElse("1000000").toInt
-      Ok(Json.obj("data" -> JsArray(obj.list(page,itemNum)),
-        "total_num" -> obj.count()))
+      Ok(Json.obj("data" -> JsArray(obj.list(0,Int.MaxValue))))
   }
 
+  /**
+   * Action for datatable
+   * @return
+   */
+  //TODO: handle datatable search function
   def listDataTable() = Action{
     implicit request =>
 
-      request.queryString.keys
       val draw = request.getQueryString("draw").getOrElse(throw new Exception("Missing parameter \"draw\"")).toInt
       val start = request.getQueryString("start").getOrElse(throw new Exception("Missing parameter \"start\"")).toInt
       val length= request.getQueryString("length").getOrElse(throw new Exception("Missing parameter \"length\"")).toInt
 
-      val search = request.queryString.get("search").getOrElse(None)
-      val order = request.queryString.get("order").getOrElse(None)
-      val column = request.queryString.get("column").getOrElse(None)
+      val search = ArrayQueryParam("search",request.queryString)
+      val order = ArrayQueryParam("order",request.queryString)
+      val column = ArrayQueryParam("columns",request.queryString)
 
       var totalCount = 0//obj.count()
+
+      val data = obj.list(start,length)
 
       val ret = Json.obj(
         "draw" -> draw,
         "recordTotal" ->totalCount,
         "recordsFiltered" -> totalCount,
-        "data" -> JsNull
+        "data" -> JsArray(data)
       )
       Ok(ret)
   }

@@ -57,8 +57,8 @@ abstract class AbstractObject {
   }
 
   //List action
-  def list(page:Int, item_per_page:Int)(implicit query:JsValue = Json.obj()):Seq[JsObject] = {
-    Await.result(collection.find(query).options(QueryOpts((page-1)*item_per_page,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT)
+  def list(offset:Int, item_per_page:Int)(implicit query:JsValue = Json.obj()):Seq[JsObject] = {
+    Await.result(collection.find(query).options(QueryOpts(offset,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT)
   }
 
   //Delete action
