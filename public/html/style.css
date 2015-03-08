@@ -146,3 +146,22 @@ table, th, td {
     border: 1px solid black;
 }
 
+#infotable {
+	overflow: auto;
+}
+.left-column {
+	width:200px;
+	text-align:center;
+	border:2px solid;
+	float : left;
+}
+.right-column {
+	width:480px;
+	text-align:center;
+	border:2px solid;
+	float : left;
+}
+.textfield {
+	height:50px;
+}
+
