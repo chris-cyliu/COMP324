@@ -152,16 +152,16 @@ table, th, td {
 .left-column {
 	width:200px;
 	text-align:center;
-	border:2px solid;
+
 	float : left;
 }
 .right-column {
 	width:480px;
 	text-align:center;
-	border:2px solid;
 	float : left;
 }
 .textfield {
-	height:50px;
+	width:480px;
+	height:70px;
 }
 
