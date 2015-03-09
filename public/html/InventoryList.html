@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Inventory Management System</title>
+</head>
+<body>
+
+<div id="wrap">
+
+<div id="header">
+	<div id="logo">
+		<h1><a href="#">Inventory Management System</a></h1>
+	</div>
+	<div id="menu">
+	
+		<ul>
+
+			<li><a href="home.html">Home</a></li>
+			<li><a href="Administration.html">User Management</a></li>
+			<li><a href="#">User Info.</a></li>
+			<li class="active"><a href="Inventory.html">Inventory</a></li>
+			<li><a href="#">Logout </a></li>
+		</ul>
+	</div>
+</div>
+
+<div id="contentwrap">
+
+<div id="content">
+
+<h2>Inventory List</h2>
+
+<p>Please tick the box that you list shown:</p>
+
+<form action="">
+<p><select>
+  <option value="">Please Choose the Location</option>
+  <option value="regional">Regional Store</option>
+  <option value="districts">Districts</option>
+   <option value="divisions">Divisions</option>
+   <option value="subunits">Subunits</option>
+   <option value="launches">Launches</option>
+   <option value="users">Users</option>
+</select></p>
+  <input type="checkbox" name="vehicle" value="Bike"> Lighting Equipment<br>
+  <input type="checkbox" name="vehicle" value="Car" checked> Weapon<br>
+  <input type="checkbox" name="vehicle" value="Car" checked> Rescue Equipment<br>
+  <input type="checkbox" name="vehicle" value="Car" checked> Bulletproof Equipment<br>
+  <input type="checkbox" name="vehicle" value="Car" checked> First Aid Kit<br>
+  <input type="checkbox" name="vehicle" value="Car" checked> All of them<br><br>
+  <input type="submit" value="Generate List">
+</form>
+
+<h2>User's Inventory List</h2>
+<p>
+	<table>
+  <tr>
+	<th>Purchase Date</th>
+    <th>Borrow Date</th>
+    <th>Inventory Location</th>
+	<th>Equipment Type</th>
+	<th>Equipment Name</th>
+	<th>Serial No.</th>
+	<th>Expected Lifespan</th>
+  </tr>
+  <tr>
+    <td>28-02-2008</td>
+    <td>10-04-2008</td>
+	<td>Marine East Division</td>
+	<td>Rescue Equipment</td>
+	<td>Life Jacket</td>
+	<td>J0015</td>
+	<td>5 years</td>
+  </tr>
+  <tr>
+    <td>25-09-2008</td>
+    <td>16-07-2008</td>
+	<td>Marine West Division</td>
+	<td>Lighting Equipment</td>
+	<td>Small Electric Torch</td>
+	<td>S0018</td>
+	<td>5 years</td>
+  </tr>
+</table>
+</p>
+<form action="">
+  <input type="submit" value="Print List">
+</form>
+</div>
+
+<div id="sidebar">
+<h3>Inventory</h3>
+<ul>
+<li><a href="ManageCategory.html">Manage Category </a></li>
+<li><a href="ManageItem.html">Manage Item </a></li>
+<li><a href="ManageLocation.html">Manage Location </a></li>
+<li><a href="AssignLocation.html">Assign Location </a></li>
+<li><a href="InventoryCheck.html">Inventory Check</a></li>
+<li><a href="EditInventory.html">Edit Inventory Information</a></li>
+<li><a href="MovementRecord.html">Movement Record</a></li>
+<li><a href="InventoryList.html">Generate Inventory List</a></li>
+</ul>
+
+
+</div>
+
+<div style="clear: both;"> </div>
+
+</div>
+
+</div>
+
+<div id="footer">
+</div>
+
+</body>
+</html>
+
