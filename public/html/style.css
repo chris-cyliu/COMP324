@@ -150,3 +150,10 @@ table, th, td {
     border: 1px solid black;
 	text-align: center;
 }
+
+.nav-tabs li a {
+	font-size:12px;
+}
+.tab-content {
+	font-size:12px;
+}

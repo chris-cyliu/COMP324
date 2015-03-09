@@ -5,10 +5,6 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="style.css"/>
-	<style type="text/css">
-		.nav-tabs li a {font-size:12px;}
-		.tab-content {font-size:12px;}
-	</style>
 	
     <title>Inventory Management System</title>
 </head>
@@ -42,8 +38,10 @@
 			<!-- BEGIN TABLE PORTLET-->
 				<div class="portlet">
 					<div class="portlet-body">
-						<div class="btn-group">
-							<button id="create">Create</button>
+						<div class="clearfix">
+						<div class="pull-right">
+							<button type="button" data-toggle="modal" data-target="#myModal">Create</button>
+						</div>
 						</div>
 						<table class="table table-bordered">
 							<thead>
@@ -132,23 +130,50 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1_1">
 							<!-- Begin Tab1 Form-->
-							<form action="" id="rightForm">
-								<p>Name: </p>
-								<p><input type="text" name="name" /></p>
-								<p>Position: </p>
-								<p><input type="text" name="position" /></p>
-								<p>Division: </p>
-								<p><input type="text" name="division" /></p>
-								<p>Subunit: </p>
-								<p><input type="text" name="subunit" /></p>
-								<p>Team: </p>
-								<p><input type="text" name="team" /></p>
-
-								<div class="modal-footer">
-									<button type="reset" class="btn">Reset</button>
-									<button type="submit" class="btn" name="tab1_form_submit">Save</button>
-								</div>
-							</form>
+							<div class="portlet-body">
+								<form action="" id="rightForm">
+									<div>
+										&nbsp;
+									</div>
+									<div>
+										<label>Name: </label>
+										<div>   
+											<input type="text" name="name" />
+										</div>
+									</div>
+									<div>
+										<label>Position: </label>
+										<div>   
+											<input type="text" name="position" />
+										</div>
+									</div>
+									<div>
+										<label>Division: </label>
+										<div>   
+											<input type="text" name="division" />
+										</div>
+									</div>
+									<div>
+										<label>Subunit: </label>
+										<div>   
+											<input type="text" name="subunit" />
+										</div>
+									</div>
+									<div>
+										<label>Team: </label>
+										<div>   
+											<input type="text" name="team" />
+										</div>
+									</div>
+									<div>
+										&nbsp;
+									</div>
+									<div class="modal-footer">
+										<button type="reset" class="btn">Reset</button>
+										<button type="submit" class="btn" name="tab1_form_submit">Save</button>
+									</div>
+								</form>
+							</div>
 							<!-- End Tab1 Form-->
 						</div>
 
