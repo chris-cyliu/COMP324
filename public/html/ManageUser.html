@@ -1,101 +1,94 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style.css" />
-<title>Inventory Management System</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <title>Inventory Management System</title>
 </head>
 <body>
 
-<script type="text/javascript">
-// Popup window code
-function newPopup() {
-	popupWindow = window.open(
-		"EditUser.html",'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
-
-		//popupWindow.document.write("<title>Inventory Management System</title><p>Category Name: <br><br> ");
-		//popupWindow.document.write("<input type=\"text\" name=\"type\" value=\"\"/> </p> <br> ");
-}
-</script>
-
-
 <div id="wrap">
 
-<div id="header">
-	<div id="logo">
-		<h1><a href="#">Inventory Management System</a></h1>
-	</div>
-	<div id="menu">
-	
-		<ul>
+    <div id="header">
+        <div id="logo">
+            <h1><a href="#">Inventory Management System</a></h1>
+        </div>
+        <div id="menu">
 
-			<li><a href="home.html">Home</a></li>
-			<li class="active"><a href="Administration.html">User Management</a></li>
-			<li><a href="#">User Info.</a></li>
-			<li><a href="Inventory.html">Inventory</a></li>
-			<li><a href="#">Logout </a></li>
-			
-		</ul>
-	</div>
-</div>
+            <ul>
 
-<div id="contentwrap">
+                <li><a href="home.html">Home</a></li>
+                <li class="active"><a href="Administration.html">User Management</a></li>
+                <li><a href="#">User Info.</a></li>
+                <li><a href="Inventory.html">Inventory</a></li>
+                <li><a href="#">Logout </a></li>
 
-<div id="content">
+            </ul>
+        </div>
+    </div>
 
-<h2>Manage Users</h2>
+    <div id="contentwrap">
 
-	<table>
-  <tr>
-	<th>Name</th>
-    <th>Position</th>
-    <th>Division</th>
-	<th>Subunit</th>
-	<th>Team</th>
-	<th>Access Right</th>
-	<th>Edit User Information</th>
-	<th>Delete</th>
-  </tr>
-  <tr>
-    <td>Chan Tai Man</td>
-    <td>Senior Police Constable</td>
-	<td>Marine East Division</td>
-	<td>IPSU</td>
-	<td>Team 1</td>
-	<td>General User</td>
-	<td><button type="button" onclick="newPopup()">Edit</button></td>
-	<td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
-  </tr>
-  <tr>
-    <td>Fong Siu Ming</td>
-    <td>West Division Divisional Commander</td>
-	<td>Marine West Division</td>
-	<td>/</td>
-	<td>/</td>
-	<td>Regional Supply Office Staff</td>
-	<td><button type="button" onclick="newPopup()">Edit</button></td>
-	<td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
-  </tr>
-</table>
+        <div id="content">
 
-</div>
+            <h2>Manage Users</h2>
 
-<div id="sidebar">
-<h3>User Management</h3>
-<ul>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Subunit</th>
+                    <th>Team</th>
+                    <th>Access Right</th>
+                    <th>Edit User Information</th>
+                    <th>Delete</th>
+                </tr>
+                <tr>
+                    <td>Chan Tai Man</td>
+                    <td>Senior Police Constable</td>
+                    <td>Marine East Division</td>
+                    <td>IPSU</td>
+                    <td>Team 1</td>
+                    <td>General User</td>
+                    <td>
+                        <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
+                    </td>
+                    <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
+                </tr>
+                <tr>
+                    <td>Fong Siu Ming</td>
+                    <td>West Division Divisional Commander</td>
+                    <td>Marine West Division</td>
+                    <td>/</td>
+                    <td>/</td>
+                    <td>Regional Supply Office Staff</td>
+                    <td>
+                        <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
+                    </td>
+                    <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
+                </tr>
+            </table>
 
-<li><a href="ManageUser.html">Manage Users </a></li>
-<li><a href="AssignUser.html">Assign Access Right to users in Division </a></li>
+        </div>
 
-</ul>
+        <div id="sidebar">
+            <h3>User Management</h3>
+            <ul>
+
+                <li><a href="ManageUser.html">Manage Users </a></li>
+                <li><a href="AssignUser.html">Assign Access Right to users in Division </a></li>
+
+            </ul>
 
 
-</div>
+        </div>
 
-<div style="clear: both;"> </div>
+        <div style="clear: both;"></div>
 
-</div>
+    </div>
 
 </div>
 
@@ -103,4 +96,53 @@ function newPopup() {
 </div>
 
 </body>
+
+<!-- Model -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="tabs">
+                <ul class="tab-links">
+                    <li class="active"><a href="#tab1">Basic Information</a></li>
+                    <li><a href="#tab2">User Group</a></li>
+                    <li><a href="#tab3">Access Right</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="tab1" class="tab active">
+                        <p>Basic Information</p>
+
+                        <p>Donec pulvinar neque sed semper lacinia. Curabitur lacinia ullamcorper nibh; quis imperdiet velit
+                            eleifend ac. Donec blandit mauris eget aliquet lacinia! Donec pulvinar massa interdum risus
+                            ornare mollis.</p>
+                    </div>
+
+                    <div id="tab2" class="tab">
+                        <p>User Group</p>
+
+                        <p>Donec pulvinar neque sed semper lacinia. Curabitur lacinia ullamcorper nibh; quis imperdiet velit
+                            eleifend ac. Donec blandit mauris eget aliquet lacinia! Donec pulvinar massa interdum risus
+                            ornare mollis. In hac habitasse platea dictumst. Ut euismod tempus hendrerit. Morbi ut
+                            adipiscing nisi. Etiam rutrum sodales gravida! Aliquam tellus orci, iaculis vel.</p>
+                    </div>
+
+                    <div id="tab3" class="tab">
+                        <p>Access Right</p>
+
+                        <p>Donec pulvinar neque sed semper lacinia. Curabitur lacinia ullamcorper nibh; quis imperdiet velit
+                            eleifend ac. Donec blandit mauris eget aliquet lacinia! Donec pulvinar massa interdum ri.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- !Model -->
+
 </html>
+
+<script src="../js/jquery-1.11.2.min.js"></script>
+<script src="../js/knockout-3.3.0.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/bootstrap.min.js"></script>
