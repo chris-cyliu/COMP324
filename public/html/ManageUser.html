@@ -5,7 +5,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="style.css"/>
-	
+
     <title>Inventory Management System</title>
 </head>
 <body>
@@ -17,15 +17,12 @@
             <h1><a href="#">Inventory Management System</a></h1>
         </div>
         <div id="menu">
-
             <ul>
-
                 <li><a href="home.html">Home</a></li>
                 <li class="active"><a href="Administration.html">User Management</a></li>
                 <li><a href="#">User Info.</a></li>
                 <li><a href="Inventory.html">Inventory</a></li>
                 <li><a href="#">Logout </a></li>
-
             </ul>
         </div>
     </div>
@@ -35,59 +32,59 @@
         <div id="content">
 
             <h2>Manage Users</h2>
-			<!-- BEGIN TABLE PORTLET-->
-				<div class="portlet">
-					<div class="portlet-body">
-						<div class="clearfix">
-						<div class="pull-right">
-							<button type="button" data-toggle="modal" data-target="#myModal">Create</button>
-						</div>
-						</div>
-						<table class="table table-bordered">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Position</th>
-									<th>Division</th>
-									<th>Subunit</th>
-									<th>Team</th>
-									<th>Access Right</th>
-									<th>Edit User Information</th>
-									<th>Delete</th>
-								</tr>
-							</thead>
+            <!-- BEGIN TABLE PORTLET-->
+            <div class="portlet">
+                <div class="portlet-body">
+                    <div class="clearfix">
+                        <div class="pull-right">
+                            <button type="button" data-toggle="modal" data-target="#myModal">Create</button>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Division</th>
+                            <th>Subunit</th>
+                            <th>Team</th>
+                            <th>Access Right</th>
+                            <th>Edit User Information</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
 
-							<tbody>
-								<tr>
-									<td>Chan Tai Man</td>
-									<td>Senior Police Constable</td>
-									<td>Marine East Division</td>
-									<td>IPSU</td>
-									<td>Team 1</td>
-									<td>General User</td>
-									<td>
-										<button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
-									</td>
-									<td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
-								</tr>
+                        <tbody>
+                        <tr>
+                            <td>Chan Tai Man</td>
+                            <td>Senior Police Constable</td>
+                            <td>Marine East Division</td>
+                            <td>IPSU</td>
+                            <td>Team 1</td>
+                            <td>General User</td>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
+                            </td>
+                            <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
+                        </tr>
 
-								<tr>
-									<td>Fong Siu Ming</td>
-									<td>West Division Divisional Commander</td>
-									<td>Marine West Division</td>
-									<td>/</td>
-									<td>/</td>
-									<td>Regional Supply Office Staff</td>
-									<td>
-										<button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
-									</td>
-									<td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			<!-- END TABLE PORTLET-->
+                        <tr>
+                            <td>Fong Siu Ming</td>
+                            <td>West Division Divisional Commander</td>
+                            <td>Marine West Division</td>
+                            <td>/</td>
+                            <td>/</td>
+                            <td>Regional Supply Office Staff</td>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
+                            </td>
+                            <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END TABLE PORTLET-->
 
         </div>
 
@@ -114,86 +111,73 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-				<h4 id="myModalLabel1">Edit User Info</h4>
-			</div>
-			
-			<div class="modal-body">
-				<div class="tabbable tabbable-custom">
-					<ul class="nav nav-tabs">
-						<li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
-						<li><a href="#tab_1_2" data-toggle="tab">User Group</a></li>
-						<li><a href="#tab_1_3" data-toggle="tab">Access Right</a></li>
-					</ul>
 
-					<div class="tab-content">
-						<div class="tab-pane active" id="tab_1_1">
-							<!-- Begin Tab1 Form-->
-							<div class="portlet-body">
-								<form action="" id="rightForm">
-									<div>
-										&nbsp;
-									</div>
-									<div>
-										<label>Name: </label>
-										<div>   
-											<input type="text" name="name" />
-										</div>
-									</div>
-									<div>
-										<label>Position: </label>
-										<div>   
-											<input type="text" name="position" />
-										</div>
-									</div>
-									<div>
-										<label>Division: </label>
-										<div>   
-											<input type="text" name="division" />
-										</div>
-									</div>
-									<div>
-										<label>Subunit: </label>
-										<div>   
-											<input type="text" name="subunit" />
-										</div>
-									</div>
-									<div>
-										<label>Team: </label>
-										<div>   
-											<input type="text" name="team" />
-										</div>
-									</div>
-									<div>
-										&nbsp;
-									</div>
-									<div class="modal-footer">
-										<button type="reset" class="btn">Reset</button>
-										<button type="submit" class="btn" name="tab1_form_submit">Save</button>
-									</div>
-								</form>
-							</div>
-							<!-- End Tab1 Form-->
-						</div>
+            <div class="modal-body">
+                <div class="tabbable tabbable-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
+                        <li><a href="#tab_1_2" data-toggle="tab">User Group</a></li>
+                        <li><a href="#tab_1_3" data-toggle="tab">Access Right</a></li>
+                    </ul>
 
-						<div class="tab-pane" id="tab_1_2">
-							<p>Howdy, I'm in Section 2.</p>
-							<p>
-								Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation.
-							</p>
-						</div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1_1">
+                            <!-- Begin Tab1 Form-->
+                            <div class="portlet-body">
+                                <form action="" id="rightForm">
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input type="text" class="form-control" name="name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="position">Position:</label>
+                                        <input type="text" class="form-control" name="position"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="division">Divison:</label>
+                                        <input type="text" class="form-control" name="division"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="subunit">Subunit:</label>
+                                        <input type="text" class="form-control" name="subunit"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="team">Team:</label>
+                                        <input type="text" class="form-control" name="team"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="reset" class="btn">Reset</button>
+                                        <button type="submit" class="btn" name="tab1_form_submit">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- End Tab1 Form-->
+                        </div>
 
-						<div class="tab-pane" id="tab_1_3">
-							<p>Howdy, I'm in Section 3.</p>
-							<p>
-								Duis autem vel eum iriure dolor in hendrerit in vulputate.
-								Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
+                        <div class="tab-pane" id="tab_1_2">
+                            <p>Howdy, I'm in Section 2.</p>
+
+                            <p>
+                                Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
+                                nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+                                vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud
+                                exerci tation.
+                            </p>
+                        </div>
+
+                        <div class="tab-pane" id="tab_1_3">
+                            <p>Howdy, I'm in Section 3.</p>
+
+                            <p>
+                                Duis autem vel eum iriure dolor in hendrerit in vulputate.
+                                Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
+                                nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+                                vulputate velit esse molestie consequat
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
