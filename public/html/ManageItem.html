@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+
+    <title>Inventory Management System</title>
+</head>
+<body>
+
+    <div id="header">
+        <div id="logo">
+            <h1><a href="#">Inventory Management System</a></h1>
+        </div>
+        <div id="menu">
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li class="active"><a href="Administration.html">User Management</a></li>
+                <li><a href="#">User Info.</a></li>
+                <li><a href="Inventory.html">Inventory</a></li>
+                <li><a href="#">Logout </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="content">
+
+        <h2>Manage Users</h2>
+        <!-- BEGIN TABLE PORTLET-->
+        <div class="portlet">
+            <div class="portlet-body">
+                <div class="clearfix">
+                    <div class="pull-right" style="margin-bottom: 10px">
+                        <button type="button" data-toggle="modal" data-target="#myModal">Create</button>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Division</th>
+                        <th>Subunit</th>
+                        <th>Team</th>
+                        <th>Access Right</th>
+                        <th>Edit User Information</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>Chan Tai Man</td>
+                        <td>Senior Police Constable</td>
+                        <td>Marine East Division</td>
+                        <td>IPSU</td>
+                        <td>Team 1</td>
+                        <td>General User</td>
+                        <td>
+                            <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
+                        </td>
+                        <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Fong Siu Ming</td>
+                        <td>West Division Divisional Commander</td>
+                        <td>Marine West Division</td>
+                        <td>/</td>
+                        <td>/</td>
+                        <td>Regional Supply Office Staff</td>
+                        <td>
+                            <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
+                        </td>
+                        <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END TABLE PORTLET-->
+
+    </div>
+
+    <div id="sidebar">
+        <h3>User Management</h3>
+        <ul>
+            <li><a href="ManageUser.html">Manage Users </a></li>
+            <li><a href="AssignUser.html">Assign Access Right to users in Division </a></li>
+        </ul>
+    </div>
+
+    <div style="clear: both;"></div>
+
+
+</body>
+
+<!-- Model -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="tabbable tabbable-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
+                        <li><a href="#tab_1_2" data-toggle="tab">User Group</a></li>
+                        <li><a href="#tab_1_3" data-toggle="tab">Access Right</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1_1">
+                            <!-- Begin Tab1 Form-->
+                            <div class="portlet-body">
+                                <form action="" id="rightForm">
+									<div style="width:200px;height:200px;background-color:red;float:right;">Image</div>
+                                    <div class="form-group"">
+                                        <label for="SerialNumber">Serial Number:</label>
+                                        <input type="text" class="form-control" name="SerialNumber" style="width:350px"/>
+										
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="EnglishName">EnglishName:</label>
+                                        <input type="text" class="form-control" name="EnglishName" style="width:350px"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ChineseName">中文名稱:</label>
+                                        <input type="text" class="form-control" name="ChineseName" style="width:350px"/>
+                                    </div>
+									
+                                    <div class="form-group">
+                                        <label for="Description">Description:</label>
+                                       <!-- Fail -->
+									   <!--<input type="text" class="form-control" name="Description"/>-->
+									   <textarea rows="5" cols="100" class="form-control"  name="Description"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="DateofPurchase">Date of Purchase:</label>
+                                        <input type="text" class="form-control" name="DateofPurchase"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="BeginServiceDate">Begin Service Date:</label>
+                                        <input type="text" class="form-control" name="BeginServiceDate"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="ExpectedLifespan">Expected Lifespan:</label>
+                                        <input type="text" class="form-control" name="ExpectedLifespan"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="DateofPurchase">Date of Purchase:</label>
+                                        <input type="text" class="form-control" name="DateofPurchase"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="Size">Size:</label>
+                                        <input type="text" class="form-control" name="Size"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="SizeChart">Size Chart:</label>
+                                        <input type="text" class="form-control" name="SizeChart"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="UserManual">User Manual:</label>
+                                        <input type="text" class="form-control" name="UserManual"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="ProductWebsite">Product Website</label>
+                                        <input type="text" class="form-control" name="ProductWebsite"/>
+                                    </div>
+									<div class="form-group">
+                                        <label for="ServingRequirements">Serving Requirements:</label>
+                                        <textarea rows="5" cols="100" class="form-control" name="ServingRequirements"/></textarea>
+                                    </div>
+									<div class="form-group">
+                                        <label for="MovementRecord">Movement Record:</label>
+                                        <textarea rows="5" cols="100" class="form-control" name="MovementRecord"></textarea>
+                                    </div>
+									<div class="form-group">
+                                        <label for="SafetyStandards">Safety Standards:</label>
+                                        <textarea rows="5" cols="100" class="form-control" name="SafetyStandards"></textarea>
+                                    </div>
+									<div class="form-group">
+                                        <label for="ScaleofIssue">Scale of Issue</label>
+                                        <textarea rows="5" cols="100" class="form-control" name="ScaleofIssue"></textarea>
+                                    </div>
+									<div class="form-group">
+                                        <label for="Remarks">Remarks</label>
+                                        <textarea rows="5" cols="100" class="form-control" name="Remarks"></textarea>
+                                    </div>									
+                                    <div class="modal-footer">
+                                        <button type="reset" class="btn">Reset</button>
+                                        <button type="submit" class="btn" name="tab1_form_submit">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- End Tab1 Form-->
+                        </div>
+
+                        <div class="tab-pane" id="tab_1_2">
+                            <p>Howdy, I'm in Section 2.</p>
+
+                            <p>
+                                Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
+                                nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+                                vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud
+                                exerci tation.
+                            </p>
+                        </div>
+
+                        <div class="tab-pane" id="tab_1_3">
+                            <p>Howdy, I'm in Section 3.</p>
+
+                            <p>
+                                Duis autem vel eum iriure dolor in hendrerit in vulputate.
+                                Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
+                                nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+                                vulputate velit esse molestie consequat
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- !Model -->
+
+</html>
+
+<script src="../js/jquery-1.11.2.min.js"></script>
+<script src="../js/knockout-3.3.0.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/bootstrap.min.js"></script>
