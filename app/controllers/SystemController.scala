@@ -22,9 +22,9 @@ object SystemController extends Controller with MongoController {
     request =>
       request.session.get(Session.KW_USER_OBJ) match {
         case None =>
-          Redirect(Util.loginPath)
+          Ok(views.html.login())
         case Some(e) =>
-          Redirect("/assets/html/home.html")
+          Ok(views.html.layout("Homepage",views.html.homepage()))
       }
   }
 }

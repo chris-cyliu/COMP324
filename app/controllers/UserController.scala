@@ -76,8 +76,10 @@ object UserController extends ResourceController{
 
   }
 
-
-  def addGroup = ???
+  def page = Action {
+    request =>
+      Ok(views.html.userManagement())
+  }
 
   override val obj: AbstractObject = User
 }
