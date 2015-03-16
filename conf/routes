@@ -3,30 +3,33 @@
 # ~~~~
 
 # Home page
-GET           /                        controllers.SystemController.homepage()
+GET           /                          controllers.SystemController.homepage()
 
 # User
-GET           /user                    controllers.UserController.list()
-GET           /user/datatable          controllers.UserController.listDataTable()
-POST          /user/login              controllers.UserController.login()
-GET           /user/logout             controllers.UserController.logout()
-GET           /user/page               controllers.UserController.page()
+GET           /user                      controllers.UserController.list()
+GET           /user/datatable            controllers.UserController.listDataTable()
+POST          /user/login                controllers.UserController.login()
+GET           /user/logout               controllers.UserController.logout()
+GET           /user/page                 controllers.UserController.page()
 
-POST          /user/create             controllers.UserController.createUser()
+POST          /user/create               controllers.UserController.createUser()
 
-DELETE        /user/*id                controllers.UserController.remove(id)
+DELETE        /user/*id                  controllers.UserController.remove(id)
 
 #System
-GET           /system/menu             controllers.SystemController.getMenu()
+GET           /system/menu               controllers.SystemController.getMenu()
 
 #Item
-GET           /item/borrow/page        controllers.ItemController.pageBorrowItem()
-GET           /item/page               controllers.ItemController.itemManage()
-GET           /item/register/page      controllers.ItemController.pageItemRegistration()
+GET           /item/borrow/page          controllers.ItemController.pageBorrowItem()
+GET           /item/page                 controllers.ItemController.itemManage()
+GET           /item/register/page        controllers.ItemController.pageItemRegistration()
+GET           /item/location/page        controllers.ItemController.pageLocation()
+GET           /item/receive/page         controllers.ItemController.pageReceiveItem()
+GET           /item/assign/page          controllers.ItemController.pageAssignItem()
 
 #Group
-GET           /group/page              controllers.GroupController.page
+GET           /group/page                controllers.GroupController.page
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file            controllers.Assets.at(path="/public", file)
+GET           /assets/*file              controllers.Assets.at(path="/public", file)
     

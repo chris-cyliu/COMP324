@@ -16,7 +16,7 @@
 
             </tr>
         </thead>
-        <tbody data-bind="template: { name: 'template_dt_user_row', foreach: userList }">
+        <tbody>
         </tbody>
     </table>
 </div>
@@ -142,15 +142,16 @@
 
 <script type="text/javascript">
 $(function(){
-    var datatable = $("#list_table").DataTable();
 
     //binding  table for listing user
-    var userList = new ListUserModelView();
-    ko.applyBindings(userList,$("#content_wrap").get(0));
-
-    //binding create user modal
-    ko.applyBindings(new CreateUserViewModel(),$("#createUserModal" ).get(0));
-userList.requestUserList();
+    var itemList = new ManageItemListModel($("#list_table" ).get(0));
+    ko.applyBindings(itemList,$("#content_wrap").get(0));
 
 })
 </script>
+
+    <style>
+        table img{
+            max-height:100px
+        }
+    </style>

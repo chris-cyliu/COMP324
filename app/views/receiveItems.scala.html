@@ -1,0 +1,36 @@
+<div id="wrapper_receive_item">
+    <h2>Receive item</h2>
+    <ul class="list-group">
+        <li class="list-group-item">From location:<span data-bind="text:from"></span></li>
+        <li class="list-group-item">To location:<span data-bind="text:to"></span></li>
+    </ul>
+    <table class="table" id="table_receive_item">
+        <thead>
+            <tr>
+                <th>Item name</th>
+                <th>Serial number</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-6 centered"><button class="btn btn-success">Received</button></div>
+        <div class="col-md-6 centered"><button class="btn btn-danger">Denied</button></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var data = {
+        from:"Inventory",
+        to:"Team A",
+        items:[{
+            name:"Life Jacket",
+            serial_num:"XD412443"
+        }]
+    }
+    $(function(){
+        ko.applyBindings(new ReceiveItemModel(data,$("#table_receive_item" ).get(0)),$("#wrapper_receive_item" ).get(0))
+    })
+</script>
+

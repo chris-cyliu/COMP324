@@ -25,11 +25,11 @@
     </script>
 
     <div class="row">
-        <div class="col-md-4"><input type="hidden" id="select_item" data-bind="value:request_new_item_id"></div>
-        <div class="col-md-4"><input type="text" name="name" value="1" data-bind="value:request_new_item_qty" a size="25" value="1"/></div>
-        <div class="col-md-4"><i data-bind="click:click_add" class="glyphicon glyphicon-ok"></i></div>
+        <div class="col-md-4"><input  type="hidden" id="select_item" data-bind="value:request_new_item_id"></div>
+        <div class="col-md-4"><input class="form-control" type="text" name="name" value="1" data-bind="value:request_new_item_qty" size="25" value="1"/></div>
+        <div class="col-md-4"><button class="btn btn-default" data-bind="click:click_add">Add Request Item</button></div>
     </div>
-    <p align="right"><input id ='confirm' type="button" onclick="show()" value="Confirm" ></p>
+    <p align="right"><input class="btn btn-success" id ='confirm' type="button" onclick="show()" value="Confirm" ></p>
 
 
 

@@ -247,11 +247,124 @@ var RequestItemModel = function(){
 
     this.click_add_request = function(){
         //ajax reqeust to server
+        //TODO : request borrow item
     }
 }
 
-var ManageItemList = function(tableDom){
+/**
+ * View model for item registration
+ * @constructor
+ */
+var ItemRegistrationModel = function(){
     var self = this;
 
-    self.tableDom = tableDom;
+    this.registration_items = ko.observableArray();
+
+    this.register_item_id = ko.observable();
+    this.register_serial_num = ko.observable();
+
+    this.getNewItemName = function(){
+        for(var x in items)
+            if(items[x].id == self.register_item_id())
+                return items[x].name;
+    }
+
+    this.click_add = function(){
+        self.registration_items.push({
+            id:self.register_item_id(),
+            name :self.getNewItemName(),
+            serial_num:self.register_serial_num()
+        });
+    }
+
+    this.click_add_request = function(){
+        //ajax reqeust to server
+        //TODO : request item registration
+    }
+}
+
+var ManageItemListModel = function(tableDOM){
+    var self = this;
+
+    self.dataTableObject = $(tableDOM).DataTable({
+        data:items,
+        columns:[
+            {"data":"image"},
+            {"data":"name"},
+            {"data":"description"}
+        ],
+        "aoColumnDefs": [
+            {
+                "mRender": function (data, type, row) {
+                    img_str = "<img src=\""+data+"\"/>";
+                    return img_str;
+                },
+                "aTargets":[ 0 ]
+            }
+        ]
+    });
+}
+
+var ManageLocationModel = function(tableDOM , create_location_type_DOM){
+    var self = this;
+
+    self.dataTableObject = $(tableDOM).DataTable({
+        data:locations,
+        columns:[
+            {"data":"name"},
+            {"data":"type"},
+            {"data":"description"}
+        ]
+    });
+
+    self.select_location = $(create_location_type_DOM).select2({
+        data:location_type,
+        width:"100%"
+    })
+}
+
+var ReceiveItemModel = function(data , item_table_DOM){
+    var self = this;
+
+    self.itemDataTable = $(item_table_DOM).DataTable({
+        "paging":   false,
+        "info":     false,
+        "searching": false,
+        data:data.items,
+        columns:[
+            {"data":"name"},
+            {"data":"serial_num"}
+        ]
+    })
+
+    self.from = ko.observable(data.from);
+    self.to = ko.observable(data.to);
+    self.items = ko.observableArray(data.items);
+
+}
+
+var AssignItemModel = function(select_from_location_DOM , select_to_location_DOM , select_assgin_item_DOM , select_assign_item_serial_DOM){
+    var self = this;
+
+    self.select_from_location = $(select_from_location_DOM).select2({
+        data:getLocationGroupByType(),
+        width:"100%"
+    })
+
+    self.select_to_location= $(select_to_location_DOM).select2({
+        data:getLocationGroupByType(),
+        width:"100%"
+    })
+
+    self.select_assgin_item = $(select_assgin_item_DOM).select2({
+        data:getItemsGroupByCategory(),
+        placeholder:"Item",
+        width:"100%"
+    })
+
+    self.select_assign_item_serial = $(select_assign_item_serial_DOM).select2({
+        data:getItemsGroupByCategory(),
+        placeholder:"Serial Number",
+        width:"100%"
+    })
 }

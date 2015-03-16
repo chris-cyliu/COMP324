@@ -129,25 +129,28 @@
                                 <a href="#"><i class="fa fa-table fa-fw"></i>Inventory management</a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="/item/page"><i class="fa fa-child fa-fw"></i>Manage item</a>
+                                        <a href="/item/page"><i class="fa fa-cube fa-fw"></i>Manage item</a>
                                     </li>
                                     <li>
-                                        <a href="/group/page"><i class="fa fa-group fa-fw"></i>Manage location</a>
+                                        <a href="/item/location/page"><i class="fa fa-flag fa-fw"></i>Manage location</a>
                                     </li>
                                     <li>
-                                        <a href="/group/page"><i class="fa fa-group fa-fw"></i>Item registration</a>
+                                        <a href="/item/register/page"><i class="fa fa-inbox fa-fw"></i>Item registration</a>
+                                    </li>
+                                    <li>
+                                        <a href="/item/assign/page"><i class="fa fa-cloud-upload fa-fw"></i>Assign item</a>
                                     </li>
 
                                 </ul>
                             </li>
+                            @*<li>*@
+                                @*<a href="/group/page"><i class="fa fa-share fa-fw"></i>Receive item</a>*@
+                            @*</li>*@
                             <li>
-                                <a href="/group/page"><i class="fa fa-group fa-fw"></i>Receive item</a>
+                                <a href="/item/borrow/page"><i class="fa fa-arrows-h fa-fw"></i>Borrow item</a>
                             </li>
                             <li>
-                                <a href="/item/borrow/page"><i class="fa fa-group fa-fw"></i>Borrow item</a>
-                            </li>
-                            <li>
-                                <a href="/group/page"><i class="fa fa-group fa-fw"></i>Report</a>
+                                <a href="/group/page"><i class="fa fa-tachometer fa-fw"></i>Report</a>
                             </li>
                             @*<li>*@
                                 @*<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>*@
@@ -246,27 +249,38 @@
         {
             id:001,
             name:"Marine North Division",
-            type:"division"
+            type:"division",
+            description:""
         },
         {
             id:002,
             name:"Marine Harbor Division",
-            type:"division"
+            type:"division",
+            description:""
         },
         {
             id:003,
             name:"Marine East Division",
-            type:"division"
+            type:"division",
+            description:""
         },
         {
             id:004,
             name:"Subunit A",
-            type:"subunit"
+            type:"subunit",
+            description:""
         },
         {
             id:005,
             name:"Subunit B",
-            type:"subunit"
+            type:"subunit",
+            description:""
+        },
+        {
+            id:006,
+            name:"User A",
+            type:"user",
+            description:""
         }
     ];
 
@@ -293,12 +307,16 @@
     {
         id:001,
         name:"Life Jacket",
-        category:[001,002]
+        category:[001,002],
+        image:"/assets/upload/71NepQkJ48L._SL1500_.jpg",
+        description:"A life jacket"
     },
     {
         id:002,
         name:"Glasses",
-        category:[002]
+        category:[002],
+        image:"/assets/upload/main_OCPMFRAME_m-frame_polished-black-black-iridium-heater-v_001_81_png_hero.png",
+        description:"It is a glasses"
     }
     ]
 
@@ -315,7 +333,19 @@
         id:"003",
         name:"Manage Item"
     }
+    ];
+
+    var location_type = [
+    {
+        id:"divison",
+        text:"divison"
+    },
+    {
+        id:"subunit",
+        text:"subunit"
+    }
     ]
+
 
 
     var getLocationGroupByType = function(){
