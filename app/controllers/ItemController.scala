@@ -12,4 +12,12 @@ object ItemController extends ResourceController {
   def pageBorrowItem = Action {
     Ok(views.html.layout("Borrow Item",views.html.borrowItem()))
   }
+
+  def pageItemRegistration = Action {
+    Ok(views.html.layout("Item registration",views.html.itemRegistration()))
+  }
+
+  def itemManage = Action {
+    Ok(views.html.layout("Item Management",views.html.itemManagement()))
+  }
 }

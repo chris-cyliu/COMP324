@@ -10,13 +10,8 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Position</th>
-            <th>Division</th>
-            <th>Subunit</th>
-            <th>Team</th>
-            <th>Access Right</th>
-            <th>Edit User Information</th>
-            <th>Delete</th>
+            <th>Description</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -44,7 +39,7 @@
                 <div class="tabbable tabbable-custom">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
-                        <li><a href="#tab_1_2" data-toggle="tab">User Group</a></li>
+                        <li><a href="#tab_1_2" data-toggle="tab">Members</a></li>
                         <li><a href="#tab_1_3" data-toggle="tab">Access Right</a></li>
                     </ul>
 
@@ -58,20 +53,8 @@
                                         <input type="text" class="form-control" name="name"/>
                                     </div>
                                     <div class="form-group">
-                                        <label for="position">Position:</label>
+                                        <label for="position">Description:</label>
                                         <input type="text" class="form-control" name="position"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="division">Divison:</label>
-                                        <input type="text" class="form-control" name="division"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="subunit">Subunit:</label>
-                                        <input type="text" class="form-control" name="subunit"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="team">Team:</label>
-                                        <input type="text" class="form-control" name="team"/>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
@@ -79,7 +62,7 @@
                                     </div>
                                 </form>
                             </div>
-                                <!-- End Tab1 Form-->
+                        <!-- End Tab1 Form-->
                         </div>
 
                         <div class="tab-pane" id="tab_1_2">

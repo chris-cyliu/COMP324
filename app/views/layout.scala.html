@@ -129,11 +129,15 @@
                                 <a href="#"><i class="fa fa-table fa-fw"></i>Inventory management</a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="/user/page"><i class="fa fa-child fa-fw"></i>Manage item</a>
+                                        <a href="/item/page"><i class="fa fa-child fa-fw"></i>Manage item</a>
                                     </li>
                                     <li>
                                         <a href="/group/page"><i class="fa fa-group fa-fw"></i>Manage location</a>
                                     </li>
+                                    <li>
+                                        <a href="/group/page"><i class="fa fa-group fa-fw"></i>Item registration</a>
+                                    </li>
+
                                 </ul>
                             </li>
                             <li>
@@ -234,7 +238,10 @@
     var alert_model = new AlertViewModel()
     ko.applyBindings(alert_model , $("#alert_box" ).get(0));
 
-    //Global Location list
+    /*
+        Location list
+        TODO: render by server
+     */
     var locations = [
         {
             id:001,
@@ -263,6 +270,10 @@
         }
     ];
 
+    /*
+        Item category
+        TODO: redner by server
+     */
     var item_category = [
     {
         id:001,
@@ -274,6 +285,10 @@
     }
     ]
 
+    /*
+        List of itme
+        TODO: render by server
+     */
     var items = [
     {
         id:001,
@@ -284,6 +299,21 @@
         id:002,
         name:"Glasses",
         category:[002]
+    }
+    ]
+
+    var sysFuncList = [
+    {
+        id: "001",
+        name:"Manage User"
+    },
+    {
+        id:"002",
+        name:"Manage User Group"
+    },
+    {
+        id:"003",
+        name:"Manage Item"
     }
     ]
 

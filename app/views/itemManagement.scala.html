@@ -1,0 +1,156 @@
+<div id="content_wrap">
+    <h2>Manage items</h2>
+
+    <div class="clearfix">
+        <div class="pull-right" style="margin-bottom: 10px">
+            <button type="button" data-toggle="modal" data-target="#createUserModal">Create</button>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered" id="list_table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Item Name</th>
+                <th>Description</th>
+
+            </tr>
+        </thead>
+        <tbody data-bind="template: { name: 'template_dt_user_row', foreach: userList }">
+        </tbody>
+    </table>
+</div>
+
+<!-- Create User Model -->
+<div class="modal fade" id="createUserModal" data-toggle="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="tabbable tabbable-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
+                        <li><a href="#tab_1_2" data-toggle="tab">Image and user manual</a></li>
+                        <li><a href="#tab_service" data-toggle="tab">Service</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1_1">
+                                <!-- Begin Tab1 Form-->
+                            <div class="portlet-body">
+                                <form action="" id="rightForm">
+
+                                    <div class="form-group">
+                                        <label for="EnglishName">EnglishName:</label>
+                                        <input type="text" class="form-control" name="EnglishName"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="PurchaseDate">PurchaseDate</label>
+                                        <div class='input-group date' id='datepicker_pd'>
+                                            <input type='text' class="form-control" />
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Expected lifetime</label>
+                                        <input class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Available size</label>
+                                        <input class="form-control" type="text">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="Description">Description:</label>
+                                            <!-- Fail -->
+                                            <!--<input type="text" class="form-control" name="Description"/>-->
+                                        <textarea class="form-control" rows="5" cols="40" name="Description"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Product website</label>
+                                        <input class="form-control" type="text">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Remark</label>
+                                        <textarea class="form-control"></textarea>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                        <button class="btn" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                                <!-- End Tab1 Form-->
+                        </div>
+
+
+                        <div class="tab-pane" id="tab_1_2">
+                            <div>
+                                <label>Image upload: </label>
+                                <input type="file">
+                            </div>
+                            <div>
+                                <label>Size chart upload: </label>
+                                <input type="file">
+                            </div>
+                            <div>
+                                <label>User manual uplaod: </label>
+                                <input type="file">
+                            </div>
+                            <div class="modal-footer">
+                                <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                <button class="btn" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab_service">
+                            <div class="form-group">
+                                <label>Service Requirement</label>
+                                <textarea class="form-control"></textarea>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_deep_info">
+                            <div class="form-group">
+                                <label>Reason of purchase</label>
+                                <textarea class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Cost</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Contract Ref.</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Service Information</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- !Model -->
+
+<script type="text/javascript">
+$(function(){
+    var datatable = $("#list_table").DataTable();
+
+    //binding  table for listing user
+    var userList = new ListUserModelView();
+    ko.applyBindings(userList,$("#content_wrap").get(0));
+
+    //binding create user modal
+    ko.applyBindings(new CreateUserViewModel(),$("#createUserModal" ).get(0));
+userList.requestUserList();
+
+})
+</script>

@@ -217,6 +217,10 @@ var resultJsOp = function(ret_obj , view_model){
     }
 }
 
+/**]
+ * View model for request borrow item
+ * @constructor
+ */
 var RequestItemModel = function(){
     var self = this;
 
@@ -244,7 +248,10 @@ var RequestItemModel = function(){
     this.click_add_request = function(){
         //ajax reqeust to server
     }
+}
 
+var ManageItemList = function(tableDom){
+    var self = this;
 
-
+    self.tableDom = tableDom;
 }
