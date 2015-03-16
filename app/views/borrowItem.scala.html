@@ -1,0 +1,79 @@
+<div id="request_item_wrapper">
+    <h2>Borrow Request</h2>
+
+    <div class="form-group">
+        <label for="location">Request Location:</label>
+        <input data-bind="value:request_location" type="hidden" id="select_location">
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Request items</th>
+                <th>Qty</th>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody data-bind="template: { name: 'template_request_item', foreach: request_items }">
+        </tbody>
+    </table>
+    <script type="text/html" id="template_request_item">
+        <tr>
+            <td data-bind="text:name"></td>
+            <td data-bind="text:qty"></td>
+        </tr>
+    </script>
+
+    <div class="row">
+        <div class="col-md-4"><input type="hidden" id="select_item" data-bind="value:request_new_item_id"></div>
+        <div class="col-md-4"><input type="text" name="name" value="1" data-bind="value:request_new_item_qty" a size="25" value="1"/></div>
+        <div class="col-md-4"><i data-bind="click:click_add" class="glyphicon glyphicon-ok"></i></div>
+    </div>
+    <p align="right"><input id ='confirm' type="button" onclick="show()" value="Confirm" ></p>
+
+
+
+
+
+    <div id ="showHide" style="display:none">
+        <br>
+        <h2>Request Item List</h2>
+
+        <div class="bs-example">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Item name</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rescue Jacket</td>
+                        <td>2</td>
+                    </tr>
+                </tbody>
+            </table>
+            <input id='decline' type="button" value = "Decline" alt="Submit"  style="float:right">
+            <input id='accept' type="button" value = "Accept" alt="Submit" style="float:right">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $("#select_location" ).select2( {
+            data : getLocationGroupByType(),
+            width : "100%"
+        });
+
+        $("#select_item" ).select2( {
+            placeholder:"Request Item",
+            data : getItemsGroupByCategory(),
+            width : "100%"
+        });
+
+        ko.applyBindings(new RequestItemModel(),$("#request_item_wrapper" ).get(0));
+    })
+
+</script>

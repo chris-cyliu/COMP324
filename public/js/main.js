@@ -1,6 +1,16 @@
 var _base_path = "http://127.0.0.1:9000"
 
 /**
+ * Json Object for function list
+ * @type {{user_manage: string, item_manage: string, borrow: string, report: string}}
+ */
+var acl_func = {
+    user_manage : "User Management",
+    item_manage : "Item Management",
+    borrow :"Borrow Item",
+    report : "report"
+}
+/**
  * Model view for login
  * @constructor
  */
@@ -58,9 +68,21 @@ var CreateUserViewModel = function(){
     var _path = _base_path +"/user/create"
     var self = this;
 
-    this.username = ko.observable();
-    this.pw = ko.observable();
-    this.confirm = ko.observable();
+    //Attributes
+    //Tab info
+    this.display_name = ko.observable("");
+    this.username = ko.observable("");
+    this.position = ko.observable("");
+    this.division = ko.observable("");
+    this.subunit = ko.observable("");
+    this.team = ko.observable("");
+
+    //Tab password
+    this.pw = ko.observable("");
+    this.confirm = ko.observable("");
+
+    //Tab
+    this.group = ko.observableArray();
 
     this.createUser = function(){
         if(this.pw() != this.confirm()){
@@ -72,8 +94,14 @@ var CreateUserViewModel = function(){
             dataType:"json",
             contentType :"application/json",
             data:ko.toJSON({
+                "display_name":self.display_name,
                 "username":self.username,
-                      "pw":self.pw
+                      "pw":self.pw,
+                "position":self.position,
+                "division":self.division,
+                "subunit":self.subunit,
+                "divison":self.divison,
+                "team":self.team
             }),
             success:function(){
                 alert_model.success("Successfully create user \""+self.username()+"\"");
@@ -88,6 +116,9 @@ var CreateUserViewModel = function(){
                 alert_model.error(respone_json["error"])
             }
         })
+
+        //reload
+
     }
 }
 
@@ -149,18 +180,23 @@ var ListUserModelView = function(){
 var AlertViewModel = function(){
     var self = this;
     this.alert_message = ko.observable();
+
+    /**
+     * 0: success
+     * 1: error
+     */
     this.alert_status = ko.observable();
     this.alert_visible = ko.observable(false);
 
     this.success = function(message){
         self.alert_message(message);
-        self.alert_status("success");
+        self.alert_status(0);
         self.alert_visible(true);
     }
 
     this.error = function(message){
         self.alert_message(message);
-        self.alert_status("error");
+        self.alert_status(1);
         self.alert_visible(true);
     }
 }
@@ -179,4 +215,36 @@ var resultJsOp = function(ret_obj , view_model){
         //redirect
         window.location.href = ret_obj.redirect
     }
+}
+
+var RequestItemModel = function(){
+    var self = this;
+
+    this.request_location = ko.observable();
+    this.request_items = ko.observableArray();
+
+    this.request_new_item_id = ko.observable();
+    this.request_new_item_qty = ko.observable();
+
+    this.getNewItemName = function(){
+        for(var x in items)
+            if(items[x].id == self.request_new_item_id())
+                return items[x].name;
+    }
+
+    this.click_add = function(){
+
+        self.request_items.push({
+            id:self.request_new_item_id(),
+            name :self.getNewItemName(),
+            qty:self.request_new_item_qty()
+        });
+    }
+
+    this.click_add_request = function(){
+        //ajax reqeust to server
+    }
+
+
+
 }

@@ -12,7 +12,11 @@
 
         <title>Inventory management system</title>
 
-            <!-- Bootstrap Core CSS -->
+        <!-- jQuery -->
+        <script src="/assets/lib/jquery/dist/jquery.min.js"></script>
+
+
+        <!-- Bootstrap Core CSS -->
         <link href="/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
             <!-- MetisMenu CSS -->
@@ -21,9 +25,14 @@
             <!-- Custom CSS -->
         <link href="/assets/css/sb-admin-2.css" rel="stylesheet">
 
+        <!- Bootstrap Select2 -->
+        <link href="/assets/lib/select2/select2.css" rel="stylesheet">
+
             <!-- Custom Fonts -->
         <link href="/assets/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+        <link href="/assets/lib/datatables/media/css/jquery.dataTables.min.css" type="text/css">
+        <link href="/assets/lib/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css">
             <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
             <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
             <!--[if lt IE 9]>
@@ -46,42 +55,42 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Inventory Management System</a>
+                    <a class="navbar-brand" href="/">Inventory Management System</a>
                 </div>
                     <!-- /.navbar-header -->
 
                 <ul class="nav navbar-top-links navbar-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-messages">
-                            <li>
-                                <a href="#">
-                                    <div>
-                                        <strong>John Smith</strong>
-                                        <span class="pull-right text-muted">
-                                            <em>Yesterday</em>
-                                        </span>
-                                    </div>
-                                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                                </a>
-                            </li>
-                        </ul>
-                            <!-- /.dropdown-messages -->
-                    </li>
+                    @*<li class="dropdown">*@
+                        @*<a class="dropdown-toggle" data-toggle="dropdown" href="#">*@
+                            @*<i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>*@
+                        @*</a>*@
+                        @*<ul class="dropdown-menu dropdown-messages">*@
+                            @*<li>*@
+                                @*<a href="#">*@
+                                    @*<div>*@
+                                        @*<strong>John Smith</strong>*@
+                                        @*<span class="pull-right text-muted">*@
+                                            @*<em>Yesterday</em>*@
+                                        @*</span>*@
+                                    @*</div>*@
+                                    @*<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>*@
+                                @*</a>*@
+                            @*</li>*@
+                        @*</ul>*@
+                            @*<!-- /.dropdown-messages -->*@
+                    @*</li>*@
                         <!-- /.dropdown -->
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                            </li>
-                            <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                            </li>
+                            @*<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>*@
+                            @*</li>*@
+                            @*<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>*@
+                            @*</li>*@
                             <li class="divider"></li>
-                            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <li><a href="/user/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
                         </ul>
                             <!-- /.dropdown-user -->
@@ -105,92 +114,67 @@
                             @*<!-- /input-group -->*@
                             @*</li>*@
                             <li>
-                                <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-user fa-fw"></i> User Management<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="flot.html">Flot Charts</a>
+                                        <a href="/user/page"><i class="fa fa-child fa-fw"></i>Mange User</a>
                                     </li>
                                     <li>
-                                        <a href="morris.html">Morris.js Charts</a>
+                                        <a href="/group/page"><i class="fa fa-group fa-fw"></i>Manage Group</a>
                                     </li>
                                 </ul>
                                     <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
-                            </li>
-                            <li>
-                                <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-table fa-fw"></i>Inventory management</a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="panels-wells.html">Panels and Wells</a>
+                                        <a href="/user/page"><i class="fa fa-child fa-fw"></i>Manage item</a>
                                     </li>
                                     <li>
-                                        <a href="buttons.html">Buttons</a>
-                                    </li>
-                                    <li>
-                                        <a href="notifications.html">Notifications</a>
-                                    </li>
-                                    <li>
-                                        <a href="typography.html">Typography</a>
-                                    </li>
-                                    <li>
-                                        <a href="icons.html"> Icons</a>
-                                    </li>
-                                    <li>
-                                        <a href="grid.html">Grid</a>
+                                        <a href="/group/page"><i class="fa fa-group fa-fw"></i>Manage location</a>
                                     </li>
                                 </ul>
-                                    <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="#">Second Level Item</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Second Level Item</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Third Level <span class="fa arrow"></span></a>
-                                        <ul class="nav nav-third-level">
-                                            <li>
-                                                <a href="#">Third Level Item</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Third Level Item</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Third Level Item</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Third Level Item</a>
-                                            </li>
-                                        </ul>
-                                            <!-- /.nav-third-level -->
-                                    </li>
-                                </ul>
-                                    <!-- /.nav-second-level -->
+                                <a href="/group/page"><i class="fa fa-group fa-fw"></i>Receive item</a>
                             </li>
-                            <li class="active">
-                                <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a class="active" href="blank.html">Blank Page</a>
-                                    </li>
-                                    <li>
-                                        <a href="login.html">Login Page</a>
-                                    </li>
-                                </ul>
-                                    <!-- /.nav-second-level -->
+                            <li>
+                                <a href="/item/borrow/page"><i class="fa fa-group fa-fw"></i>Borrow item</a>
                             </li>
+                            <li>
+                                <a href="/group/page"><i class="fa fa-group fa-fw"></i>Report</a>
+                            </li>
+                            @*<li>*@
+                                @*<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>*@
+                                @*<ul class="nav nav-second-level">*@
+                                    @*<li>*@
+                                        @*<a href="#">Second Level Item</a>*@
+                                    @*</li>*@
+                                    @*<li>*@
+                                        @*<a href="#">Second Level Item</a>*@
+                                    @*</li>*@
+                                    @*<li>*@
+                                        @*<a href="#">Third Level <span class="fa arrow"></span></a>*@
+                                        @*<ul class="nav nav-third-level">*@
+                                            @*<li>*@
+                                                @*<a href="#">Third Level Item</a>*@
+                                            @*</li>*@
+                                            @*<li>*@
+                                                @*<a href="#">Third Level Item</a>*@
+                                            @*</li>*@
+                                            @*<li>*@
+                                                @*<a href="#">Third Level Item</a>*@
+                                            @*</li>*@
+                                            @*<li>*@
+                                                @*<a href="#">Third Level Item</a>*@
+                                            @*</li>*@
+                                        @*</ul>*@
+                                            @*<!-- /.nav-third-level -->*@
+                                    @*</li>*@
+                                @*</ul>*@
+                                    @*<!-- /.nav-second-level -->*@
+                            @*</li>*@
                         </ul>
                     </div>
                         <!-- /.sidebar-collapse -->
@@ -203,6 +187,8 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
+                            <!-- Alert -->
+                            <div id="alert_box" class="alert" role="alert" data-bind="text:alert_message , visible:alert_visible , css:{'alert-danger':alert_status()==1 ,'alert-success':alert_status()==0}"></div>
                             @content
                         </div>
                             <!-- /.col-lg-12 -->
@@ -216,9 +202,6 @@
         </div>
             <!-- /#wrapper -->
 
-            <!-- jQuery -->
-        <script src="/assets/lib/jquery/dist/jquery.min.js"></script>
-
             <!-- Bootstrap Core JavaScript -->
         <script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -228,6 +211,135 @@
             <!-- Custom Theme JavaScript -->
         <script src="/assets/js/sb-admin-2.js"></script>
 
+        <script src="/assets/js/sb-admin-2.js"></script>
+
+        <script src="/assets/lib/datatables/media/js/jquery.dataTables.min.js"></script>
+        <script src="/assets/lib/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+        <!-- KnockoutJS -->
+        <script src="/assets/lib/knockoutjs/dist/knockout.js"></script>
+
+        <!- Bootstrap Select2 -->
+        <script src="/assets/lib/select2/select2.js"></script>
+
+        <!-- custom js -->
+        <script src ="/assets/js/main.js"></script>
+
     </body>
 
 </html>
+
+<script type="text/javascript">
+    //binding alert
+    var alert_model = new AlertViewModel()
+    ko.applyBindings(alert_model , $("#alert_box" ).get(0));
+
+    //Global Location list
+    var locations = [
+        {
+            id:001,
+            name:"Marine North Division",
+            type:"division"
+        },
+        {
+            id:002,
+            name:"Marine Harbor Division",
+            type:"division"
+        },
+        {
+            id:003,
+            name:"Marine East Division",
+            type:"division"
+        },
+        {
+            id:004,
+            name:"Subunit A",
+            type:"subunit"
+        },
+        {
+            id:005,
+            name:"Subunit B",
+            type:"subunit"
+        }
+    ];
+
+    var item_category = [
+    {
+        id:001,
+        name:"Category01"
+    },
+    {
+        id:002,
+        name:"Category02"
+    }
+    ]
+
+    var items = [
+    {
+        id:001,
+        name:"Life Jacket",
+        category:[001,002]
+    },
+    {
+        id:002,
+        name:"Glasses",
+        category:[002]
+    }
+    ]
+
+
+    var getLocationGroupByType = function(){
+        var group = {};
+        for (var x in locations){
+            locations[x]["text"] = locations[x]["name"];
+            if(typeof group[locations[x]["type"]]=="undefined"){
+                group[locations[x]["type"]] = [];
+            }
+            group[locations[x]["type"]].push(locations[x]);
+        }
+
+        var ret = [];
+        for(var x in group){
+            var temp = {
+                text:x,
+                children :group[x]
+            };
+            ret.push(temp)
+        }
+        return ret;
+    }
+
+    var getCategoryById = function(id){
+        for(var x in item_category){
+            if(item_category[x]["id"] == id)
+                return item_category[x]
+        }
+    }
+    var getItemsGroupByCategory = function(){
+        var category = {};
+        for(var x in items){
+            var item = items[x];
+            item["text"] = item["name"];
+            for(var y in items[x]["category"]){
+                if(typeof category[items[x]["category"][y]] == "undefined"){
+                    category[items[x]["category"][y]] = {
+                        obj:getCategoryById(items[x]["category"][y]),
+                        children:[]
+                    }
+                }
+                category[items[x]["category"][y]]["children"].push(item);
+            }
+        }
+
+        var ret = [];
+        for(var x in category){
+            var temp = {
+                text:category[x]["obj"]["name"],
+                children :category[x]["children"]
+            }
+            ret.push(temp);
+        }
+        return ret;
+    }
+
+</script>

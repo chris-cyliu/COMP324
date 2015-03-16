@@ -1,38 +1,167 @@
-<h2>Manage Users</h2>
+<div id="content_wrap">
+    <h2>Manage Users</h2>
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Position</th>
-        <th>Division</th>
-        <th>Subunit</th>
-        <th>Team</th>
-        <th>Access Right</th>
-        <th>Edit User Information</th>
-        <th>Delete</th>
-    </tr>
-    <tr>
-        <td>Chan Tai Man</td>
-        <td>Senior Police Constable</td>
-        <td>Marine East Division</td>
-        <td>IPSU</td>
-        <td>Team 1</td>
-        <td>General User</td>
-        <td>
-            <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
-        </td>
-        <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
-    </tr>
-    <tr>
-        <td>Fong Siu Ming</td>
-        <td>West Division Divisional Commander</td>
-        <td>Marine West Division</td>
-        <td>/</td>
-        <td>/</td>
-        <td>Regional Supply Office Staff</td>
-        <td>
-            <button type="button" data-toggle="modal" data-target="#myModal">Edit</button>
-        </td>
-        <td><input type="image" src="images/delete.jpg" alt="Submit" width="15" height="15"></td>
-    </tr>
-</table>
+        <div class="clearfix">
+            <div class="pull-right" style="margin-bottom: 10px">
+                <button type="button" data-toggle="modal" data-target="#createUserModal">Create</button>
+            </div>
+        </div>
+
+        <table class="table table-striped table-bordered" id="list_table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Subunit</th>
+                    <th>Team</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody data-bind="template: { name: 'template_dt_user_row', foreach: userList }">
+
+            </tbody>
+        </table>
+
+        <script type="text/html" id="template_dt_user_row">
+            <tr>
+                <td data-bind="text:display_name">Chan Tai Man</td>
+                <td data-bind="text:position">Senior Police Constable</td>
+                <td data-bind="text:division">Marine East Division</td>
+                <td data-bind="text:subunit">IPSU</td>
+                <td data-bind="text:team">Team 1</td>
+                @*<td>*@
+                @*<button type="button" data-toggle="modal" data-target="#myModal">Edit</button>*@
+                @*</td>*@
+                <td><span style="margin-right:5px" class="glyphicon glyphicon-edit"></span><span class="glyphicon glyphicon-remove"></span></td>
+            </tr>
+        </script>
+</div>
+
+<!-- Create User Model -->
+<div class="modal fade" id="createUserModal" data-toggle="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="tabbable tabbable-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
+                        <li><a href="#tab_password" data-toggle="tab">Password</a></li>
+                        <li><a href="#tab_1_2" data-toggle="tab">User Group</a></li>
+                        <li><a href="#tab_1_3" data-toggle="tab">Access Right</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1_1">
+                                <!-- Begin Tab1 Form-->
+                            <div class="portlet-body">
+                                <form action="" id="rightForm">
+                                    <div class="form-group">
+                                        <label for="username">User name:</label>
+                                        <input data-bind="value:username" type="text" class="form-control" name="username"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Display name:</label>
+                                        <input data-bind="value:display_name" type="text" class="form-control" name="display_name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="position">Position:</label>
+                                        <input data-bind="value:position" type="text" class="form-control" name="position"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="division">Divison:</label>
+                                        <input data-bind="value:division" type="text" class="form-control" name="division"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="subunit">Subunit:</label>
+                                        <input data-bind="value:subunit" type="text" class="form-control" name="subunit"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="team">Team:</label>
+                                        <input data-bind="value:team" type="text" class="form-control" name="team"/>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                        <button class="btn" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                                <!-- End Tab1 Form-->
+                        </div>
+
+                        <!-- Passord Tab -->
+                        <div class="tab-pane" id="tab_password">
+                            <form action="" id="rightForm">
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input data-bind="value:pw" type="password" class="form-control" name="password"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="con_password">Confirm Password:</label>
+                                    <input data-bind="value:confirm" type="password" class="form-control" name="con_password"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                    <button class="btn" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- / Passord Tab -->
+
+                        <div class="tab-pane" id="tab_1_2">
+                            <table class="table table-striped table-bordered" id="create_group_table">
+                                <thead>
+                                    <tr>
+                                        <th>Group Name</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="modal-footer">
+                                <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                <button class="btn" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab_1_3">
+                            <table class="table table-striped table-bordered" id="create_group_table">
+                                <thead>
+                                    <tr>
+                                        <th>Access Right</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="modal-footer">
+                                <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                <button class="btn" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- !Model -->
+
+<script type="text/javascript">
+    $(function(){
+        $("#list_table").dataTable();
+
+        //binding  table for listing user
+        var userList = new ListUserModelView();
+        ko.applyBindings(userList,$("#content_wrap").get(0));
+
+        //binding create user modal
+        ko.applyBindings(new CreateUserViewModel(),$("#createUserModal" ).get(0));
+        userList.requestUserList();
+
+    })
+</script>

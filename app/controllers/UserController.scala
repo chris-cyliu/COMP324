@@ -33,25 +33,6 @@ object UserController extends ResourceController{
       Ok("{\"success\":\"\"}")
   }
 
-  def pageCreateUser =Action{
-    Ok(views.html.layout("Create User",views.html.createUser()))
-  }
-
-  /**
-   * Request:
-   *  page  :
-   *  ItemNum :
-   *
-   * Response:
-   *  Json:{
-   *    "data" -> Array of a list of user object
-   *    "total" -> Number of element in db
-   *  }
-   * @return
-   */
-  def listPage() = Action {
-    Ok(views.html.layout("List User",views.html.listUser()))
-  }
   /**
    * Method : POST
    * login user account and set session
@@ -78,7 +59,7 @@ object UserController extends ResourceController{
 
   def page = Action {
     request =>
-      Ok(views.html.userManagement())
+      Ok(views.html.layout("User Management",views.html.userManagement()))
   }
 
   override val obj: AbstractObject = User

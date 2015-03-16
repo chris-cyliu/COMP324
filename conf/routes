@@ -8,18 +8,22 @@ GET           /                      controllers.SystemController.homepage()
 # User
 GET           /user                  controllers.UserController.list()
 GET           /user/datatable        controllers.UserController.listDataTable()
-GET           /user/listpage         controllers.UserController.listPage()
 POST          /user/login            controllers.UserController.login()
 GET           /user/logout           controllers.UserController.logout()
 GET           /user/page             controllers.UserController.page()
 
 POST          /user/create           controllers.UserController.createUser()
-GET           /user/create           controllers.UserController.pageCreateUser()
 
 DELETE        /user/*id              controllers.UserController.remove(id)
 
 #System
 GET           /system/menu           controllers.SystemController.getMenu()
+
+#Item
+GET           /item/borrow/page      controllers.ItemController.pageBorrowItem()
+
+#Group
+GET           /group/page            controllers.GroupController.page
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file          controllers.Assets.at(path="/public", file)
