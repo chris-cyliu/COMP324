@@ -64,7 +64,7 @@ var MenuViewModel = function(){
  * Create User model view
  * @constructor
  */
-var CreateUserViewModel = function(){
+var CreateUserViewModel = function(parentModel){
     var _path = _base_path +"/user/create"
     var self = this;
 
@@ -110,6 +110,8 @@ var CreateUserViewModel = function(){
                 self.username("");
                 self.pw("");
                 self.confirm("");
+
+                parentModel.requestUserList();
             },
             error : function(xhr,status,error) {
                 var respone_json = JSON.parse(xhr.responseText);
@@ -125,15 +127,51 @@ var CreateUserViewModel = function(){
 /**
  *TODO: paginate
  */
-var ListUserModelView = function(){
+var ListUserModelView = function(datatable_DOM){
 
     var _path = _base_path+"/user"
     var self =this;
     this.userList = ko.observableArray();
     this.pageNumber = ko.observable(1);
     this.userPerPage = ko.observable(20);
-    this.totalNum = ko.observable(0);
+    this.delete_user_display_name = ko.observable();
+    this.datatable_obj = $(datatable_DOM).DataTable({
+        columns:[
+            {"data":"display_name"},
+            {"data":"position"},
+            {"data":"division"},
+            {"data":"subunit"},
+            {"data":"team"},
+            {"data":null}
+        ],
+        "aoColumnDefs": [
+            {
+                "mRender": function (data, type, row) {
+                    return "<button class=\"btn btn-default\">Edit</button>"+
+                            "<button class=\"btn btn-danger\">Delete</button>"
+                },
+                "aTargets":[ 5 ]
+            }
+        ]
 
+    });
+
+    this.getNameFromUserList = function(id){
+        var index = 0;
+        var searchList = self.userList();
+        for(var x in searchList){
+            if(searchList[x].id == id)
+                return searchList[x].display_name;
+        }
+    }
+    this.updateTable =function(){
+        self.datatable_obj.clear();
+        var list = self.userList();
+        for(var x in list){
+            self.datatable_obj.row.add(list[x]);
+        }
+        self.datatable_obj.draw();
+    }
     this.requestUserList = function(){
         $.ajax(_path,{
             type :"get",
@@ -144,9 +182,11 @@ var ListUserModelView = function(){
                 "itemNum":this.userPerPage()
             },
             success:function(json){
+                self.userList.removeAll();
                 self.totalNum = json["total_num"];
                 for(x in json.data)
-                    self.userList.push(json.data[x])
+                    self.userList.push(json.data[x]);
+                self.updateTable();
             },
             error:function(){
                 alert_model.error("Fail to retrieve user list")
@@ -154,6 +194,10 @@ var ListUserModelView = function(){
         })
     }
 
+    this.deleteClickHandle = function(){
+        var user_id = $(this).data("user_id");
+
+    }
     this.requestDelUser = function(){
         var user = this
         var id = user["_id"]["$oid"];
@@ -172,6 +216,8 @@ var ListUserModelView = function(){
             }
         })
     }
+
+    self.requestUserList();
 }
 /**
  * For alert module

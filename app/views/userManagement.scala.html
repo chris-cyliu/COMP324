@@ -3,7 +3,7 @@
 
         <div class="clearfix">
             <div class="pull-right" style="margin-bottom: 10px">
-                <button type="button" data-toggle="modal" data-target="#createUserModal">Create</button>
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#createUserModal">Create</button>
             </div>
         </div>
 
@@ -18,24 +18,22 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody data-bind="template: { name: 'template_dt_user_row', foreach: userList }">
+            <tbody>
 
             </tbody>
         </table>
+        <!-- Modal for delete User -->
+    <div>
+        <div class="modal fade" id="del_user_modal" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
+            <div class="modal-header">Delete user</div>
+            <div class="modal-content">
+                <div class="modal-body">
+                Are you sure want to delete user "<span data-bind="text:delete_user_display_name"></span>"
+            </div>
+            </div>
 
-        <script type="text/html" id="template_dt_user_row">
-            <tr>
-                <td data-bind="text:display_name"></td>
-                <td data-bind="text:position"></td>
-                <td data-bind="text:division"></td>
-                <td data-bind="text:subunit"></td>
-                <td data-bind="text:team"></td>
-                @*<td>*@
-                @*<button type="button" data-toggle="modal" data-target="#myModal">Edit</button>*@
-                @*</td>*@
-                <td><span style="margin-right:5px" class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="bottom" title="Edit"></span><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Delete"></span></td>
-            </tr>
-        </script>
+        </div>
+    </div>
 </div>
 
 <!-- Create User Model -->
@@ -151,17 +149,14 @@
 </div>
 <!-- !Model -->
 
+
 <script type="text/javascript">
     $(function(){
-        $("#list_table").dataTable();
-
         //binding  table for listing user
-        var userList = new ListUserModelView();
+        var userList = new ListUserModelView($("#list_table" ).get(0));
         ko.applyBindings(userList,$("#content_wrap").get(0));
 
         //binding create user modal
-        ko.applyBindings(new CreateUserViewModel(),$("#createUserModal" ).get(0));
-        userList.requestUserList();
-
+        ko.applyBindings(new CreateUserViewModel(userList),$("#createUserModal").get(0));
     })
 </script>
