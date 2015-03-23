@@ -1,5 +1,82 @@
-var _base_path = "http://127.0.0.1:9000"
+var _base_path = "http://127.0.0.1:8080"
 
+/**
+ * Object for render action
+ * */
+var datatable_render_action = function(target_column){
+    return {
+        "mRender": function (data, type, row) {
+        return "<button data-id=\""+data+"\" class=\"btn btn-default modal_edit\">Edit</button>"+
+            "<button data-toggle=\"modal\" data-target=\"#del_user_modal\" data-id=\""+data+"\" class=\"btn btn-danger modal_delete\">Delete</button>"
+    },
+        "aTargets":[target_column]
+    }
+}
+
+var datatable_remove_row = function(DTobj,event){
+    DTobj.row($(event.target).parents("tr")).remove().draw();
+}
+
+/**
+ * Init a generic select2
+ */
+var select2_init = function(select_dom , dt_obj ,select_ajax_path){
+    return $(select_dom).select2({
+        ajax:{
+            url:select_ajax_path,
+            type:"get",
+            dataType: 'json',
+            results:function(data){
+                var ret = [];
+                for(var x in data.data){
+                    ret.push({
+                        "id":data.data[x]._id.$oid,
+                        "text":data.data[x].name
+                    })
+                }
+                return {results:ret}
+            },
+            cache:true
+        }
+    }).on("select2-selecting",function(event){
+        //function to handle select group
+        //add the select to table
+        //clear the selection
+        //TODO : check table group exist ?
+        dt_obj.row.add({
+            _id:{$oid:event.val},
+            name:event.choice.text
+        })
+        dt_obj.draw();
+        $(event.target).select2("val",'');
+    })
+}
+
+var dt_init = function(table_dom){
+    return $(table_dom).DataTable({
+        paging:false,
+        searching:false,
+        columns:[
+            {data:"name"},
+            {data:null}
+        ],
+        "aoColumnDefs":[
+            {
+                "mRender": function (data, type, row) {
+                    return "<button class=\"btn btn-danger button-group-delete\">Delete</button>"
+                },
+                "aTargets":[1]
+            }
+        ],
+        "drawCallback":function(){
+            var self=this.api();
+            //add handle for delete
+            $(".button-group-delete").on("click",function(event){
+                datatable_remove_row(self,event);
+            })
+        }
+    })
+}
 /**
  * Json Object for function list
  * @type {{user_manage: string, item_manage: string, borrow: string, report: string}}
@@ -17,8 +94,8 @@ var acl_func = {
 var LoginViewModel = function() {
     var self = this;
     var _path_login = _base_path+"/user/login"
-    self.username = ko.observable();
-    self.password = ko.observable();
+    self.username = ko.observable("");
+    self.password = ko.observable("");
     self.error_display = ko.observable(false);
     self.error_msg = ko.observable();
 
@@ -64,9 +141,17 @@ var MenuViewModel = function(){
  * Create User model view
  * @constructor
  */
-var CreateUserViewModel = function(parentModel){
+var CreateUserViewModel = function(parentModel, groupTableDom, aclTableDom , select_addGroup_dom, select_add_feature_dom){
+
     var _path = _base_path +"/user/create"
     var self = this;
+
+    /**
+     * `create` and `update` mode only
+     * @type {string}
+     */
+    this.mode = "create";
+    this.update_id =null;
 
     //Attributes
     //Tab info
@@ -81,8 +166,43 @@ var CreateUserViewModel = function(parentModel){
     this.pw = ko.observable("");
     this.confirm = ko.observable("");
 
-    //Tab
+    //Tab group
     this.group = ko.observableArray();
+    this.DTgroup = dt_init(groupTableDom);
+    /**
+     * Select for add group to the table
+     * @type {*|jQuery}
+     */
+    this.select_add_group = select2_init(select_addGroup_dom,self.DTgroup,_base_path+"/group");
+
+    //Tab access right
+    this.DTfeature = dt_init(aclTableDom);
+    this.select_add_acl = select2_init(select_add_feature_dom,self.DTfeature,_base_path+"/feature")
+
+    /**
+     * Check current mode and call
+     */
+    this.click_create_handle = function(){
+        if(self.mode == "create"){
+            this.createUser()
+        }
+        if(self.mode == "update"){
+            var data =
+            this.updateUser()
+        }
+    }
+
+    this.clearFields = function(){
+        self.display_name ("");
+        self.username ("");
+        self.position ("");
+        self.division ("");
+        self.subunit ("");
+        self.team ("");
+
+        self.DTgroup.clear().draw();
+        self.DTfeature.clear().draw();
+    }
 
     this.createUser = function(){
         if(this.pw() != this.confirm()){
@@ -94,23 +214,84 @@ var CreateUserViewModel = function(parentModel){
             dataType:"json",
             contentType :"application/json",
             data:ko.toJSON({
-                "display_name":self.display_name,
-                "username":self.username,
-                      "pw":self.pw,
-                "position":self.position,
-                "division":self.division,
-                "subunit":self.subunit,
-                "divison":self.divison,
-                "team":self.team
+                "display_name":self.display_name(),
+                "username":self.username(),
+                      "pw":self.pw(),
+                "position":self.position(),
+                "division":self.division(),
+                "subunit":self.subunit(),
+                "team":self.team()
             }),
             success:function(){
                 alert_model.success("Successfully create user \""+self.username()+"\"");
+                parentModel.requestUserList();
+            },
+            error : function(xhr,status,error) {
+                var respone_json = JSON.parse(xhr.responseText);
+                alert_model.error(respone_json["error"])
+            }
+        })
+    }
 
-                //clear
-                self.username("");
-                self.pw("");
-                self.confirm("");
+    this.editUser = function(id,object){
+        self.update_id = id;
+        self.display_name(object.display_name);
+        self.username (object.username);
+        self.position(object.position);
+        self.division (object.division);
+        self.subunit(object.subunit);
+        self.team (object.team);
 
+        //init current group
+        self.DTgroup.clear();
+        $.ajax({
+            url:_base_path+"/group/user/"+id,
+            type:"GET",
+            success:function(json){
+                self.DTgroup.rows.add(json.data);
+                self.DTgroup.draw();
+            }
+        })
+
+        //init current feature
+        self.DTfeature.clear();
+        $.ajax({
+            url:_base_path+"/feature/user/"+id,
+            type:"GET",
+            success:function(json){
+                self.DTfeature.rows.add(json.data);
+                self.DTfeature.draw();
+            }
+        })
+    }
+
+    this.updateUser = function(id){
+        var update_info = {
+            "display_name":self.display_name(),
+            "username":self.username(),
+            "position":self.position(),
+            "division":self.division(),
+            "subunit":self.subunit(),
+            "team":self.team()
+        }
+
+        //update basic informatin
+        if(self.pw()!=""){
+            if(self.pw() != self.confirm()){
+                alert_model.error("Password and Confirm Password are not same")
+                return;
+            }else{
+                update_info["pw"] = self.pw()
+            }
+        }
+
+        $.ajax(_base_path+"/user/"+self.update_id , {
+            type :"PUT",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON(update_info),
+            success:function(){
+                alert_model.success("Successfully update user \""+self.username()+"\"");
                 parentModel.requestUserList();
             },
             error : function(xhr,status,error) {
@@ -119,22 +300,50 @@ var CreateUserViewModel = function(parentModel){
             }
         })
 
-        //reload
+        //update group
+        var update_group_json = [];
+        for(var x = 0; x <self.DTgroup.data().length;x++){
+            update_group_json.push({
+                "userid":self.update_id,
+                "groupid":self.DTgroup.row(x).data()._id.$oid
+            })
+        }
+        if(update_group_json.length > 0)
+            $.ajax(_base_path+"/group/addMember",{
+                type :"PUT",
+                dataType:"json",
+                contentType :"application/json",
+                data:ko.toJSON(update_group_json)
+            });
 
+        //update feature acl
+        var update_feature_json = [];
+        for(var x = 0; x <self.DTfeature.data().length;x++){
+            update_feature_json.push({
+                "userid":self.update_id,
+                "featureid":self.DTfeature.row(x).data()._id.$oid
+            })
+        }
+        if(update_feature_json.length > 0)
+            $.ajax(_base_path+"/feature/addMember",{
+                type :"PUT",
+                dataType:"json",
+                contentType :"application/json",
+                data:ko.toJSON(update_feature_json)
+            });
     }
 }
 
-/**
- *TODO: paginate
- */
 var ListUserModelView = function(datatable_DOM){
 
     var _path = _base_path+"/user"
     var self =this;
+    this.createModel = null;
     this.userList = ko.observableArray();
     this.pageNumber = ko.observable(1);
     this.userPerPage = ko.observable(20);
     this.delete_user_display_name = ko.observable();
+    this.delete_user_id = 0;
     this.datatable_obj = $(datatable_DOM).DataTable({
         columns:[
             {"data":"display_name"},
@@ -142,28 +351,31 @@ var ListUserModelView = function(datatable_DOM){
             {"data":"division"},
             {"data":"subunit"},
             {"data":"team"},
-            {"data":null}
+            {"data":"_id.$oid"}
         ],
         "aoColumnDefs": [
-            {
-                "mRender": function (data, type, row) {
-                    return "<button class=\"btn btn-default\">Edit</button>"+
-                            "<button class=\"btn btn-danger\">Delete</button>"
-                },
-                "aTargets":[ 5 ]
-            }
-        ]
+            datatable_render_action(5)
+        ],
+        "drawCallback":function(){
+            $(".modal_edit").on("click",self.buttonEditHandle);
+        }
 
     });
 
-    this.getNameFromUserList = function(id){
-        var index = 0;
-        var searchList = self.userList();
-        for(var x in searchList){
-            if(searchList[x].id == id)
-                return searchList[x].display_name;
-        }
+    this.buttonCreateHandle = function(){
+        self.createModel.mode="create";
+        self.createModel.clearFields();
+        return true;
     }
+
+    this.buttonEditHandle = function(){
+        self.createModel.mode="update";
+        var data = self.datatable_obj.row($(this).parents("tr")).data();
+        self.createModel.editUser(data._id.$oid , data);
+        $("#createUserModal").modal("show");
+        return true;
+    }
+
     this.updateTable =function(){
         self.datatable_obj.clear();
         var list = self.userList();
@@ -171,6 +383,9 @@ var ListUserModelView = function(datatable_DOM){
             self.datatable_obj.row.add(list[x]);
         }
         self.datatable_obj.draw();
+
+        //update handle
+        $(".modal_delete").on("click",self.deleteClickHandle)
     }
     this.requestUserList = function(){
         $.ajax(_path,{
@@ -194,27 +409,44 @@ var ListUserModelView = function(datatable_DOM){
         })
     }
 
-    this.deleteClickHandle = function(){
-        var user_id = $(this).data("user_id");
-
+    this.getUserById = function(id){
+        var list = self.datatable_obj.data();
+        for(var x in list){
+            if(list[x]._id.$oid == id){
+                return list[x]
+            }
+        }
+        throw "no record for id: "+id;
     }
+
+    /**
+     * Function to
+     * @returns {boolean}
+     */
+    this.deleteClickHandle = function(){
+        self.delete_user_id = $(this).data("id");
+        self.delete_user_display_name(self.getUserById(self.delete_user_id).display_name);
+        return true
+    }
+
     this.requestDelUser = function(){
-        var user = this
-        var id = user["_id"]["$oid"];
-        var _del_path = _path + "/"+id
+        var _del_path = _path + "/"+self.delete_user_id;
         $.ajax(_del_path,{
             type :"DELETE",
             dataType:"json",
             contentType :"application/json",
             data:ko.toJSON({}),
             success:function(json){
-                alert_model.success("Successfull delete user \""+user.username+"\"");
-                self.userList.remove(user);
+                alert_model.success("Successfull delete user \""+self.delete_user_display_name()+"\"");
+
+                //update
+                self.requestUserList();
             },
             error:function(){
                 alert_model.error("Fail to remove user");
             }
         })
+        return true;
     }
 
     self.requestUserList();
@@ -329,6 +561,75 @@ var ItemRegistrationModel = function(){
     }
 }
 
+var MangeGroupModel = function(tableDOM){
+    var self = this;
+
+    this.modal_name = ko.observable("");
+    this.modal_description = ko.observable("");
+
+    this.modal_members = ko.observableArray();
+
+    this.modal_acl = ko.observableArray();
+
+    self.dataTableObject = $(tableDOM).DataTable({
+        columns:[
+            {"data":"name"},
+            {"data":"description"}
+        ],
+        "aoColumnDefs": [
+            //Action
+            {
+                "mRender": function (data, type, row) {
+                    return null;
+                },
+                "aTargets":[ 2 ]
+            }
+        ]
+    });
+
+    this.requesList = function(){
+        $.ajax(_base_path+"/group",{
+            type :"get",
+            dataType:"json",
+            contentType :"application/json",
+            success:function(json){
+                self.dataTableObject.clear();
+                self.dataTableObject.rows.add(json.data);
+                self.dataTableObject.draw();
+            },
+            error:function(){
+                alert_model.error("Fail to retrieve group list")
+            }
+        })
+    }
+
+    this.requestCreate = function(){
+        $.ajax(_base_path+"/group",{
+            type:"POST",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON({
+                "name":self.modal_name(),
+                "description":self.modal_description()
+            }),
+            contentType:"application/json",
+            success:function(json){
+                alert_model.success("Successfully added group : "+self.modal_name);
+            },
+            error:function(){
+                alert_model.error("Fail to create group ");
+            }
+        })
+    }
+
+    this.createClickHandle = function(){
+        self.requestCreate();
+    }
+
+    self.requesList();
+
+}
+
 var ManageItemListModel = function(tableDOM){
     var self = this;
 
@@ -340,15 +641,32 @@ var ManageItemListModel = function(tableDOM){
             {"data":"description"}
         ],
         "aoColumnDefs": [
-            {
-                "mRender": function (data, type, row) {
-                    img_str = "<img src=\""+data+"\"/>";
-                    return img_str;
-                },
-                "aTargets":[ 0 ]
-            }
+            datatable_render_action(0)
         ]
     });
+
+    this.requestUserList = function(){
+        $.ajax(_base_path+"/group",{
+            type :"get",
+            dataType:"json",
+            contentType :"application/json",
+            data:{
+                "page":this.pageNumber(),
+                "itemNum":this.userPerPage()
+            },
+            success:function(json){
+                self.userList.removeAll();
+                self.totalNum = json["total_num"];
+                for(x in json.data)
+                    self.userList.push(json.data[x]);
+                self.updateTable();
+            },
+            error:function(){
+                alert_model.error("Fail to retrieve user list")
+            }
+        })
+    }
+
 }
 
 var ManageLocationModel = function(tableDOM , create_location_type_DOM){

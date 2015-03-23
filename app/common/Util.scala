@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 object Util {
 
-  val basePath = "http://127.0.0.1:9000"
+  val basePath = "http://127.0.0.1:8080"
 
   val homePagePath = basePath
 

@@ -2,6 +2,7 @@ package controllers
 
 import common.ArrayQueryParam
 import model.{User, AbstractObject}
+import play.api.libs.json
 import play.api.libs.json.{JsNull, JsArray, Json, JsObject}
 import play.api.mvc.{Result, Action, Controller}
 import play.modules.reactivemongo.MongoController
@@ -25,7 +26,9 @@ abstract class ResourceController extends Controller with MongoController {
     implicit request =>
       val ret_obj = obj.create(request.body.as[JsObject])
       var ret = Json.obj("success"->"","data"->ret_obj)
-      Ok(ret)
+      Ok(Json.obj{
+        "data"->ret
+      })
   }
 
   /**

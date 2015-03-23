@@ -81,12 +81,12 @@ abstract class AbstractObject {
   }
 
   def update(id:String , update:JsValue) = {
-    val id_obj = BSONFormats.toJSON(BSONObjectID.parse(id).get)
+    val id_obj = Json.obj("_id"->BSONFormats.toJSON(BSONObjectID.parse(id).get))
     var nUpdate = update.as[JsObject]
 
     //update "UPDATED" timestamp
     nUpdate = nUpdate + (KW_UPDATED , BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis())))
-    Await.result(collection.update(id_obj, update),MAX_WAIT)
+    Await.result(collection.update(id_obj, Json.obj("$set"->nUpdate)),MAX_WAIT)
   }
 
   def get(id:String):JsValue = {

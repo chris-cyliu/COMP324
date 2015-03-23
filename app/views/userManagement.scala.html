@@ -3,7 +3,7 @@
 
         <div class="clearfix">
             <div class="pull-right" style="margin-bottom: 10px">
-                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#createUserModal">Create</button>
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#createUserModal" data-bind="click:buttonCreateHandle">Create</button>
             </div>
         </div>
 
@@ -23,15 +23,18 @@
             </tbody>
         </table>
         <!-- Modal for delete User -->
-    <div>
-        <div class="modal fade" id="del_user_modal" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
-            <div class="modal-header">Delete user</div>
+    <div class="modal fade" id="del_user_modal" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
+                <div class="modal-header"><h4>Delete user</h4></div>
                 <div class="modal-body">
                 Are you sure want to delete user "<span data-bind="text:delete_user_display_name"></span>"
+                </div>
+                <div class="modal-footer">
+                    <button data-bind="click:requestDelUser" type="submit" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+                    <button class="btn" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
-            </div>
-
         </div>
     </div>
 </div>
@@ -47,7 +50,7 @@
                         <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
                         <li><a href="#tab_password" data-toggle="tab">Password</a></li>
                         <li><a href="#tab_1_2" data-toggle="tab">User Group</a></li>
-                        <li><a href="#tab_1_3" data-toggle="tab">Access Right</a></li>
+                        <li><a href="#tab_1_3" data-toggle="tab">Access Feature</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -81,7 +84,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                        <button data-bind="click:click_create_handle" type="submit" class="btn" data-dismiss="modal">Save</button>
                                         <button class="btn" data-dismiss="modal">Cancel</button>
                                     </div>
                                 </form>
@@ -101,15 +104,16 @@
                                     <input data-bind="value:confirm" type="password" class="form-control" name="con_password"/>
                                 </div>
                                 <div class="modal-footer">
-                                    <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                    <button data-bind="click:click_create_handle" type="submit" class="btn" data-dismiss="modal">Save</button>
                                     <button class="btn" data-dismiss="modal">Cancel</button>
                                 </div>
                             </form>
                         </div>
                         <!-- / Passord Tab -->
 
+                        <!-- Group Tab -->
                         <div class="tab-pane" id="tab_1_2">
-                            <table class="table table-striped table-bordered" id="create_group_table">
+                            <table class="table table-striped table-bordered" id="group_table">
                                 <thead>
                                     <tr>
                                         <th>Group Name</th>
@@ -119,25 +123,27 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            Add Group:<input class="form-control" type="hidden" id="select_add_group">
                             <div class="modal-footer">
-                                <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                <button data-bind="click:click_create_handle" type="submit" class="btn" data-dismiss="modal">Save</button>
                                 <button class="btn" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
 
                         <div class="tab-pane" id="tab_1_3">
-                            <table class="table table-striped table-bordered" id="create_group_table">
+                            <table class="table table-striped table-bordered" id="feature_table">
                                 <thead>
                                     <tr>
-                                        <th>Access Right</th>
+                                        <th>Access Feature</th>
                                         <th>Remove</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                             </table>
+                            Add feature:<input class="form-control" type="hidden" id="select_add_feature">
                             <div class="modal-footer">
-                                <button data-bind="click:createUser" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                <button data-bind="click:click_create_handle" type="submit" class="btn" data-dismiss="modal">Save</button>
                                 <button class="btn" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -157,6 +163,9 @@
         ko.applyBindings(userList,$("#content_wrap").get(0));
 
         //binding create user modal
-        ko.applyBindings(new CreateUserViewModel(userList),$("#createUserModal").get(0));
+        var createViewModel = new CreateUserViewModel(userList,$("#group_table" ).get(0),$("#feature_table" ).get(0),$("#select_add_group" ).get(0),$("#select_add_feature" ).get(0));
+        ko.applyBindings(createViewModel,$("#createUserModal").get(0));
+
+        userList.createModel = createViewModel;
     })
 </script>
