@@ -20,7 +20,7 @@
     </table>
 
     <!-- Create View Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal_view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -75,7 +75,7 @@
                                 <table class="table table-striped table-bordered" id="create_group_table">
                                     <thead>
                                         <tr>
-                                            <th>Access Right</th>
+                                            <th>Access Feature</th>
                                             <th>Remove</th>
                                         </tr>
                                     </thead>
@@ -94,6 +94,21 @@
         </div>
     </div>
     <!-- !Model -->
+
+    <div class="modal fade" id="modal_delete" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h4>Delete Group</h4></div>
+                <div class="modal-body">
+                Are you sure want to delete group "<span data-bind="text:delete_group_display_name"></span>"
+                </div>
+                <div class="modal-footer">
+                    <button data-bind="click:requestDelete" type="submit" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+                    <button class="btn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

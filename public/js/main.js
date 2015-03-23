@@ -561,15 +561,23 @@ var ItemRegistrationModel = function(){
     }
 }
 
-var MangeGroupModel = function(tableDOM){
+var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add_feature_dom){
     var self = this;
 
     this.modal_name = ko.observable("");
     this.modal_description = ko.observable("");
+    this.delete_group_display_name = ko.observable("")
 
-    this.modal_members = ko.observableArray();
+    this.DTmember = $(memberTableDom).DataTable({
+        columns:[
+            {"data":"name"},
+            {"data":null}
+        ]
+    });
 
-    this.modal_acl = ko.observableArray();
+    //Tab access right
+    this.DTfeature = dt_init(aclTableDom);
+    this.select_add_acl = select2_init(select_add_feature_dom,self.DTfeature,_base_path+"/feature");
 
     self.dataTableObject = $(tableDOM).DataTable({
         columns:[
@@ -577,15 +585,56 @@ var MangeGroupModel = function(tableDOM){
             {"data":"description"}
         ],
         "aoColumnDefs": [
-            //Action
             {
                 "mRender": function (data, type, row) {
-                    return null;
+                    return "<button data-toggle=\"modal\" data-target=\"#modal_view\" data-id=\""+data+"\" class=\"btn btn-default modal_edit\">Edit</button>"+
+                        "<button data-toggle=\"modal\" data-target=\"#modal_delete\" data-id=\""+data+"\" class=\"btn btn-danger modal_delete\">Delete</button>"
                 },
-                "aTargets":[ 2 ]
+                "aTargets":[2]
             }
-        ]
+        ],
+        "drawCallback":function(){
+            var tableobj = this;
+            //binding edit button
+            $(".modal_edit").on("click",function(){
+                self.edit(tableobj.row($(this).parents("tr")).data());
+                return true;
+            });
+            //binding delete button
+            $(".modal_delete").on("click",function(){
+                var del_obj = tableobj.row($(this).parents("tr")).date();
+                self.delete_group_display_name(del_obj.name);
+                return true;
+            })
+        }
     });
+
+    this.edit = function(object){
+        var id = object._id.$oid;
+        self.modal_name(object.name);
+        self.modal_name(object.description);
+
+        //request member list
+        $.ajax(_base_path+"/group/getMember/"+id,{
+            type:"GET",
+            success:function(json){
+                self.DTmember.clear();
+                self.DTmember.rows.add(json.data);
+                self.DTmember.draw();
+            }
+        })
+
+        $.ajax(_base_path+"/group/getFeature/"+id,{
+            type:"GET",
+            success:function(json){
+                self.DTfeature.clear();
+                self.DTfeature.rows.add(json.data);
+                self.DTmember.draw();
+            }
+        })
+    }
+
+    this.requestDelete=function(){};
 
     this.requesList = function(){
         $.ajax(_base_path+"/group",{
@@ -598,7 +647,7 @@ var MangeGroupModel = function(tableDOM){
                 self.dataTableObject.draw();
             },
             error:function(){
-                alert_model.error("Fail to retrieve group list")
+                alert_model.error("Fail to retrieve grozzup list")
             }
         })
     }
