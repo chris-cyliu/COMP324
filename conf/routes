@@ -15,6 +15,7 @@ GET           /user/page                 controllers.UserController.page()
 POST          /user/create               controllers.UserController.createUser()
 PUT           /user/*id                  controllers.UserController.update(id)
 DELETE        /user/*id                  controllers.UserController.remove(id)
+POST          /user/getByIds             controllers.UserController.getUsers()
 
 
 #Item
@@ -25,18 +26,28 @@ GET           /item/location/page        controllers.ItemController.pageLocation
 GET           /item/receive/page         controllers.ItemController.pageReceiveItem()
 GET           /item/assign/page          controllers.ItemController.pageAssignItem()
 
+GET           /item                      controllers.ItemController.list()
+POST          /item                      controllers.ItemController.create()
+PUT           /item/*id                  controllers.ItemController.update(id)
+DELETE        /item/*id                  controllers.ItemController.remove(id)
+
 #Group
 GET           /group/page                controllers.GroupController.page()
 GET           /group                     controllers.GroupController.list()
 POST          /group                     controllers.GroupController.create()
 GET           /group/user/*id            controllers.GroupController.getGroupByUserid(id)
-PUT           /group/addMember           controllers.GroupController.updateGroup()
+POST          /group/addMember           controllers.GroupController.updateGroup()
+PUT           /group/*id                 controllers.GroupController.update(id)
+DELETE        /group/*id                 controllers.GroupController.remove(id)
+
 
 #Feature
 GET           /feature                   controllers.FeatureController.list()
 GET           /feature/user/*id          controllers.FeatureController.getFeatureByUserid(id)
-PUT           /feature/addMember         controllers.FeatureController.updateFeature()
+PUT           /feature/addAcl            controllers.FeatureController.updateACL()
 
+#upload
+POST          /upload                    controllers.UploadController.uploadFile()
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file              controllers.Assets.at(path="/public", file)
     

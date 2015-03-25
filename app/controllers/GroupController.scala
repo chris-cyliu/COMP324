@@ -37,7 +37,8 @@ object GroupController extends ResourceController{
           Group.addUserToGroup((a\"userid").as[JsString].value,(a\"groupid").as[JsString].value)
       })
       Ok(Json.obj(
-        "success" -> JsString("")
+        "success" -> ""
       ))
   }
+  
 }

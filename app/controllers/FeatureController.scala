@@ -1,7 +1,7 @@
 package controllers
 
 import model.{Feature, AbstractObject}
-import play.api.libs.json.{JsValue, JsString, JsArray, Json}
+import play.api.libs.json.{ Json}
 import play.api.mvc.Action
 
 /**
@@ -19,22 +19,5 @@ object FeatureController extends ResourceController{
     )
     var ret = Feature.list(0,Int.MaxValue)(query)
     Ok(Json.obj("data"->ret))
-  }
-
-  /**
-   * [{userid: , featureid},{userid: , featureid},{userid: , featureid}]
-   * @return
-   */
-  def updateFeature() = Action(parse.json){
-    implicit request =>
-      val array_pair = request.body.as[JsArray]
-      array_pair.value.foreach({
-        //foreach add to Feature
-        a:JsValue =>
-          Feature.updateAcl((a\"featureid").as[JsString].value,(a\"userid").as[JsString].value,"user")
-      })
-      Ok(Json.obj(
-        "success" -> JsString("")
-      ))
   }
 }

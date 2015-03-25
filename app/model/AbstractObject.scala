@@ -1,6 +1,7 @@
 package model
 
 import error.MongodbException
+import model.Feature._
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoPlugin
@@ -91,5 +92,39 @@ abstract class AbstractObject {
 
   def get(id:String):JsValue = {
     this.list(1,1)(Json.obj(KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(id).get)))(0)
+  }
+
+  /**
+   * Function to add a acl rule
+   * @param id
+   * @param _type
+   */
+  def updateAcl(id:String,act_id:String,level:Int, _type:String) = {
+    //check previous record
+    val query_userid = Json.obj(Feature.KW_ACL -> Json.obj(
+      "$elemMatch"->Json.obj(
+        "id" -> act_id
+      )
+    )
+    )
+    val query_id = Json.obj("_id"->BSONFormats.toJSON(BSONObjectID.parse(id).get))
+    val query = Json.obj("$and" -> JsArray(query_userid::query_id::Nil))
+    var ret = Feature.list(0,Int.MaxValue)(query)
+
+    if(ret.size==0){
+      //new acl to feature
+      val op =
+        Json.obj(
+          "$push"->Json.obj(KW_ACL -> Json.obj(
+            ACL.KW_ID ->act_id,
+            ACL.KW_RIGHT -> level,
+            ACL.KW_TYPE -> _type
+          )
+          )
+        )
+      Await.result(collection.update(query_id,op),MAX_WAIT)
+    }else{
+      //TODO: Exist ?
+    }
   }
 }

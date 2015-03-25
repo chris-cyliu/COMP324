@@ -4,6 +4,7 @@ import play.api.libs.json.{JsString, JsArray, Json}
 import play.modules.reactivemongo.json.BSONFormats
 import reactivemongo.bson.BSONObjectID
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -25,6 +26,6 @@ object Group extends AbstractObject{
         KW_MEMBER -> JsString(userid)
       }
     )
-    this.collection.update(criteria,op)
+    Await.result(this.collection.update(criteria,op),MAX_WAIT)
   }
 }

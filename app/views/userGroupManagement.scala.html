@@ -3,7 +3,7 @@
 
     <div class="clearfix">
         <div class="pull-right" style="margin-bottom: 10px">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Create</button>
+            <button type="button" data-bind="click:btnCreateHanlde" class="btn btn-success" data-toggle="modal" data-target="#modal_view">Create</button>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                                             <input type="text" class="form-control" name="position" data-bind="value:modal_description"/>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bind="click:createClickHandle"data-dismiss="modal">Save</button>
+                                            <button type="button" class="btn btn-primary" data-bind="click:handle_modal_btn_save"data-dismiss="modal">Save</button>
                                             <button type="button" class="btn" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
@@ -55,24 +55,23 @@
                             </div>
 
                             <div class="tab-pane" id="tab_1_2">
-                                <table class="table table-striped table-bordered" id="create_group_table">
+                                <table class="table table-striped table-bordered" id="table_member">
                                     <thead>
                                         <tr>
-                                            <th>Group Name</th>
-                                            <th>Remove</th>
+                                            <th>User Name</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bind="click:createClickHandle" data-dismiss="modal">Save</button>
+                                    <button type="button" class="btn btn-primary" data-bind="click:handle_modal_btn_save" data-dismiss="modal">Save</button>
                                     <button type="button" class="btn" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
 
                             <div class="tab-pane" id="tab_1_3">
-                                <table class="table table-striped table-bordered" id="create_group_table">
+                                <table class="table table-striped table-bordered" id="table_feature">
                                     <thead>
                                         <tr>
                                             <th>Access Feature</th>
@@ -82,8 +81,9 @@
                                     <tbody>
                                     </tbody>
                                 </table>
+                                Add feature:<input class="form-control" type="hidden" id="select_add_feature">
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bind="click:createClickHandle" data-dismiss="modal">Save</button>
+                                    <button type="button" class="btn btn-primary" data-bind="click:handle_modal_btn_save" data-dismiss="modal">Save</button>
                                     <button type="button" class="btn" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                 Are you sure want to delete group "<span data-bind="text:delete_group_display_name"></span>"
                 </div>
                 <div class="modal-footer">
-                    <button data-bind="click:requestDelete" type="submit" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+                    <button data-bind="click:handle_btn_del_confirm" type="submit" class="btn btn-danger" data-dismiss="modal">Confirm</button>
                     <button class="btn" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -115,6 +115,6 @@
 </div>
 <script type="text/javascript">
     $(function(){
-        ko.applyBindings(new MangeGroupModel($("#list_table" ).get(0)),$("#wrapper_ko" ).get(0))
+        ko.applyBindings(new MangeGroupModel($("#list_table" ).get(0),$("#table_feature" ).get(0),$("#table_member" ).get(0),$("#select_add_feature" ).get(0)),$("#wrapper_ko" ).get(0))
     })
 </script>

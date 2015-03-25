@@ -310,7 +310,7 @@ var CreateUserViewModel = function(parentModel, groupTableDom, aclTableDom , sel
         }
         if(update_group_json.length > 0)
             $.ajax(_base_path+"/group/addMember",{
-                type :"PUT",
+                type :"POST",
                 dataType:"json",
                 contentType :"application/json",
                 data:ko.toJSON(update_group_json)
@@ -320,12 +320,14 @@ var CreateUserViewModel = function(parentModel, groupTableDom, aclTableDom , sel
         var update_feature_json = [];
         for(var x = 0; x <self.DTfeature.data().length;x++){
             update_feature_json.push({
-                "userid":self.update_id,
-                "featureid":self.DTfeature.row(x).data()._id.$oid
+                "act_id":self.update_id,
+                "id":self.DTfeature.row(x).data()._id.$oid,
+                "type":"user",
+                "level":1
             })
         }
         if(update_feature_json.length > 0)
-            $.ajax(_base_path+"/feature/addMember",{
+            $.ajax(_base_path+"/feature/addAcl",{
                 type :"PUT",
                 dataType:"json",
                 contentType :"application/json",
@@ -508,6 +510,7 @@ var RequestItemModel = function(){
     this.request_new_item_id = ko.observable();
     this.request_new_item_qty = ko.observable();
 
+
     this.getNewItemName = function(){
         for(var x in items)
             if(items[x].id == self.request_new_item_id())
@@ -563,15 +566,18 @@ var ItemRegistrationModel = function(){
 
 var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add_feature_dom){
     var self = this;
-
+    this.modal_mode = null;
     this.modal_name = ko.observable("");
     this.modal_description = ko.observable("");
-    this.delete_group_display_name = ko.observable("")
+
+    this.delete_group_display_name = ko.observable("");
+    this.delete_group_id = null;
+
+    this.update_id;
 
     this.DTmember = $(memberTableDom).DataTable({
         columns:[
-            {"data":"name"},
-            {"data":null}
+            {"data":"display_name"},
         ]
     });
 
@@ -579,6 +585,12 @@ var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add
     this.DTfeature = dt_init(aclTableDom);
     this.select_add_acl = select2_init(select_add_feature_dom,self.DTfeature,_base_path+"/feature");
 
+    self.clear = function(){
+        self.modal_name("");
+        self.modal_description("");
+        self.DTmember.clear().draw();
+        self.DTfeature.clear().draw();
+    }
     self.dataTableObject = $(tableDOM).DataTable({
         columns:[
             {"data":"name"},
@@ -587,56 +599,127 @@ var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add
         "aoColumnDefs": [
             {
                 "mRender": function (data, type, row) {
-                    return "<button data-toggle=\"modal\" data-target=\"#modal_view\" data-id=\""+data+"\" class=\"btn btn-default modal_edit\">Edit</button>"+
-                        "<button data-toggle=\"modal\" data-target=\"#modal_delete\" data-id=\""+data+"\" class=\"btn btn-danger modal_delete\">Delete</button>"
+                    return "<button data-toggle=\"modal\" data-target=\"#modal_view\" class=\"btn btn-default modal_edit\">Edit</button>"+
+                        "<button data-toggle=\"modal\" data-target=\"#modal_delete\" class=\"btn btn-danger modal_delete\">Delete</button>"
                 },
                 "aTargets":[2]
             }
         ],
         "drawCallback":function(){
-            var tableobj = this;
             //binding edit button
             $(".modal_edit").on("click",function(){
-                self.edit(tableobj.row($(this).parents("tr")).data());
+                self.modal_mode = "update";
+                self.edit(self.dataTableObject.row($(this).parents("tr")).data());
                 return true;
             });
             //binding delete button
             $(".modal_delete").on("click",function(){
-                var del_obj = tableobj.row($(this).parents("tr")).date();
+                var del_obj = self.dataTableObject.row($(this).parents("tr")).data();
                 self.delete_group_display_name(del_obj.name);
+                self.delete_group_id = del_obj._id.$oid;
                 return true;
             })
         }
     });
 
-    this.edit = function(object){
-        var id = object._id.$oid;
-        self.modal_name(object.name);
-        self.modal_name(object.description);
+    this.handle_modal_btn_save = function(){
+        if(self.modal_mode == "create"){
+            self.requestCreate()
+        }else{
+            self.requestUpdate()
+        }
+    }
 
-        //request member list
-        $.ajax(_base_path+"/group/getMember/"+id,{
-            type:"GET",
-            success:function(json){
-                self.DTmember.clear();
-                self.DTmember.rows.add(json.data);
-                self.DTmember.draw();
+    this.handle_btn_del_confirm=function(){
+        self.requestDelete(self.delete_group_id)
+    }
+
+    /**
+     * [{
+     *      feature_id:
+     *      id:
+     *      type
+     *
+     * }]
+     */
+    this.requestUpdate = function(){
+        //update basic information
+        $.ajax(_base_path+"/group/"+self.update_id,{
+            type :"PUT",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON({
+                name:self.modal_name,
+                description:self.modal_description
+            }),
+            success:function(){
+                self.requestList();
             }
         })
 
-        $.ajax(_base_path+"/group/getFeature/"+id,{
+        //update feature acl
+        var update_feature_json = [];
+        for(var x = 0; x <self.DTfeature.data().length;x++){
+            update_feature_json.push({
+                "id":self.update_id,
+                "act_id":self.DTfeature.row(x).data()._id.$oid,
+                "type":"group",
+                "level":1
+            })
+        }
+        if(update_feature_json.length > 0)
+            $.ajax(_base_path+"/feature/addAcl",{
+                type :"PUT",
+                dataType:"json",
+                contentType :"application/json",
+                data:ko.toJSON(update_feature_json)
+            })
+    }
+
+    this.edit = function(object){
+        var id = object._id.$oid;
+        self.update_id = id;
+        self.modal_name(object.name);
+        self.modal_description(object.description);
+
+        //request member list
+        if(typeof object.member != "undefined")
+            $.ajax(_base_path+"/user/getByIds",{
+                type:"POST",
+                dataType:"json",
+                contentType :"application/json",
+                data:ko.toJSON(object.member),
+                success:function(json){
+                    self.DTmember.clear();
+                    self.DTmember.rows.add(json.data);
+                    self.DTmember.draw();
+                }
+            })
+
+        //request current feature list
+        $.ajax(_base_path+"/feature/user/"+id,{
             type:"GET",
             success:function(json){
                 self.DTfeature.clear();
                 self.DTfeature.rows.add(json.data);
-                self.DTmember.draw();
+                self.DTfeature.draw();
             }
         })
     }
 
-    this.requestDelete=function(){};
+    this.requestDelete=function(id){
+        $.ajax(_base_path+"/group/"+id,{
+            type:"DELETE",
+            success:function(){
+                self.requestList();
+            }
+        })
 
-    this.requesList = function(){
+    };
+
+
+
+    this.requestList = function(){
         $.ajax(_base_path+"/group",{
             type :"get",
             dataType:"json",
@@ -663,7 +746,8 @@ var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add
             }),
             contentType:"application/json",
             success:function(json){
-                alert_model.success("Successfully added group : "+self.modal_name);
+                alert_model.success("Successfully added group : "+self.modal_name());
+                self.requestList();
             },
             error:function(){
                 alert_model.error("Fail to create group ");
@@ -671,50 +755,219 @@ var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add
         })
     }
 
+    this.btnCreateHanlde = function(){
+        self.modal_mode = "create";
+        self.clear();
+        return true;
+    }
     this.createClickHandle = function(){
         self.requestCreate();
     }
 
-    self.requesList();
+    self.requestList();
 
 }
 
 var ManageItemListModel = function(tableDOM){
     var self = this;
 
+    //'create', 'upload'
+    this.modal_mode;
+
+    this.edit_obj;
+    this.delete_obj;
+
+    this.delete_display_name = ko.observable();
+
+    //fields
+    self.modal_fields = {
+        name:ko.observable(""),
+        purchase_date:ko.observable(""),
+        expected_lifetime: ko.observable(""),
+        avaliable_size : ko.observable(""),
+        description: ko.observable(""),
+        website:ko.observable(""),
+        remark:ko.observable(""),
+        image:ko.observable(""),
+        size_chart:ko.observable(""),
+        user_manual:ko.observable(""),
+        service_requirenment:ko.observable(""),
+        reason_of_purchase:ko.observable(""),
+        cost:ko.observable(""),
+        contract_ref:ko.observable(""),
+        service_information:ko.observable("")
+    }
+
+
+    //table init
     self.dataTableObject = $(tableDOM).DataTable({
-        data:items,
         columns:[
             {"data":"image"},
             {"data":"name"},
             {"data":"description"}
         ],
         "aoColumnDefs": [
-            datatable_render_action(0)
-        ]
+            {"mRender": function (data, type, row) {
+                img_str = "<img src=\""+data+"\"/>";
+                return img_str;
+            },"aTargets":[ 0 ]},
+
+            {"mRender": function (data, type, row) {
+                return "<button data-toggle=\"modal\" data-target=\"#modal_view\" class=\"btn btn-default modal_edit\">Edit</button>"+
+                    "<button data-toggle=\"modal\" data-target=\"#modal_delete\" class=\"btn btn-danger modal_delete\">Delete</button>"
+            },
+                "aTargets":[3]}
+        ],
+        "drawCallback":function(){
+            //bind edit
+            $(".modal_edit").on("click",self.handle_btn_item_edit);
+
+            //bind delete item
+            $(".modal_delete").on("click",self.handle_btn_item_del);
+        }
     });
 
-    this.requestUserList = function(){
-        $.ajax(_base_path+"/group",{
-            type :"get",
-            dataType:"json",
-            contentType :"application/json",
-            data:{
-                "page":this.pageNumber(),
-                "itemNum":this.userPerPage()
-            },
-            success:function(json){
-                self.userList.removeAll();
-                self.totalNum = json["total_num"];
-                for(x in json.data)
-                    self.userList.push(json.data[x]);
-                self.updateTable();
-            },
-            error:function(){
-                alert_model.error("Fail to retrieve user list")
+    self.clearFields = function(){
+        for(var x in self.fields){
+            self.fields[x]("");
+        }
+    }
+
+    self.handle_btn_create = function(){
+        self.clearFields();
+        self.modal_mode = "create";
+        return true;
+    }
+
+    self.handle_btn_item_edit = function(){
+        self.clearFields();
+        self.modal_mode = "update"
+        var obj = self.dataTableObject.row($(this).parents("tr")).data();
+        self.edit_obj = obj;
+        for(var x in self.modal_fields){
+            if(typeof obj[x] != "undefined")
+                self.modal_fields[x](obj[x])
+        }
+
+        //update preview
+        var file_fields = ["image","size_chart","user_manual"];
+        $.each(file_fields, function(v,k){
+            var path = self.modal_fields[k]();
+            if(path!="" && typeof path!="undefined") {
+                var preview = $("#preview_"+k);
+                //update preview
+                preview.html("");
+                if (k == "image") {
+                    preview.html("<img class=\"preview\" src=\"" + path + "\"></img>");
+                } else {
+                    preview.html("<a target=\"_blank\" href=\"" + path + "\">Click Here to download</a>");
+                }
+            }
+        })
+        return true;
+    }
+
+    self.handle_btn_modal = function(){
+        if(self.modal_mode=="create"){
+            self.requestCreate()
+        }else
+            self.requestUpdate(self.edit_obj._id.$oid)
+    }
+
+    self.handle_btn_item_del = function(){
+        var obj = self.dataTableObject.row($(this).parents("tr")).data();
+        self.delete_obj(obj);
+        self.delete_display_name(obj.name);
+        return true;
+    }
+
+    /**
+     * For input paramter
+     */
+    self.handle_file_upload = function(data,event){
+        //accepts single file only
+        var file = event.target.files;
+        var data = new FormData();
+        data.append("file",file[0])
+        var target_field = $(event.target).data("target_field");
+        var preview = $("#preview_"+target_field);
+        $.ajax(_base_path+"/upload",{
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success:function(data){
+                var path = data.path;
+                self.modal_fields[target_field](path);
+
+                //update preview
+                preview.html("");
+                if(target_field=="image"){
+                    preview.html("<img class=\"preview\" src=\""+path+"\"></img>");
+                }else{
+                    preview.html("<a target=\"_blank\" href=\""+path+"\">Click Here to download</a>");
+                }
             }
         })
     }
+
+    this.requestList = function(){
+        $.ajax(_base_path+"/item",{
+            type :"get",
+            dataType:"json",
+            contentType :"application/json",
+            success:function(json){
+                self.dataTableObject.clear();
+                self.dataTableObject.rows.add(json.data);
+                self.dataTableObject.draw();
+            },
+            error:function(){
+                alert_model.error("Fail to retrieve item list")
+            }
+        })
+    }
+
+    this.requestCreate = function(){
+        $.ajax(_base_path+"/item",{
+            type :"POST",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON(self.modal_fields),
+            success:function(json){
+                alert_model.success("Successfully added item : "+self.modal_fields.name());
+                self.requestList();
+            },
+            error:function() {
+                alert_model.error("Fail to create item ")
+            }
+        })
+    }
+
+    this.requestUpdate = function(id){
+        $.ajax(_base_path+"/item/"+id,{
+            type:"PUT",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON(self.modal_fields),
+            success:function(json){
+                alert_model.success("Successfully update item : "+self.modal_fields.name());
+                self.requestList();
+            },
+            error:function() {
+                alert_model.error("Fail to update item ")
+            }
+        })
+    }
+
+    this.requestDelete = function(id){
+        $.ajax(_base_path+"/item/"+id,{
+            type:"DELETE"
+        })
+    }
+
+    //update list
+    this.requestList();
 
 }
 
@@ -729,6 +982,8 @@ var ManageLocationModel = function(tableDOM , create_location_type_DOM){
             {"data":"description"}
         ]
     });
+
+    self.
 
     self.select_location = $(create_location_type_DOM).select2({
         data:location_type,

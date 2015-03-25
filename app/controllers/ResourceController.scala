@@ -1,10 +1,9 @@
 package controllers
 
 import common.ArrayQueryParam
-import model.{User, AbstractObject}
-import play.api.libs.json
-import play.api.libs.json.{JsNull, JsArray, Json, JsObject}
-import play.api.mvc.{Result, Action, Controller}
+import model.{ AbstractObject}
+import play.api.libs.json._
+import play.api.mvc.{Action, Controller}
 import play.modules.reactivemongo.MongoController
 
 /**
@@ -94,6 +93,23 @@ abstract class ResourceController extends Controller with MongoController {
       val request_data = request.body.as[JsObject]
       obj.update(id,request_data)
       Ok("{\"success\":\"\"}")
+  }
+
+  /**
+   * [{id: , objid ,type},{id: ,type:, objid},{id: , type: , objid}]
+   * @return
+   */
+  def updateACL() = Action(parse.json){
+    implicit request =>
+      val array_pair = request.body.as[JsArray]
+      array_pair.value.foreach({
+        //foreach add to obj
+        a:JsValue =>
+          obj.updateAcl((a\"act_id").as[JsString].value,(a\"id").as[JsString].value,(a\"level").as[JsNumber].value.toInt,(a\"type").as[JsString].value)
+      })
+      Ok(Json.obj(
+        "success" -> JsString("")
+      ))
   }
 
 }
