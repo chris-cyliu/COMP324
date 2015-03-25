@@ -966,15 +966,67 @@ var ManageItemListModel = function(tableDOM){
         })
     }
 
-    //update list
+    //update     list
     this.requestList();
 
 }
 
-var ManageLocationModel = function(tableDOM , create_location_type_DOM){
+var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , create_location_type_DOM){
     var self = this;
 
-    self.dataTableObject = $(tableDOM).DataTable({
+    this.obj_edit;
+    this.obj_delete;
+    this.del_name;
+    // create or delete
+    this.modal_mode;
+
+    this.modal_fields = {
+        name:ko.observable(),
+        type:ko.observable(),
+        description:ko.observable()
+
+    };
+
+    this.clear_modal =function(){
+        for(var x in self.modal_fields){
+            self.modal_fields[x]("");
+        }
+        self.DTpic.clear().draw();
+    }
+
+    this.handle_btn_create = function(){
+        self.modal_moda = "create";
+        self.clear_modal();
+        return true;
+    }
+
+    this.handle_btn_edit = function(){
+        self.modal_mode = "edit";
+        self.obj_edit = DTmain.row($(this).parent("tr")).data();
+        self.edit(self.obj_edit);
+        return true;
+    }
+
+    this.handle_btn_delete = function(){
+        self.obj_del = DTmain.row($(this).parents("tr")).data();
+        self.del_name = obj_del.name;
+        return true;
+    }
+
+    this.handle_dtpic_btn_delete = function(){
+        self.DTpic.row($(this).parents("tr")).remove().draw();
+    }
+
+    this.handle_modal_btn_confirm = function(){
+        if(self.modal_mode == "create"){
+            self.requestCreate();
+        }else{
+            self.requestUpdate(self.edit_obj._id.$oid);
+        }
+    }
+
+
+    self.DTmain = $(tableDOM).DataTable({
         data:locations,
         columns:[
             {"data":"name"},
@@ -983,12 +1035,146 @@ var ManageLocationModel = function(tableDOM , create_location_type_DOM){
         ]
     });
 
-    self.
+    self.DTpic = $(tableDOM_pic).DataTable({
+        columns:[
+            {"data":display_name},
+            {"data":null}
+        ],
+        aoColumnDefs:{"mRender": function (data, type, row) {
+            var dom = "<button class=\"btn btn-danger modal_pic_delete\"></button>";
+            return dom;
+        },"aTargets":[ 1 ]}
+    });
+
+    self.select2_pic = $(dom_select_user).select2({
+        ajax:{
+            url:_base_path+"/user",
+            type:"get",
+            dataType: 'json',
+            results:function(data){
+                var ret = [];
+                for(var x in data.data){
+                    ret.push({
+                        "id":data.data[x]._id.$oid,
+                        "text":data.data[x].dispkay_name
+                    })
+                }
+                return {results:ret}
+            },
+            cache:true
+        }
+    }).on("select2-selecting",function(event){
+        //function to handle select group
+        //add the select to table
+        //clear the selection
+        //TODO : check table group exist ?
+        DTpic.row.add({
+            _id:{$oid:event.val},
+            name:event.choice.text
+        })
+        DTpic.draw();
+        $(event.target).select2("val",'');
+    })
 
     self.select_location = $(create_location_type_DOM).select2({
         data:location_type,
         width:"100%"
     })
+
+    this.edit = function(object){
+        for(var x in self.modal_fields){
+            if(typeof object[x] != "undefined"){
+                self.modal_fields[x](object[x])
+            }
+        }
+
+        if(object["pic"].length = 0){
+            $.ajax(_base_path+"/user/getByIds",{
+                type:"POST",
+                dataType:"json",
+                contentType :"application/json",
+                data:ko.toJSON(object.pic),
+                success:function(json){
+                    self.DTpic.clear();
+                    self.DTpic.rows.add(json.data);
+                    self.DTpic.draw();
+                }
+            })
+        }
+    }
+
+    this.requestList = function(){
+        $.ajax(_base_path+"/location",{
+            type :"get",
+            dataType:"json",
+            contentType :"application/json",
+            success:function(json){
+                self.DTmain.clear();
+                self.DTmain.rows.add(json.data);
+                self.DTmain.draw();
+            },
+            error:function(){
+                alert_model.error("Fail to retrieve location list")
+            }
+        })
+    }
+
+    this.requestCreate = function(){
+        //collect list of pic from table and append to the field pic
+        var user_id_list = [];
+        $.each(DTpic.data(),function(data){
+            user_id_list.push(data._id.$oid)
+        })
+
+        var data = self.modal_fields;
+        data.pic = user_id_list;
+
+        $.ajax(_base_path+"/location",{
+            type :"POST",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON(data),
+            success:function(json){
+                alert_model.success("Successfully added location : "+self.modal_fields.name());
+                self.requestList();
+            },
+            error:function() {
+                alert_model.error("Fail to create location ")
+            }
+        })
+    }
+
+    this.requestUpdate = function(id){
+
+        //collect list of pic from table and append to the field pic
+        var user_id_list = [];
+        $.each(DTpic.data(),function(data){
+            user_id_list.push(data._id.$oid)
+        })
+
+        var data = self.modal_fields;
+        data.pic = user_id_list;
+        
+        $.ajax(_base_path+"/location/"+id,{
+            type:"PUT",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON(data),
+            success:function(json){
+                alert_model.success("Successfully update location : "+self.modal_fields.name());
+                self.requestList();
+            },
+            error:function() {
+                alert_model.error("Fail to update location ")
+            }
+        })
+    }
+
+    this.requestDelete = function(id){
+        $.ajax(_base_path+"/location/"+id,{
+            type:"DELETE"
+        })
+    }
 }
 
 var ReceiveItemModel = function(data , item_table_DOM){
