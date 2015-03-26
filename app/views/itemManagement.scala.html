@@ -31,6 +31,7 @@
                             <li class="active"><a href="#tab_1_1" data-toggle="tab">Basic Information</a></li>
                             <li><a href="#tab_1_2" data-toggle="tab">Image and user manual</a></li>
                             <li><a href="#tab_service" data-toggle="tab">Service</a></li>
+                            <li><a href="#tab_serial" data-toggle="tab">Serial Item</a> </li>
                         </ul>
 
                         <div class="tab-content">
@@ -135,6 +136,26 @@
                                     <label>Service Information</label>
                                     <input data-bind="value:modal_fields.service_information" type="text" class="form-control">
                                 </div>
+                                <div class="modal-footer">
+                                    <button data-bind="click:handle_btn_modal" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                    <button class="btn" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+
+                            <!-- Serial Item -->
+                            <div class="tab-pane" id="tab_serial">
+                                <table class="table" id="table_serial">
+                                    <thead>
+                                        <th>Serial Item</th>
+                                        <th>Owner Location</th>
+                                        <th>Current Location</th>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div class="modal-footer">
+                                    <button data-bind="click:handle_btn_modal" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                    <button class="btn" data-dismiss="modal">Cancel</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -145,7 +166,7 @@
         <!-- !Model -->
 
         <!-- Modal for delete User -->
-    <div class="modal fade" id="modal_del" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
+    <div class="modal fade" id="modal_delete" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header"><h4>Delete user</h4></div>
@@ -153,7 +174,7 @@
                 Are you sure want to delete user "<span data-bind="text:delete_display_name"></span>"
                 </div>
                 <div class="modal-footer">
-                    <button data-bind="click:handle_btn_item_del" type="submit" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+                    <button data-bind="click:handle_btn_del_confirm" type="submit" class="btn btn-danger" data-dismiss="modal">Confirm</button>
                     <button class="btn" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -166,7 +187,7 @@
 $(function(){
 
     //binding  table for listing user
-    var itemList = new ManageItemListModel($("#list_table" ).get(0));
+    var itemList = new ManageItemListModel($("#list_table" ).get(0),$("#table_serial").get(0));
     ko.applyBindings(itemList,$("#content_wrap").get(0));
 
 })

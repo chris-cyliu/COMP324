@@ -1,6 +1,8 @@
 package controllers
 
 import model.{Item, AbstractObject}
+import play.api.libs.json
+import play.api.libs.json.{Json, JsArray}
 import play.api.mvc.Action
 
 /**
@@ -31,5 +33,12 @@ object ItemController extends ResourceController {
 
   def pageAssignItem = Action {
     Ok(views.html.layout("Assign item",views.html.assignItem()))
+  }
+
+  def addSerial = Action(parse.json){
+    implicit  request =>
+      val serialItemList = request.body.as[JsArray].value
+      serialItemList.foreach(Item.addSerial(_))
+      Ok(Json.obj("success"->""))
   }
 }

@@ -25,6 +25,7 @@ GET           /item/register/page        controllers.ItemController.pageItemRegi
 GET           /item/location/page        controllers.ItemController.pageLocation()
 GET           /item/receive/page         controllers.ItemController.pageReceiveItem()
 GET           /item/assign/page          controllers.ItemController.pageAssignItem()
+POST          /item/addSerial            controllers.ItemController.addSerial()
 
 GET           /item                      controllers.ItemController.list()
 POST          /item                      controllers.ItemController.create()
@@ -39,6 +40,12 @@ GET           /group/user/*id            controllers.GroupController.getGroupByU
 POST          /group/addMember           controllers.GroupController.updateGroup()
 PUT           /group/*id                 controllers.GroupController.update(id)
 DELETE        /group/*id                 controllers.GroupController.remove(id)
+
+#location
+GET           /location                  controllers.LocationController.list()
+POST          /location                  controllers.LocationController.create()
+PUT           /location/*id              controllers.LocationController.update(id)
+DELETE        /location/*id              controllers.LocationController.remove(id)
 
 
 #Feature

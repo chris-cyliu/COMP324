@@ -536,31 +536,109 @@ var RequestItemModel = function(){
  * View model for item registration
  * @constructor
  */
-var ItemRegistrationModel = function(){
+var ItemRegistrationModel = function(dom_table_item, dom_select_item ,dom_select_location, dom_input_serial){
     var self = this;
 
-    this.registration_items = ko.observableArray();
+    //init select2
+    this.select_item = $(dom_select_item).select2({
+        ajax:{
+            url:_base_path+"/item",
+            type:"get",
+            dataType: 'json',
+            results:function(data){
+                var ret = [];
+                for(var x in data.data){
+                    ret.push({
+                        "id":data.data[x]._id.$oid,
+                        "text":data.data[x].name
+                    })
+                }
+                return {results:ret}
+            },
+            cache:true
+        }
+    })
+    this.select_item = dom_select_item;
 
-    this.register_item_id = ko.observable();
-    this.register_serial_num = ko.observable();
+    this.select_location = $(dom_select_location).select2({
+        ajax:{
+            url:_base_path+"/location",
+            type:"get",
+            dataType: 'json',
+            results:function(data){
+                var ret = [];
+                for(var x in data.data){
+                    ret.push({
+                        "id":data.data[x]._id.$oid,
+                        "text":data.data[x].name
+                    })
+                }
+                return {results:ret}
+            },
+            cache:true
+        }
+    })
+    this.select_location = dom_select_location;
 
-    this.getNewItemName = function(){
-        for(var x in items)
-            if(items[x].id == self.register_item_id())
-                return items[x].name;
+    this.dt_main = $(dom_table_item).DataTable({
+        columns:[
+            {"data":"name"},
+            {"data":"serial"},
+            {"data":null}
+        ],
+        "aoColumnDefs": [
+            {
+                "mRender": function (data, type, row) {
+                    return "<button data-toggle=\"modal\" data-target=\"#modal_delete\" class=\"btn btn-danger modal_delete\">Delete</button>"
+                },
+                "aTargets":[2]
+            }
+        ],
+        "drawCallback":function(){
+            $(".modal_delete").on("click",function(){
+                self.dt_main.row($(this).parents("tr")).remove().draw();
+            })
+        }
+    });
+
+    this.getNewItemObj = function(){return $(self.select_item).select2("data")};
+
+    this.btn_add_handle = function(){
+        //get item obj and serial
+        var item_obj = self.getNewItemObj();
+        var serial = $(dom_input_serial).val();
+
+        var new_obj = {
+            item_id : item_obj.id,
+            serial : serial,
+            name: item_obj.text
+        }
+        //push to table
+        self.dt_main.row.add(new_obj).draw();
     }
 
-    this.click_add = function(){
-        self.registration_items.push({
-            id:self.register_item_id(),
-            name :self.getNewItemName(),
-            serial_num:self.register_serial_num()
-        });
-    }
+    this.requestAdd = function(){
 
-    this.click_add_request = function(){
-        //ajax reqeust to server
-        //TODO : request item registration
+        var data = [];
+        for(var x = 0; x<self.dt_main.data().length;x++){
+            var temp = self.dt_main.row(x).data();
+            temp.location_id = $(self.select_location).select2("val");
+            data.push(self.dt_main.row(x).data())
+        }
+        //request add
+        $.ajax(_base_path+"/item/addSerial",{
+            type :"POST",
+            dataType:"json",
+            contentType :"application/json",
+            data:ko.toJSON(data),
+            success:function(){
+                alert_model.success("Successfully register item");
+                //clear table
+                self.dt_main.clear().draw();
+            }
+        })
+
+
     }
 }
 
@@ -768,7 +846,7 @@ var MangeGroupModel = function(tableDOM, aclTableDom, memberTableDom ,select_add
 
 }
 
-var ManageItemListModel = function(tableDOM){
+var ManageItemListModel = function(tableDOM,dom_table_serial, table_serial){
     var self = this;
 
     //'create', 'upload'
@@ -778,6 +856,17 @@ var ManageItemListModel = function(tableDOM){
     this.delete_obj;
 
     this.delete_display_name = ko.observable();
+
+    this.cache_location=null;
+    //init cache
+    $.ajax(_base_path+"/location",{
+        type :"get",
+        dataType:"json",
+        contentType :"application/json",
+        success:function(data){
+            self.cache_location = data.data
+        }
+    })
 
     //fields
     self.modal_fields = {
@@ -795,8 +884,26 @@ var ManageItemListModel = function(tableDOM){
         reason_of_purchase:ko.observable(""),
         cost:ko.observable(""),
         contract_ref:ko.observable(""),
-        service_information:ko.observable("")
+        service_information:ko.observable(""),
+        serial:ko.observableArray([])
     }
+
+    self.table_serial = $(dom_table_serial).DataTable({
+        columns:[
+            {"data":"serial"},
+            {"data":"own_location"},
+            {"data":"cur_location"}
+        ],
+        "aoColumnDefs": [
+            {"mRender": function (location_id, type, row) {
+                for(var x in self.cache_location){
+                    if(self.cache_location[x]._id.$oid == location_id){
+                        return self.cache_location[x].name;
+                    }
+                }
+            },"aTargets":[ 1,2 ]}
+        ]
+    })
 
 
     //table init
@@ -831,6 +938,7 @@ var ManageItemListModel = function(tableDOM){
         for(var x in self.fields){
             self.fields[x]("");
         }
+        self.table_serial.clear();
     }
 
     self.handle_btn_create = function(){
@@ -864,6 +972,10 @@ var ManageItemListModel = function(tableDOM){
                 }
             }
         })
+
+        //update Serial
+        if(self.edit_obj.serial.length > 0)
+            self.table_serial.rows.add(self.edit_obj.serial).draw();
         return true;
     }
 
@@ -876,9 +988,13 @@ var ManageItemListModel = function(tableDOM){
 
     self.handle_btn_item_del = function(){
         var obj = self.dataTableObject.row($(this).parents("tr")).data();
-        self.delete_obj(obj);
+        self.delete_obj = obj;
         self.delete_display_name(obj.name);
         return true;
+    }
+
+    self.handle_btn_del_confirm = function(){
+        self.requestDelete(self.delete_obj._id.$oid)
     }
 
     /**
@@ -962,7 +1078,10 @@ var ManageItemListModel = function(tableDOM){
 
     this.requestDelete = function(id){
         $.ajax(_base_path+"/item/"+id,{
-            type:"DELETE"
+            type:"DELETE",
+            success:function(){
+                self.requestList();
+            }
         })
     }
 
@@ -971,12 +1090,13 @@ var ManageItemListModel = function(tableDOM){
 
 }
 
-var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , create_location_type_DOM){
+var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user ,create_location_type_DOM){
     var self = this;
 
     this.obj_edit;
     this.obj_delete;
-    this.del_name;
+    this.del_name = ko.observable("");
+    this.del_name = ko.observable("");
     // create or delete
     this.modal_mode;
 
@@ -995,22 +1115,26 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
     }
 
     this.handle_btn_create = function(){
-        self.modal_moda = "create";
+        self.modal_mode = "create";
         self.clear_modal();
         return true;
     }
 
     this.handle_btn_edit = function(){
         self.modal_mode = "edit";
-        self.obj_edit = DTmain.row($(this).parent("tr")).data();
+        self.obj_edit = self.DTmain.row($(this).parents("tr")).data();
         self.edit(self.obj_edit);
         return true;
     }
 
     this.handle_btn_delete = function(){
-        self.obj_del = DTmain.row($(this).parents("tr")).data();
-        self.del_name = obj_del.name;
+        self.obj_del = self.DTmain.row($(this).parents("tr")).data();
+        self.del_name(self.obj_del.name);
         return true;
+    }
+
+    this.handle_btn_delete_confirm = function(){
+        self.requestDelete(self.obj_del._id.$oid);
     }
 
     this.handle_dtpic_btn_delete = function(){
@@ -1021,29 +1145,39 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
         if(self.modal_mode == "create"){
             self.requestCreate();
         }else{
-            self.requestUpdate(self.edit_obj._id.$oid);
+            self.requestUpdate(self.obj_edit._id.$oid);
         }
+        return true;
     }
 
-
     self.DTmain = $(tableDOM).DataTable({
-        data:locations,
         columns:[
             {"data":"name"},
             {"data":"type"},
-            {"data":"description"}
-        ]
+            {"data":"description"},
+            {"data":null}
+        ],
+        "aoColumnDefs":[{"mRender": function (data, type, row) {
+             return"<button class=\"btn btn-default btn_location_edit\" data-toggle=\"modal\" data-target=\"#createUserModal\">Edit</button>"+
+                      "<button class=\"btn btn-danger btn_location_del\" data-toggle=\"modal\" data-target=\"#modal_del\">Delete</button>";
+        },"aTargets":[ 3 ]}],
+        drawCallback:function(){
+            $(".btn_location_edit").on("click",self.handle_btn_edit);
+            $(".btn_location_del").on("click",self.handle_btn_delete);
+        }
     });
 
     self.DTpic = $(tableDOM_pic).DataTable({
         columns:[
-            {"data":display_name},
+            {"data":"display_name"},
             {"data":null}
         ],
-        aoColumnDefs:{"mRender": function (data, type, row) {
-            var dom = "<button class=\"btn btn-danger modal_pic_delete\"></button>";
-            return dom;
-        },"aTargets":[ 1 ]}
+        "aoColumnDefs":[{"mRender": function (data, type, row) {
+            return "<button class=\"btn btn-danger modal_pic_delete\">Delete</button>;"
+        },"aTargets":[ 1 ]}],
+        drawCallback:function(){
+            $(".modal_pic_delete").on("click",self.handle_dtpic_btn_delete);
+        }
     });
 
     self.select2_pic = $(dom_select_user).select2({
@@ -1056,7 +1190,7 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
                 for(var x in data.data){
                     ret.push({
                         "id":data.data[x]._id.$oid,
-                        "text":data.data[x].dispkay_name
+                        "text":data.data[x].display_name
                     })
                 }
                 return {results:ret}
@@ -1068,11 +1202,11 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
         //add the select to table
         //clear the selection
         //TODO : check table group exist ?
-        DTpic.row.add({
+        self.DTpic.row.add({
             _id:{$oid:event.val},
-            name:event.choice.text
+            display_name:event.choice.text
         })
-        DTpic.draw();
+        self.DTpic.draw();
         $(event.target).select2("val",'');
     })
 
@@ -1083,12 +1217,12 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
 
     this.edit = function(object){
         for(var x in self.modal_fields){
-            if(typeof object[x] != "undefined"){
+            if(typeof object[x] != "undefined" && x!="pic"){
                 self.modal_fields[x](object[x])
             }
         }
 
-        if(object["pic"].length = 0){
+        if(object["pic"].length > 0){
             $.ajax(_base_path+"/user/getByIds",{
                 type:"POST",
                 dataType:"json",
@@ -1122,9 +1256,10 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
     this.requestCreate = function(){
         //collect list of pic from table and append to the field pic
         var user_id_list = [];
-        $.each(DTpic.data(),function(data){
-            user_id_list.push(data._id.$oid)
-        })
+        var size = self.DTpic.data().length;
+        for(var x =0;x<size; x++){
+            user_id_list.push(self.DTpic.row(x).data()._id.$oid)
+        }
 
         var data = self.modal_fields;
         data.pic = user_id_list;
@@ -1148,9 +1283,10 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
 
         //collect list of pic from table and append to the field pic
         var user_id_list = [];
-        $.each(DTpic.data(),function(data){
-            user_id_list.push(data._id.$oid)
-        })
+        var size = self.DTpic.data().length;
+        for(var x =0;x<size; x++){
+            user_id_list.push(self.DTpic.row(x).data()._id.$oid)
+        }
 
         var data = self.modal_fields;
         data.pic = user_id_list;
@@ -1172,9 +1308,15 @@ var ManageLocationModel = function(tableDOM,tableDOM_pic, dom_select_user , crea
 
     this.requestDelete = function(id){
         $.ajax(_base_path+"/location/"+id,{
-            type:"DELETE"
+            type:"DELETE",
+            success:function(){
+                self.requestList();
+            }
         })
     }
+
+    //init data
+    self.requestList();
 }
 
 var ReceiveItemModel = function(data , item_table_DOM){
