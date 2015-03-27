@@ -58,13 +58,4 @@ object Item extends AbstractObject{
 //    Transfer.transfer(None,location_id ,item_id , serial, Transfer.KW_APPROVED)
   }
 
-  /**
-   * Assign location attr in the object
-   * Add Transfer log -> waiting for pending
-   * @param item_id
-   * @param serial
-   */
-  def assign(item_id:String, serial:String , location_id_from:String , location_id_to:String) = {
-    Transfer.transfer(Some(location_id_from), location_id_to ,item_id , serial, Transfer.KW_PENDING)
-  }
 }

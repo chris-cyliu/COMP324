@@ -43,30 +43,31 @@ object User extends AbstractObject{
       })
   }
 
-  def setPassword(in:JsObject, text:String):JsObject = {
-    in - User.KW_PASSWORD + (User.KW_PASSWORD -> JsString(Crypto.encryptAES(text)))
-  }
-
   /**
    * Function to create new user
    * @param in
    * @return
    */
-  override def create( in:JsObject) = {
+  override def create(in:JsValue) = {
     //check user name whether it already exist or not
     val username = in \ KW_USERNAME
     if(Await.result(collection.find(Json.obj(KW_USERNAME -> username)).cursor[JsObject].collect[List](1),MAX_WAIT).size > 0)
       throw new Exception(s"Duplicated user name $username")
-    
+
     //encrypt password
     val in_encrypt_pw = User.setPassword(in,(in \ User.KW_PASSWORD).as[JsString].value)
 
+    val ret = super.create(in_encrypt_pw)
+
     //create Location object
-    val location = Json.obj(
+    Location.createUserLocation((ret\User.KW_ID).as[JsString].value,(ret\"display_name").as[JsString].value)
 
-    )
+    ret
+  }
 
-    super.create(in_encrypt_pw)
+  def setPassword(t_in:JsValue, text:String):JsObject = {
+    val in = t_in.as[JsObject]
+    in - User.KW_PASSWORD + (User.KW_PASSWORD -> JsString(Crypto.encryptAES(text)))
   }
 
   /**

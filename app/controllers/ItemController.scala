@@ -1,8 +1,8 @@
 package controllers
 
-import model.{Item, AbstractObject}
+import model.{Transfer, Item, AbstractObject}
 import play.api.libs.json
-import play.api.libs.json.{Json, JsArray}
+import play.api.libs.json.{JsString, Json, JsArray}
 import play.api.mvc.Action
 
 /**
@@ -39,6 +39,17 @@ object ItemController extends ResourceController {
     implicit  request =>
       val serialItemList = request.body.as[JsArray].value
       serialItemList.foreach(Item.addSerial(_))
+
+      val to_location_id = (serialItemList(0) \ "location_id").as[JsString].value
+      val item_id_serial_seq = serialItemList.map({x=>
+        val item_id = (x \ "item_id").as[JsString].value
+        val serial = (x \ "serial").as[JsString].value
+        (item_id,serial)
+      })
+      //add transfer record
+      Transfer.assignItem(to_location_id, item_id_serial_seq);
       Ok(Json.obj("success"->""))
+
+
   }
 }
