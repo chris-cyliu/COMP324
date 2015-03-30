@@ -47,7 +47,7 @@ import scala.concurrent.Future
         User.login(username,password) match {
           case Some(e) =>
             //construct redirect
-            Ok(Util.getRedirectJsObj(Util.homePagePath)).withSession(Session.KW_USER_OBJ -> e.toString)
+            Ok(Util.getRedirectJsObj(Util.homePagePath)).withSession(Session.KW_USER_OBJ -> Json.stringify(e))
           case None =>
             throw new Exception("Wrong username and password")
         }

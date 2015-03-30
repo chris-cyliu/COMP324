@@ -27,10 +27,6 @@ object ItemController extends ResourceController {
     Ok(views.html.layout("Item Management",views.html.itemManagement()))
   }
 
-  def pageReceiveItem = Action {
-    Ok(views.html.layout("Receive Item",views.html.receiveItems()))
-  }
-
   def pageAssignItem = Action {
     Ok(views.html.layout("Assign item",views.html.assignItem()))
   }
@@ -49,7 +45,21 @@ object ItemController extends ResourceController {
       //add transfer record
       Transfer.assignItem(to_location_id, item_id_serial_seq);
       Ok(Json.obj("success"->""))
+  }
 
+  def getSerialByIdLocation(item_id:String,location_id:String) = Action {
+    implicit request =>
+      val data = Item.getSerial(item_id,location_id)
+      Ok(Json.obj(
+        "data" -> JsArray(data)
+      ))
+  }
 
+  def aduit(location_id:String) = Action {
+    implicit request =>
+      val data = Item.aduit(location_id)
+      Ok(Json.obj(
+        "data" -> JsArray(data)
+      )
   }
 }

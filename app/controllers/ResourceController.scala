@@ -112,4 +112,18 @@ abstract class ResourceController extends Controller with MongoController {
       ))
   }
 
+  def getByIds = Action(parse.json){
+    implicit request =>
+      val array_json_ids = request.body.as[JsArray].value
+      val ids_string = array_json_ids.map({x=>
+        x.as[JsString].value
+      })
+      val objs = obj.getListByIds(ids_string)
+      Ok(
+        Json.obj(
+          "data" -> JsArray(objs)
+        )
+      )
+  }
+
 }

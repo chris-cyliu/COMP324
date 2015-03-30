@@ -1,62 +1,58 @@
+<div id="page_page_wrapper" style="margin-top: 20px">
+    <div class="panel panel-default" >
 
-<div class="panel panel-default" style="margin-top:20px">
+        <div class="panel-heading">
+            <i class="icon-file"></i>
+            Public Notice
+        </div> <!-- /widget-header -->
 
-    <div class="panel-heading">
-        <i class="icon-file"></i>
-        Public Notice
-    </div> <!-- /widget-header -->
+        <div class="panel-body">
 
-    <div class="panel-body">
+            <p>Operations Bureau</p>
+            <p>Comprises the Operations Division, the Counter-Terrorism and Internal Security Division, and the Key Points and Search Division which includes the Police Dog Unit. It deals mainly with the staffing of operational matters which include the formulation and dissemination of relevant Force orders, boundary security, deployment of resources and liaison with the Hong Kong garrison.</p>
 
-        <p>Operations Bureau</p>
-        <p>Comprises the Operations Division, the Counter-Terrorism and Internal Security Division, and the Key Points and Search Division which includes the Police Dog Unit. It deals mainly with the staffing of operational matters which include the formulation and dissemination of relevant Force orders, boundary security, deployment of resources and liaison with the Hong Kong garrison.</p>
+            <p>Police Tactical Unit </p>
+            <p>Includes Training, Administration and the Special Duties Unit. Among other things, it reviews regularly tactics used in crowd management and riot control. </p>
+        </div> <!-- /widget-content -->
 
-        <p>Police Tactical Unit </p>
-        <p>Includes Training, Administration and the Special Duties Unit. Among other things, it reviews regularly tactics used in crowd management and riot control. </p>
-    </div> <!-- /widget-content -->
+    </div>
 
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <i class="icon-file"></i>
+            Personal message
+        </div> <!-- /widget-header -->
+
+        <div class="panel-body">
+            <ul class="chat" data-bind="template:{name:'template_message',foreach:messageList}">
+
+            </ul>
+        </div> <!-- /widget-content -->
+
+    </div>
 </div>
 
-<div class="panel panel-default" style="margin-top:20px">
+<script type="text/html" id="template_message">
+    <li class="left clearfix">
+        <span class="chat-img pull-left">
+            <img src="/assets/images/fff.gif" alt="User Avatar" class="img-circle">
+        </span>
+        <div class="chat-body clearfix">
+            <div class="header">
+                <strong data-bind="text:title" class="primary-font"></strong>
+                <small class="pull-right text-muted">
+                    <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+                </small>
+            </div>
+            <p data-bind="html:msg"></p>
 
-    <div class="panel-heading">
-        <i class="icon-file"></i>
-        Personal message
-    </div> <!-- /widget-header -->
+        </div>
+    </li>
+</script>
 
-    <div class="panel-body">
-        <ul class="chat">
-            <li class="left clearfix">
-                <span class="chat-img pull-left">
-                    <img src="http://placehold.it/50/D7E79E/fff" alt="User Avatar" class="img-circle">
-                </span>
-                <div class="chat-body clearfix">
-                    <div class="header">
-                        <strong class="primary-font">Borrow request</strong>
-                        <small class="pull-right text-muted">
-                            <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
-                        </small>
-                    </div>
-                    <p>Team B ask for some items. <a>details</a> </p>
-
-                </div>
-            </li>
-            <li class="left clearfix">
-                <span class="chat-img pull-left">
-                    <img src="http://placehold.it/50/D7E79E/fff" alt="User Avatar" class="img-circle">
-                </span>
-                <div class="chat-body clearfix">
-                    <div class="header">
-                        <strong class="primary-font">Ack receive item</strong>
-                        <small class="pull-right text-muted">
-                            <i class="fa fa-clock-o fa-fw"></i> 60 mins ago
-                        </small>
-                    </div>
-                    <p>Items are assigned to you. <a href="/item/receive/page">details</a> </p>
-                </div>
-            </li>
-        </ul>
-    </div> <!-- /widget-content -->
-
-</div>
-
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new HomePageModel(),$("#page_page_wrapper").get(0));
+    })
+</script>

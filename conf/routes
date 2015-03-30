@@ -3,58 +3,82 @@
 # ~~~~
 
 # Home page
-GET           /                          controllers.SystemController.homepage()
+GET           /                                       controllers.SystemController.homepage()
 
 # User
-GET           /user                      controllers.UserController.list()
-GET           /user/datatable            controllers.UserController.listDataTable()
-POST          /user/login                controllers.UserController.login()
-GET           /user/logout               controllers.UserController.logout()
-GET           /user/page                 controllers.UserController.page()
+GET           /user                                   controllers.UserController.list()
+GET           /user/datatable                         controllers.UserController.listDataTable()
+POST          /user/login                             controllers.UserController.login()
+GET           /user/logout                            controllers.UserController.logout()
+GET           /user/page                              controllers.UserController.page()
 
-POST          /user/create               controllers.UserController.createUser()
-PUT           /user/*id                  controllers.UserController.update(id)
-DELETE        /user/*id                  controllers.UserController.remove(id)
-POST          /user/getByIds             controllers.UserController.getUsers()
+POST          /user/create                            controllers.UserController.createUser()
+PUT           /user/*id                               controllers.UserController.update(id)
+DELETE        /user/*id                               controllers.UserController.remove(id)
+POST          /user/getByIds                          controllers.UserController.getUsers()
 
 
 #Item
-GET           /item/borrow/page          controllers.ItemController.pageBorrowItem()
-GET           /item/page                 controllers.ItemController.itemManage()
-GET           /item/register/page        controllers.ItemController.pageItemRegistration()
-GET           /item/location/page        controllers.ItemController.pageLocation()
-GET           /item/receive/page         controllers.ItemController.pageReceiveItem()
-GET           /item/assign/page          controllers.ItemController.pageAssignItem()
-POST          /item/addSerial            controllers.ItemController.addSerial()
+GET           /item/borrow/page                       controllers.ItemController.pageBorrowItem()
+GET           /item/page                              controllers.ItemController.itemManage()
+GET           /item/register/page                     controllers.ItemController.pageItemRegistration()
+GET           /item/location/page                     controllers.ItemController.pageLocation()
+GET           /item/assign/page                       controllers.ItemController.pageAssignItem()
+POST          /item/addSerial                         controllers.ItemController.addSerial()
 
-GET           /item                      controllers.ItemController.list()
-POST          /item                      controllers.ItemController.create()
-PUT           /item/*id                  controllers.ItemController.update(id)
-DELETE        /item/*id                  controllers.ItemController.remove(id)
+POST          /item/getByIds                          controllers.ItemController.getByIds()
+GET           /item                                   controllers.ItemController.list()
+POST          /item                                   controllers.ItemController.create()
+GET           /item/getSerial/:id/:location_id        controllers.ItemController.getSerialByIdLocation(id,location_id)
+PUT           /item/*id                               controllers.ItemController.update(id)
+DELETE        /item/*id                               controllers.ItemController.remove(id)
 
 #Group
-GET           /group/page                controllers.GroupController.page()
-GET           /group                     controllers.GroupController.list()
-POST          /group                     controllers.GroupController.create()
-GET           /group/user/*id            controllers.GroupController.getGroupByUserid(id)
-POST          /group/addMember           controllers.GroupController.updateGroup()
-PUT           /group/*id                 controllers.GroupController.update(id)
-DELETE        /group/*id                 controllers.GroupController.remove(id)
+GET           /group/page                             controllers.GroupController.page()
+GET           /group                                  controllers.GroupController.list()
+POST          /group                                  controllers.GroupController.create()
+GET           /group/user/*id                         controllers.GroupController.getGroupByUserid(id)
+POST          /group/addMember                        controllers.GroupController.updateGroup()
+PUT           /group/*id                              controllers.GroupController.update(id)
+DELETE        /group/*id                              controllers.GroupController.remove(id)
 
 #location
-GET           /location                  controllers.LocationController.list()
-POST          /location                  controllers.LocationController.create()
-PUT           /location/*id              controllers.LocationController.update(id)
-DELETE        /location/*id              controllers.LocationController.remove(id)
+GET           /location                               controllers.LocationController.list()
+POST          /location                               controllers.LocationController.create()
+POST          /location/getByIds                      controllers.LocationController.getByIds()
+PUT           /location/*id                           controllers.LocationController.update(id)
+DELETE        /location/*id                           controllers.LocationController.remove(id)
 
+#borrow
+GET           /borrow                                 controllers.BorrowController.list()
+GET           /borrow/:id                             controllers.BorrowController.respondRequest(id)
+POST          /borrow                                 controllers.BorrowController.create()
+PUT           /borrow/*id                             controllers.BorrowController.update(id)
+DELETE        /borrow/*id                             controllers.BorrowController.remove(id)
+POST          /borrow/approve/:id                     controllers.BorrowController.approve(id)
+POST          /borrow/reject/:id                      controllers.BorrowController.reject(id)
+
+#transfer
+GET           /transfer                               controllers.TransferController.list()
+GET           /transfer/:id                           controllers.TransferController.receiveItem(id)
+POST          /transfer/approve/:id                   controllers.TransferController.approve(id)
+POST          /transfer/reject/:id                    controllers.TransferController.reject(id)
+POST          /transfer                               controllers.TransferController.create()
+PUT           /transfer/:id                           controllers.TransferController.update(id)
+DELETE        /transfer/:id                           controllers.TransferController.remove(id)
 
 #Feature
-GET           /feature                   controllers.FeatureController.list()
-GET           /feature/user/*id          controllers.FeatureController.getFeatureByUserid(id)
-PUT           /feature/addAcl            controllers.FeatureController.updateACL()
+GET           /feature                                controllers.FeatureController.list()
+GET           /feature/user/*id                       controllers.FeatureController.getFeatureByUserid(id)
+PUT           /feature/addAcl                         controllers.FeatureController.updateACL()
 
+#Transfer
+GET           /transfer/:item_id/:serial              controllers.TransferController.getTransferBySerialItem(item_id,serial)
 #upload
-POST          /upload                    controllers.UploadController.uploadFile()
+POST          /upload                                 controllers.UploadController.uploadFile()
+
+#message
+GET           /message                                controllers.MessageController.getMessage()
+
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file              controllers.Assets.at(path="/public", file)
-    
+GET           /assets/*file                           controllers.Assets.at(path="/public", file)

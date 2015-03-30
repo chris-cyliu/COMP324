@@ -22,7 +22,7 @@
 
         <!-- Create User Model -->
     <div class="modal fade" id="modal_view" data-toggle="modal_view" tabindex="-1" role="dialog" aria-labelledby="modal_viewLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-body">
@@ -32,6 +32,8 @@
                             <li><a href="#tab_1_2" data-toggle="tab">Image and user manual</a></li>
                             <li><a href="#tab_service" data-toggle="tab">Service</a></li>
                             <li><a href="#tab_serial" data-toggle="tab">Serial Item</a> </li>
+                            <li><a href="#tab_transfer_record" data-toggle="tab">Transfer Record</a></li>
+
                         </ul>
 
                         <div class="tab-content">
@@ -149,6 +151,23 @@
                                         <th>Serial Item</th>
                                         <th>Owner Location</th>
                                         <th>Current Location</th>
+                                        <th>Action</th>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div class="modal-footer">
+                                    <button data-bind="click:handle_btn_modal" type="submit" class="btn" data-dismiss="modal">Save</button>
+                                    <button class="btn" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+
+                            <!-- Hidden tab page for serial transfer record -->
+                            <div class="tab-pane" id="tab_transfer_record">
+                                <table class="table" id="table_transfer_record">
+                                    <thead>
+                                        <th>Transfer Date</th>
+                                        <th>From Location</th>
+                                        <th>To Location</th>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
@@ -167,7 +186,7 @@
 
         <!-- Modal for delete User -->
     <div class="modal fade" id="modal_delete" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header"><h4>Delete user</h4></div>
                 <div class="modal-body">
@@ -187,7 +206,7 @@
 $(function(){
 
     //binding  table for listing user
-    var itemList = new ManageItemListModel($("#list_table" ).get(0),$("#table_serial").get(0));
+    var itemList = new ManageItemListModel($("#list_table" ).get(0),$("#table_serial").get(0),$("#table_transfer_record").get(0),$("a[href=\"#tab_transfer_record\"]").get(0));
     ko.applyBindings(itemList,$("#content_wrap").get(0));
 
 })

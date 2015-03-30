@@ -60,7 +60,7 @@ object User extends AbstractObject{
     val ret = super.create(in_encrypt_pw)
 
     //create Location object
-    Location.createUserLocation((ret\User.KW_ID).as[JsString].value,(ret\"display_name").as[JsString].value)
+    Location.createUserLocation((ret\User.KW_ID\"$oid").as[JsString].value,(ret\"display_name").as[JsString].value)
 
     ret
   }

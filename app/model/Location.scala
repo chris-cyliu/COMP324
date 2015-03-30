@@ -17,14 +17,19 @@ object Location extends AbstractObject{
   //Can be user , unit, devision
   val KW_TYPE = "type"
 
+  val KW_DESCRIPTION = "description"
+
   val KW_PIC = "pic"
 
   def createUserLocation(user_id:String ,user_name:String): Unit ={
-    Json.obj(
+    val json_location = Json.obj(
       KW_NAME -> user_name,
       KW_TYPE -> "user",
-      KW_PIC -> JsArray(JsString(user_id)::Nil)
+      KW_PIC -> JsArray(JsString(user_id)::Nil),
+      KW_DESCRIPTION ->""
     )
+
+    this.create(json_location)
   }
 
 }

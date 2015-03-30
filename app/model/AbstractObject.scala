@@ -1,7 +1,8 @@
 package model
 
+import java.util.{TimeZone, Calendar}
+
 import error.MongodbException
-import model.Feature._
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoPlugin
@@ -9,7 +10,7 @@ import play.modules.reactivemongo.json.BSONFormats
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
-import reactivemongo.api.{DefaultDB, QueryOpts}
+import reactivemongo.api.{QueryOpts}
 import reactivemongo.bson.{BSONObjectID, BSONDateTime}
 import reactivemongo.core.commands.Count
 
@@ -39,11 +40,11 @@ abstract class AbstractObject {
 
     val in = temp.as[JsObject]
     //set time
-    var save_object = in + (KW_UPDATED -> BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis())))
+    var save_object = in + (KW_UPDATED -> BSONFormats.toJSON(BSONDateTime(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis())))
 
     save_object \ KW_ID match {
       case _:JsUndefined =>
-        save_object = save_object + (KW_CREATED -> BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis())))+(KW_ID->BSONFormats.toJSON(BSONObjectID.generate))
+        save_object = save_object + (KW_CREATED -> BSONFormats.toJSON(BSONDateTime(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis())))+(KW_ID->BSONFormats.toJSON(BSONObjectID.generate))
     }
 
     val err = Await.result(collection.insert(save_object),MAX_WAIT)
@@ -86,17 +87,21 @@ abstract class AbstractObject {
     var nUpdate = update.as[JsObject]
 
     //update "UPDATED" timestamp
-    nUpdate = nUpdate + (KW_UPDATED , BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis())))
+    nUpdate = nUpdate + (KW_UPDATED , BSONFormats.toJSON(BSONDateTime(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis())))
     Await.result(collection.update(id_obj, Json.obj("$set"->nUpdate)),MAX_WAIT)
   }
 
   def get(id:String):JsValue = {
-    this.list(1,1)(Json.obj(KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(id).get)))(0)
+    this.list(0,1)(Json.obj(KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(id).get)))(0)
   }
 
   //List action
   def list(offset:Int, item_per_page:Int)(implicit query:JsValue = Json.obj()):Seq[JsObject] = {
     Await.result(collection.find(query).options(QueryOpts(offset,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT)
+  }
+
+  def list(offset:Int, item_per_page:Int,query:JsValue,projection:JsValue):Seq[JsObject] = {
+    Await.result(collection.find(query,projection).options(QueryOpts(offset,item_per_page)).cursor[JsObject].collect[List](item_per_page),MAX_WAIT)
   }
 
   /**
@@ -109,7 +114,7 @@ abstract class AbstractObject {
     val id_obj = Json.obj("_id"->BSONFormats.toJSON(BSONObjectID.parse(id).get))
 
     //update "UPDATED" timestamp
-    val nUpdate = Json.obj("$set"-> Json.obj(KW_UPDATED-> BSONFormats.toJSON(BSONDateTime(System.currentTimeMillis()))))
+    val nUpdate = Json.obj("$set"-> Json.obj(KW_UPDATED-> BSONFormats.toJSON(BSONDateTime(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()))))
     Await.result(collection.update(id_obj,nUpdate ++ update.as[JsObject]),MAX_WAIT)
   }
 
@@ -145,5 +150,24 @@ abstract class AbstractObject {
     }else{
       //TODO: Exist ?
     }
+  }
+
+  /**
+   * Function to get list of object by id
+   * @param id
+   * @return
+   */
+  def getListByIds(id:Seq[String]) = {
+    val list_id_obj = id.map({
+      x =>
+        Json.obj(
+          KW_ID -> BSONFormats.toJSON(BSONObjectID.parse(x).get)
+        )
+    })
+    val selector = Json.obj(
+      "$or"->JsArray(list_id_obj)
+    )
+
+    this.list(0,Int.MaxValue)(selector)
   }
 }

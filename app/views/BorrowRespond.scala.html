@@ -1,6 +1,6 @@
-@(transfer_record_json:String)
+@(borrow_record_json:String)
 <div id="wrapper_receive_item">
-    <h2>Receive item</h2>
+    <h2>Respond to borrow request</h2>
     <ul class="list-group">
         <li class="list-group-item">From location:<span data-bind="text:from"></span></li>
         <li class="list-group-item">To location:<span data-bind="text:to"></span></li>
@@ -9,23 +9,42 @@
         <thead>
             <tr>
                 <th>Item name</th>
-                <th>Serial number</th>
+                <th>Qty</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
     <div class="row" style="display :none ;" id="div_pending_control">
-        <div class="col-md-6 centered"><button data-bind="click:requestApprove" class="btn btn-success">Received</button></div>
+        <div class="col-md-6 centered"><button data-bind="click:requestApprove" class="btn btn-success">Approve</button></div>
         <div class="col-md-6 centered"><button data-bind="click:requestReject" class="btn btn-danger">Denied</button></div>
     </div>
     <div class="row" style="display :none ;" id="div_notice">
-        <h4>The request has beeen processed</h4>
+        <h4>Item have already receiveed</h4>
     </div>
+
+    <div class="row" id="div_respond_list" style="display :none ;">
+    <div class="col-md-12">
+        <h3>Borrow Out Item List</h3>
+        <table class="table" id="respondItem">
+            <thead>
+                <tr>
+                    <td>Item Name</td>
+                    <td>Serial</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="pull-right">
+            <button data-bind="click:requestConfirm" class="btn btn-success">Confirm</button>
+        </div>
+    </div>
+</div>
 </div>
 
 <script type="text/javascript">
-    var data = @Html(transfer_record_json);
+    var data = @Html(borrow_record_json);
     switch(data.status){
         case "pending":
             $("#div_pending_control").show();
@@ -35,11 +54,13 @@
             break;
     }
     $(function(){
-        ko.applyBindings(new ReceiveItemModel(data,
+        ko.applyBindings(new BorrowRespondModel(data,
             $("#table_receive_item" ).get(0),
             $("#div_pending_control").get(0),
-            $("#div_notice").get(0)),
-        $("#wrapper_receive_item" ).get(0))
+            $("#div_notice").get(0),
+            $("#respondItem").get(0),
+            $("#div_respond_list").get(0))
+        ,$("#wrapper_receive_item" ).get(0))
     })
 </script>
 
