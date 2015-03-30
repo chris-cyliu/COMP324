@@ -1,0 +1,43 @@
+<div id="request_item_wrapper">
+    <h2>Borrow Request</h2>
+
+    <div class="form-group">
+        <label for="location">Request item from location:</label>
+        <input type="hidden" id="select_from_location">
+    </div>
+    <div class="form-group">
+        <label for="location">Request item to location:</label>
+        <input type="hidden" id="select_to_location">
+    </div>
+
+    <table class="table" id="table_main">
+        <thead>
+            <tr>
+                <th>Request items</th>
+                <th>Qty</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+    <div class="row">
+        <div class="col-md-4"><input  type="hidden" id="select_item"></div>
+        <div class="col-md-4"><input class="form-control" type="text" name="name" value="1" data-bind="value:input_qty" size="25" value="1"/></div>
+        <div class="col-md-4"><button class="btn btn-default" data-bind="click:handle_btn_add_new">Add Request Item</button></div>
+    </div>
+    <p align="right"><input class="btn btn-success" data-bind="click:requestAddBorrow" type="button" value="Confirm" ></p>
+
+</div>
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new BorrowPageModel(
+            $("#select_from_location").get(0),
+            $("#select_to_location").get(0),
+            $("#select_item").get(0),
+            $("#table_main").get(0)
+        ),$("#request_item_wrapper" ).get(0));
+    })
+</script>

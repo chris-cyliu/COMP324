@@ -1,120 +1,123 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style.css" />
-<title>Inventory Management System</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <title>Inventory Management System</title>
 </head>
 <body>
 
 <div id="wrap">
 
-<div id="header">
-	<div id="logo">
-		<h1><a href="#">Inventory Management System</a></h1>
-	</div>
-	<div id="menu">
-	
-		<ul>
+    <div id="header">
+        <div id="logo">
+            <h1><a href="#">Inventory Management System</a></h1>
+        </div>
+        <div id="menu">
 
-			<li><a href="home.html">Home</a></li>
-			<li><a href="Administration.html">User Management</a></li>
-			<li><a href="#">User Info.</a></li>
-			<li class="active"><a href="Inventory.html">Inventory</a></li>
-			<li><a href="#">Logout </a></li>
-		</ul>
-	</div>
-</div>
+            <ul>
 
-<div id="contentwrap">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="ManageUser.html">User Management</a></li>
+                <li><a href="#">User Info.</a></li>
+                <li class="active"><a href="Inventory.html">Inventory</a></li>
+                <li><a href="#">Logout </a></li>
+            </ul>
+        </div>
+    </div>
 
-<div id="content">
+    <div id="contentwrap">
 
-<h2>Movement Record</h2>
+        <div id="content">
 
-<p>Please enter the correct information for your searching below:</p>
+            <h2>Movement Record</h2>
 
-<form action="" id="form2">
+            <p>Please enter the correct information for your searching below:</p>
 
-<b>History From:</b><br>
-<input type="date" name="bday" min="2010-01-01"><br><br>
-<b>History To:</b><br>
-<input type="date" name="bday" max="2015-03-01"><br><br>
+            <form action="" id="form2">
 
-<b>Equipment Type:</b>
-<p><select>
-  <option value="">Please Choose an Equipment Type</option>
-  <option value="weapon">Weapons</option>
-  <option value="lighting">Lighting Equipment</option>
-   <option value="rescue">Rescue Equipment</option>
-</select></p>
+                <b>History From:</b><br>
+                <input type="date" name="bday" min="2010-01-01"><br><br>
+                <b>History To:</b><br>
+                <input type="date" name="bday" max="2015-03-01"><br><br>
 
-<b>Equipment Name:</b>
-<p><select>
-  <option value="">Please Choose an Equipment Name</option>
-  <option value="lb">Lifebuoy</option>
-  <option value="lj">Life Jacket</option>
-</select></p>
+                <b>Equipment Type:</b>
 
-<b>Serial No.:</b>
-<p><select>
-  <option value="">Please Choose a Serial Number</option>
-  <option value="lb">S0018</option>
-  <option value="lj">S0019</option>
-</select></p>
-<input type="submit" value="Submit" >
-</form>
-<p>
+                <p><select>
+                    <option value="">Please Choose an Equipment Type</option>
+                    <option value="weapon">Weapons</option>
+                    <option value="lighting">Lighting Equipment</option>
+                    <option value="rescue">Rescue Equipment</option>
+                </select></p>
 
-<h2>History:</h2>
-	<table>
-  <tr>
-	<th>Purchase Date</th>
-    <th>Borrow Date</th>
-    <th>Inventory Location</th>
-	<th>Equipment Type</th>
-	<th>Equipment Name</th>
-	<th>Serial No.</th>
-  </tr>
-  <tr>
-    <td>28-02-2008</td>
-    <td>10-04-2008</td>
-	<td>Marine East Division</td>
-	<td>Lighting Equipment</td>
-	<td>Small Electric Torch</td>
-	<td>S0018</td>
-  </tr>
-  <tr>
-    <td>28-02-2008</td>
-    <td>16-07-2008</td>
-	<td>Marine West Division</td>
-	<td>Lighting Equipment</td>
-	<td>Small Electric Torch</td>
-	<td>S0018</td>
-  </tr>
-</table>
-</p>
-</div>
+                <b>Equipment Name:</b>
 
-<div id="sidebar">
-<h3>Inventory</h3>
-<ul>
-<li><a href="ManageCategory.html">Manage Category </a></li>
-<li><a href="ManageItem.html">Manage Item </a></li>
-<li><a href="ManageLocation.html">Manage Location </a></li>
-<li><a href="AssignLocation.html">Assign Location </a></li>
-<li><a href="InventoryCheck.html">Inventory Check</a></li>
-<li><a href="EditInventory.html">Edit Inventory Information</a></li>
-<li><a href="MovementRecord.html">Movement Record</a></li>
-<li><a href="InventoryList.html">Generate Inventory List</a></li>
-</ul>
+                <p><select>
+                    <option value="">Please Choose an Equipment Name</option>
+                    <option value="lb">Lifebuoy</option>
+                    <option value="lj">Life Jacket</option>
+                </select></p>
 
-</div>
+                <b>Serial No.:</b>
 
-<div style="clear: both;"> </div>
+                <p><select>
+                    <option value="">Please Choose a Serial Number</option>
+                    <option value="lb">S0018</option>
+                    <option value="lj">S0019</option>
+                </select></p>
+                <input type="submit" value="Submit">
+            </form>
+            <p>
 
-</div>
+            <h2>History:</h2>
+            <table>
+                <tr>
+                    <th>Purchase Date</th>
+                    <th>Borrow Date</th>
+                    <th>Inventory Location</th>
+                    <th>Equipment Type</th>
+                    <th>Equipment Name</th>
+                    <th>Serial No.</th>
+                </tr>
+                <tr>
+                    <td>28-02-2008</td>
+                    <td>10-04-2008</td>
+                    <td>Marine East Division</td>
+                    <td>Lighting Equipment</td>
+                    <td>Small Electric Torch</td>
+                    <td>S0018</td>
+                </tr>
+                <tr>
+                    <td>28-02-2008</td>
+                    <td>16-07-2008</td>
+                    <td>Marine West Division</td>
+                    <td>Lighting Equipment</td>
+                    <td>Small Electric Torch</td>
+                    <td>S0018</td>
+                </tr>
+            </table>
+            </p>
+        </div>
+
+        <div id="sidebar">
+            <h3>Inventory</h3>
+            <ul>
+                <li><a href="ManageCategory.html">Manage Category </a></li>
+                <li><a href="ManageItem.html">Manage Item </a></li>
+                <li><a href="ManageLocation.html">Manage Location </a></li>
+                <li><a href="AssignLocation.html">Assign Location </a></li>
+                <li><a href="InventoryCheck.html">Inventory Check</a></li>
+                <li><a href="EditInventory.html">Edit Inventory Information</a></li>
+                <li><a href="MovementRecord.html">Movement Record</a></li>
+                <li><a href="InventoryList.html">Generate Inventory List</a></li>
+            </ul>
+
+        </div>
+
+        <div style="clear: both;"></div>
+
+    </div>
 
 </div>
 

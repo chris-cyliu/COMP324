@@ -13,10 +13,10 @@ package model
 object Message extends AbstractObject{
   override val collection_name: String = "message"
 
-
   val KW_FROM = "from"
   val KW_TO = "to"
   val KW_MSG = "msg"
+  val KW_TITLE = "title"
   val KW_STATUS = "status"
   val KW_STATUS_READ = "READ"
   val KW_STATUS_UNREAD = "UNREAD"

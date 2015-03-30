@@ -12,7 +12,7 @@ object Util {
 
   val homePagePath = basePath
 
-  val loginPath = basePath + "/assets/html/login.html"
+  val loginPath = basePath
 
   def getRedirectJsObj(path:String):JsObject={
     Json.obj("redirect"->path)

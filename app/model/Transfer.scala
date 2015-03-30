@@ -1,13 +1,18 @@
 package model
 
+import java.util.{Calendar, TimeZone}
+
 import common.Util
 import play.api.libs.json._
+import play.modules.reactivemongo.json.BSONFormats
+import reactivemongo.bson.BSONDateTime
 
 /**
  * Transfer log
  * {
  *    from: location_id
  *    to: location_id
+ *    type : // may be "assign" / "borrow"
  *    items:{
  *      item_id:
  *      serial:
@@ -36,30 +41,34 @@ object Transfer extends AbstractObject {
 
   val KW_DENIED = "denied"
 
-  def transfer(from_location_id:Option[String], to_location_id:String, item_id:String, serial:String,status:String) = {
-    val data = Json.obj(
-      KW_FROM -> (from_location_id match{
-        case Some(e) =>
-          JsString(e)
-        case None =>
-          JsNull
-      }),
-      KW_TO -> JsString(to_location_id),
-      KW_ITEMS -> JsArray(
-        Json.obj(
-          KW_ITEMS_ID -> item_id,
-          KW_ITEMS_SERIAL -> serial
-        )::Nil
-      ),
-      KW_STATUS ->status
-    )
+  val KW_TYPE = "type"
 
-    val location_obj = Location.get(to_location_id)
+  val KW_TIMESTAMP = "timestamp"
+
+  def assignItem(to_location_id:String, item_id_serial_seq:Seq[(String,String)]): Unit ={
+    val items_json = item_id_serial_seq.map({x=>
+      Json.obj(
+        KW_ITEMS_ID -> x._1,
+        KW_ITEMS_SERIAL -> x._2
+      )
+    })
+    val transfer = Json.obj(
+      KW_TO -> to_location_id,
+      KW_ITEMS -> JsArray(items_json),
+      KW_STATUS -> KW_APPROVED
+    )
+    this.create(transfer)
+  }
+
+  override def create(transfer_json:JsValue) = {
+
+    val location_obj = Location.get((transfer_json \ KW_TO).as[JsString].value)
     val to_user_ids = (location_obj \ Location.KW_PIC).as[JsArray].value.map(_.as[JsString].value)
 
     //Create transfer record
-    val ret_transfer_obj = this.create(data)
-    val ret_transfer_obj_id = (ret_transfer_obj \ KW_ID).as[JsString].value
+    val temp = transfer_json.as[JsObject] + (KW_TIMESTAMP -> BSONFormats.toJSON(BSONDateTime(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis())))
+    val ret_transfer_obj = super.create(temp)
+    val ret_transfer_obj_id = (ret_transfer_obj \ KW_ID \"$oid").as[JsString].value
 
     //get common link and attach in message
     val base_url = common.Util.basePath
@@ -69,10 +78,12 @@ object Transfer extends AbstractObject {
       Message.create(Json.obj(
         Message.KW_FROM -> JsNull,
         Message.KW_TO -> JsString(user_id) ,
+        Message.KW_TITLE -> "Transfer request",
         Message.KW_MSG -> JsString("A new transfer is issued. Please refer to the link: <a href=\""+transfer_url+"\">"+transfer_url+"</a>")
       ))
     })
 
+    ret_transfer_obj
   }
 
   /**
@@ -85,22 +96,59 @@ object Transfer extends AbstractObject {
     val transfer:JsValue = this.get(id)
 
     //update status
-    this.update(id ,Util.Mongo.setField(KW_STATUS,KW_APPROVED))
+    this.update(id ,Json.obj(KW_STATUS->KW_APPROVED))
 
+    //get turple of item id an serial
     val item_ids_serial = (transfer \ Transfer.KW_ITEMS).as[JsArray].value.map(
       x=>
-        (((x \ KW_ITEMS) \KW_ITEMS_ID).as[JsString].value,
-          ((x \ KW_ITEMS) \KW_ITEMS_SERIAL).as[JsString].value
+        (
+          (x \ KW_ITEMS_ID).as[JsString].value,
+          (x \ KW_ITEMS_SERIAL).as[JsString].value
         )
     )
+
     val location_id = (transfer \ Transfer.KW_TO).as[JsString].value
-    item_ids_serial.foreach({
+    val transfer_type = (transfer \ KW_TYPE).as[JsString].value
+
+    val new_serial = item_ids_serial.foreach({
       a =>
-        Item.update(a._1 , Util.Mongo.setField(KW_ITEMS+"."+a._2,location_id))
+        //get item node
+        val item_obj = Item.get(a._1).as[JsObject]
+
+        //search serial and update the location accourding transfer type
+        val serial = (item_obj \ "serial").as[JsArray].value.map({x=>
+          (x \ "serial").as[JsString].value match{
+            case a._2 =>
+              transfer_type match {
+                case "assign" =>
+                  x.as[JsObject] ++ Json.obj("cur_location"->location_id) ++ Json.obj("own_location"->location_id)
+                case "borrow" =>
+                  x.as[JsObject] ++ Json.obj("cur_location"->location_id)
+              }
+            case _ => x
+          }
+        })
+
+        //update item
+        Item.update((item_obj \"_id"\"$oid").as[JsString].value,Json.obj("serial" -> JsArray(serial)))
+
     })
   }
 
   def deniedTransfer(id:String) = {
-    this.update(id ,Util.Mongo.setField(KW_STATUS,KW_DENIED))
+    this.update(id ,Json.obj(KW_STATUS -> KW_DENIED))
+  }
+
+  def getTransferRecord(item_id:String,serial:String) = {
+    val selector = Json.obj(
+      KW_ITEMS -> Json.obj(
+        "$elemMatch" -> Json.obj(
+          KW_ITEMS_ID -> item_id,
+          KW_ITEMS_SERIAL -> serial
+        )
+      ),
+      KW_STATUS -> KW_APPROVED
+    )
+    this.list(0,Int.MaxValue)(selector)
   }
 }

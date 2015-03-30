@@ -1,0 +1,45 @@
+@(transfer_record_json:String)
+<div id="wrapper_receive_item">
+    <h2>Receive item</h2>
+    <ul class="list-group">
+        <li class="list-group-item">From location:<span data-bind="text:from"></span></li>
+        <li class="list-group-item">To location:<span data-bind="text:to"></span></li>
+    </ul>
+    <table class="table" id="table_receive_item">
+        <thead>
+            <tr>
+                <th>Item name</th>
+                <th>Serial number</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="row" style="display :none ;" id="div_pending_control">
+        <div class="col-md-6 centered"><button data-bind="click:requestApprove" class="btn btn-success">Received</button></div>
+        <div class="col-md-6 centered"><button data-bind="click:requestReject" class="btn btn-danger">Denied</button></div>
+    </div>
+    <div class="row" style="display :none ;" id="div_notice">
+        <h4>The request has beeen processed</h4>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var data = @Html(transfer_record_json);
+    switch(data.status){
+        case "pending":
+            $("#div_pending_control").show();
+            break;
+        default:
+            $("#div_notice").show();
+            break;
+    }
+    $(function(){
+        ko.applyBindings(new ReceiveItemModel(data,
+            $("#table_receive_item" ).get(0),
+            $("#div_pending_control").get(0),
+            $("#div_notice").get(0)),
+        $("#wrapper_receive_item" ).get(0))
+    })
+</script>
+

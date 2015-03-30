@@ -1,5 +1,5 @@
 
-import model.{Page, User}
+import model.{Feature, User}
 import org.specs2.mutable.Specification
 import play.api.{GlobalSettings}
 import play.api.libs.json.{JsArray, Json}
@@ -23,12 +23,12 @@ class UserTestSpec extends Specification {
     "create standard page object" in new WithApplication {
       val json = Json.parse(scala.io.Source.fromFile("resources/StandradPageObj.txt").map(_.toByte).toArray).as[JsArray]
 
-      val collection = Page.collection
+      val collection = Feature.collection
 
       //clean up
       Await.result(collection.remove(Json.obj()),Duration(3000,MILLISECONDS))
 
-      Page.bulkInsert(json)
+      Feature.bulkInsert(json)
     }
   }
 }
