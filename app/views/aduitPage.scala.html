@@ -1,0 +1,49 @@
+<div id="page_page_wrapper">
+    <div class="row" style="margin:20px 0px 20px 0px">
+        <div class="col-md-12"><input type="hidden" id="select_location"></div>
+    </div>
+    <table class="table" id="table_main">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Number of owned item</th>
+                <th>Number of current item</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+        <!-- Modal for delete User -->
+    <div class="modal fade" id="modal_delete" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="del_user_modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <table class="table" id="table_view_serial">
+                    <thead>
+                        <tr>
+                            <th>Serial Number</th>
+                            <th>Current Location</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new AduitPageModel(
+            $("#table_main" ).get(0),
+            $("#select_location" ).get(0),
+            $("#table_view_serial" ).get(0)
+        ),$("#page_page_wrapper").get(0))
+    })
+
+</script>

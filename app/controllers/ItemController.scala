@@ -60,6 +60,9 @@ object ItemController extends ResourceController {
       val data = Item.aduit(location_id)
       Ok(Json.obj(
         "data" -> JsArray(data)
-      )
+      ))
+  }
+  def pageAduit = Action {
+    Ok(views.html.layout("Aduit items",views.html.aduitPage()))
   }
 }

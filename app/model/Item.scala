@@ -24,15 +24,11 @@ import scala.concurrent.Await
  */
 object Item extends AbstractObject{
 
-  val KW_SERIAL = "serial"
-
-  val KW_SERIAL_SERIAL = "serial"
-
-  val KW_SERIAL_CURRENT_LOCATION  = "cur_location"
-
-  val KW_SERIAL_OWN_LOCATION = "own_location"
-
   override val collection_name: String = "item"
+  val KW_SERIAL = "serial"
+  val KW_SERIAL_SERIAL = "serial"
+  val KW_SERIAL_CURRENT_LOCATION  = "cur_location"
+  val KW_SERIAL_OWN_LOCATION = "own_location"
 
   /**
    * Set default location to "System"
@@ -100,11 +96,27 @@ object Item extends AbstractObject{
           KW_SERIAL_CURRENT_LOCATION ->location_id,
           KW_SERIAL_OWN_LOCATION -> location_id
         )
-      )
+      ),
+      "name" -> 1
     )
 
+    val item_list = this.list(0,Int.MaxValue,selector,projection)
+    //cal the total of each item in the item_List
+    item_list.map({
+      item=>
+        val new_item = item.as[JsObject]
+        val count_own_cur = (new_item \ KW_SERIAL).as[JsArray].value.map({
+          x:JsValue =>
+            val is_own = if((x \ KW_SERIAL_OWN_LOCATION).as[JsString].value == location_id) 1 else 0
+            val is_cur = if((x \ KW_SERIAL_CURRENT_LOCATION).as[JsString].value == location_id) 1 else 0
+            (is_own,is_cur)
+        }).reduce({
+          (a,b)=>
+            (a._1+b._1,a._2+b._2)
+        })
+        new_item + ("count_own" -> JsNumber(count_own_cur._1)) + ("count_cur" -> JsNumber(count_own_cur._2))
+    })
 
-    this.list(0,Int.MaxValue,selector,projection)
   }
 
 }

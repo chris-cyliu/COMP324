@@ -32,6 +32,8 @@ POST          /item                                   controllers.ItemController
 GET           /item/getSerial/:id/:location_id        controllers.ItemController.getSerialByIdLocation(id,location_id)
 PUT           /item/*id                               controllers.ItemController.update(id)
 DELETE        /item/*id                               controllers.ItemController.remove(id)
+GET           /item/aduit/page                        controllers.ItemController.pageAduit()
+GET           /item/aduit/:location_id                controllers.ItemController.aduit(location_id)
 
 #Group
 GET           /group/page                             controllers.GroupController.page()
@@ -45,6 +47,7 @@ DELETE        /group/*id                              controllers.GroupControlle
 #location
 GET           /location                               controllers.LocationController.list()
 POST          /location                               controllers.LocationController.create()
+GET           /location/getViewable                   controllers.LocationController.getViewableLocation()
 POST          /location/getByIds                      controllers.LocationController.getByIds()
 PUT           /location/*id                           controllers.LocationController.update(id)
 DELETE        /location/*id                           controllers.LocationController.remove(id)

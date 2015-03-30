@@ -32,4 +32,11 @@ object Location extends AbstractObject{
     this.create(json_location)
   }
 
+  def getViewableLocation(user_id:String) = {
+    val selector = Json.obj(
+      "pic" -> user_id
+    )
+    this.list(0,Int.MaxValue)(selector)
+  }
+
 }

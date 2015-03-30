@@ -1926,3 +1926,80 @@
         }
 
     }
+
+    var AduitPageModel = function(dom_table, dom_select_location, dom_table_serial){
+        var self = this;
+
+        //Cache a list of location
+        this.location_list = null;
+
+        this.table_main = $(dom_table).DataTable({
+            columns:[
+                {data:"name"},
+                {data:"count_own"},
+                {data:"count_cur"}
+            ],
+            "aoColumnDefs":[
+                {"mRender": function (data, type, row) {
+                    return "<a class='a_view_serial'>"+data+"</a>";
+                },
+                    "aTargets":[0]}
+            ],
+            "drawCallback":function(){
+                //$(".a_view_serial").on("click");
+            }
+        })
+
+        this.table_serial = $(dom_table_serial).DataTable({
+            columns:[
+                {data:"serial"},
+                {data:"location_cur"},
+                {data:""}
+            ]
+        })
+
+        this.select_location = dom_select_location;
+        $(dom_select_location).select2({
+            placeholder:"Choose Location",
+            width:"100%",
+            ajax:{
+                url:_base_path+"/location/getViewable",
+                dataType:"json",
+                type:"GET",
+                results:function(data){
+                    var ret = [];
+                    for(var x in data.data){
+                        ret.push({
+                            text: data.data[x].name,
+                            id: data.data[x]._id.$oid
+                        })
+                    }
+                    return {results:ret}
+                }
+            }
+        }).on("change",function(){
+            //reload the item list
+            var location_id = $(self.select_location).select2("val");
+            self.table_main.clear();
+            $.ajax(_base_path+"/item/aduit/"+location_id,{
+                type:"GET",
+                dataType:"json",
+                success:function(data){
+                    self.table_main.rows.add(data.data);
+                    self.table_main.draw();
+                }
+            })
+        });
+
+        //this.handle_btn_view_serial = function(){
+        //    //display a modal
+        //    //clear table
+        //    //add data to table
+        //    //render the table
+        //
+        //    self.$(this)
+        //
+        //}
+
+
+    }
