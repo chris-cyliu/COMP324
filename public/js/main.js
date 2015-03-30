@@ -232,6 +232,40 @@
                     alert_model.error(respone_json["error"])
                 }
             })
+
+            //update group
+            var update_group_json = [];
+            for(var x = 0; x <self.DTgroup.data().length;x++){
+                update_group_json.push({
+                    "userid":self.update_id,
+                    "groupid":self.DTgroup.row(x).data()._id.$oid
+                })
+            }
+            if(update_group_json.length > 0)
+                $.ajax(_base_path+"/group/addMember",{
+                    type :"POST",
+                    dataType:"json",
+                    contentType :"application/json",
+                    data:ko.toJSON(update_group_json)
+                });
+
+            //update feature acl
+            var update_feature_json = [];
+            for(var x = 0; x <self.DTfeature.data().length;x++){
+                update_feature_json.push({
+                    "act_id":self.update_id,
+                    "id":self.DTfeature.row(x).data()._id.$oid,
+                    "type":"user",
+                    "level":1
+                })
+            }
+            if(update_feature_json.length > 0)
+                $.ajax(_base_path+"/feature/addAcl",{
+                    type :"PUT",
+                    dataType:"json",
+                    contentType :"application/json",
+                    data:ko.toJSON(update_feature_json)
+                });
         }
 
         this.editUser = function(id,object){
@@ -742,8 +776,8 @@
             var update_feature_json = [];
             for(var x = 0; x <self.DTfeature.data().length;x++){
                 update_feature_json.push({
-                    "id":self.update_id,
-                    "act_id":self.DTfeature.row(x).data()._id.$oid,
+                    "act_id":self.update_id,
+                    "id":self.DTfeature.row(x).data()._id.$oid,
                     "type":"group",
                     "level":1
                 })
@@ -1725,7 +1759,9 @@
                 dataType :"json",
                 success:function(data){
                     for(var x in data.data){
-                        self.messageList.push(data.data[x]);
+                        var temp = data.data[x];
+                        temp.timestamp = new Date(temp.created.$date).toISOString();
+                        self.messageList.push(temp);
                     }
                 }
             })
@@ -1927,11 +1963,22 @@
 
     }
 
-    var AduitPageModel = function(dom_table, dom_select_location, dom_table_serial){
+    var AduitPageModel = function(dom_table, dom_select_location, dom_table_serial , div_modal){
         var self = this;
+
+        self.item_name = ko.observable();
 
         //Cache a list of location
         this.location_list = null;
+        //init data location
+        $.ajax(_base_path+"/location",{
+            type:"GET",
+            dataType:"json",
+            async:false,
+            success:function(data){
+                self.location_list = data.data
+            }
+        })
 
         this.table_main = $(dom_table).DataTable({
             columns:[
@@ -1946,15 +1993,27 @@
                     "aTargets":[0]}
             ],
             "drawCallback":function(){
-                //$(".a_view_serial").on("click");
+                $(".a_view_serial").on("click",self.handle_btn_view_serial);
             }
         })
 
         this.table_serial = $(dom_table_serial).DataTable({
             columns:[
                 {data:"serial"},
-                {data:"location_cur"},
-                {data:""}
+                {data:"cur_location"},
+                {data:"own_location"}
+            ],
+            "aoColumnDefs":[
+                {"mRender": function (data, type, row) {
+                    //map location id to location name
+                    for(var x in self.location_list){
+                        if(self.location_list[x]._id.$oid == data){
+                            return self.location_list[x].name
+                        }
+                    }
+                    return data;
+                },
+                    "aTargets":[1,2]}
             ]
         })
 
@@ -1991,15 +2050,19 @@
             })
         });
 
-        //this.handle_btn_view_serial = function(){
-        //    //display a modal
-        //    //clear table
-        //    //add data to table
-        //    //render the table
-        //
-        //    self.$(this)
-        //
-        //}
+        this.handle_btn_view_serial = function(){
+            //display a modal
+            //clear table
+            //add data to table
+            //render the table
+            self.table_serial.clear();
+            var serials = self.table_main.row($(this).parents("tr")).data().serial;
+            self.item_name(self.table_main.row($(this).parents("tr")).data().name);
+            self.table_serial.rows.add(serials)
+            self.table_serial.draw();
+            $(div_modal).modal("show");
+
+        }
 
 
     }

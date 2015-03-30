@@ -105,7 +105,7 @@ abstract class ResourceController extends Controller with MongoController {
       array_pair.value.foreach({
         //foreach add to obj
         a:JsValue =>
-          obj.updateAcl((a\"act_id").as[JsString].value,(a\"id").as[JsString].value,(a\"level").as[JsNumber].value.toInt,(a\"type").as[JsString].value)
+          obj.updateAcl((a\"id").as[JsString].value,(a\"act_id").as[JsString].value,(a\"level").as[JsNumber].value.toInt,(a\"type").as[JsString].value)
       })
       Ok(Json.obj(
         "success" -> JsString("")
@@ -125,5 +125,4 @@ abstract class ResourceController extends Controller with MongoController {
         )
       )
   }
-
 }

@@ -1,6 +1,6 @@
 package controllers
 
-import model.{Group, AbstractObject}
+import model.{Session, User, Group, AbstractObject}
 import play.api.libs.json.{JsValue, JsString, JsArray, Json}
 import play.api.mvc.Action
 
@@ -11,7 +11,8 @@ object GroupController extends ResourceController{
   override val obj: AbstractObject = Group
 
   def page = Action {
-    Ok(views.html.layout("User Group Management",views.html.userGroupManagement()))
+    implicit request =>
+      Ok(views.html.layout("User Group Management",views.html.userGroupManagement(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def getGroupByUserid(userid:String) = Action{

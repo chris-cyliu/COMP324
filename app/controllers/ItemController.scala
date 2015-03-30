@@ -1,6 +1,6 @@
 package controllers
 
-import model.{Transfer, Item, AbstractObject}
+import model._
 import play.api.libs.json
 import play.api.libs.json.{JsString, Json, JsArray}
 import play.api.mvc.Action
@@ -12,23 +12,28 @@ object ItemController extends ResourceController {
   override val obj: AbstractObject = Item
 
   def pageBorrowItem = Action {
-    Ok(views.html.layout("Borrow Item",views.html.borrowItem()))
+    implicit request =>
+      Ok(views.html.layout("Borrow Item",views.html.borrowItem(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def pageItemRegistration = Action {
-    Ok(views.html.layout("Item registration",views.html.itemRegistration()))
+    implicit request =>
+       Ok(views.html.layout("Item registration",views.html.itemRegistration(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def pageLocation = Action {
-    Ok(views.html.layout("Manage Location",views.html.locationManagement()))
+    implicit request =>
+      Ok(views.html.layout("Manage Location",views.html.locationManagement(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def itemManage = Action {
-    Ok(views.html.layout("Item Management",views.html.itemManagement()))
+    implicit request =>
+      Ok(views.html.layout("Item Management",views.html.itemManagement(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def pageAssignItem = Action {
-    Ok(views.html.layout("Assign item",views.html.assignItem()))
+    implicit request =>
+      Ok(views.html.layout("Assign item",views.html.assignItem(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def addSerial = Action(parse.json){
@@ -63,6 +68,7 @@ object ItemController extends ResourceController {
       ))
   }
   def pageAduit = Action {
-    Ok(views.html.layout("Aduit items",views.html.aduitPage()))
+    implicit request =>
+      Ok(views.html.layout("Aduit items",views.html.aduitPage(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 }

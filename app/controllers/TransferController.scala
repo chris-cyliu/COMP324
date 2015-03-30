@@ -1,7 +1,7 @@
 package controllers
 
-import model.{Transfer, AbstractObject, Feature}
-import play.api.libs.json.{JsArray, Json}
+import model._
+import play.api.libs.json.{JsString, JsArray, Json}
 import play.api.mvc.Action
 
 /**
@@ -18,8 +18,9 @@ object TransferController extends ResourceController{
   }
 
   def receiveItem(transfer_id:String) = Action{
-    val json_stringify = Json.stringify(Transfer.get(transfer_id))
-    Ok(views.html.layout("Receive Items",views.html.receiveItems(json_stringify)))
+    implicit request =>
+      val json_stringify = Json.stringify(Transfer.get(transfer_id))
+      Ok(views.html.layout("Receive Items",views.html.receiveItems(json_stringify),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
   }
 
   def approve(transfer_id:String) = Action {

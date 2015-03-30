@@ -124,32 +124,27 @@ abstract class AbstractObject {
    * @param _type
    */
   def updateAcl(id:String,act_id:String,level:Int, _type:String) = {
-    //check previous record
-    val query_userid = Json.obj(Feature.KW_ACL -> Json.obj(
-      "$elemMatch"->Json.obj(
-        "id" -> act_id
-      )
-    )
-    )
-    val query_id = Json.obj("_id"->BSONFormats.toJSON(BSONObjectID.parse(id).get))
-    val query = Json.obj("$and" -> JsArray(query_userid::query_id::Nil))
-    var ret = Feature.list(0,Int.MaxValue)(query)
+    val ret = Feature.get(id)
+    var changed = false
+    var new_acl = (ret \ KW_ACL).as[JsArray].value.map({x=>
+      if((x \ ACL.KW_ID).as[JsString].value == act_id){
+        changed = true
+        x.as[JsObject] + (ACL.KW_RIGHT -> JsNumber(level))
+      }
+      else
+        x
+    })
 
-    if(ret.size==0){
-      //new acl to feature
-      val op =
-        Json.obj(
-          "$push"->Json.obj(KW_ACL -> Json.obj(
-            ACL.KW_ID ->act_id,
-            ACL.KW_RIGHT -> level,
-            ACL.KW_TYPE -> _type
-          )
-          )
-        )
-      Await.result(collection.update(query_id,op),MAX_WAIT)
-    }else{
-      //TODO: Exist ?
+    if(!changed){
+      new_acl = new_acl :+ Json.obj(
+        ACL.KW_ID ->act_id,
+        ACL.KW_RIGHT -> level,
+        ACL.KW_TYPE -> _type
+      )
     }
+
+    this.update(id,Json.obj(KW_ACL -> JsArray(new_acl)))
+
   }
 
   /**

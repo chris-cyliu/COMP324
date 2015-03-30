@@ -84,8 +84,9 @@ object Item extends AbstractObject{
     val selector = Json.obj(
       KW_SERIAL -> Json.obj(
         "$elemMatch" -> Json.obj(
-          KW_SERIAL_CURRENT_LOCATION ->location_id,
-          KW_SERIAL_OWN_LOCATION -> location_id
+          "$or" -> JsArray(
+            Json.obj(KW_SERIAL_CURRENT_LOCATION ->location_id)::
+            Json.obj(KW_SERIAL_OWN_LOCATION -> location_id):: Nil)
         )
       )
     )
@@ -93,8 +94,9 @@ object Item extends AbstractObject{
     val projection= Json.obj(
       KW_SERIAL -> Json.obj(
         "$elemMatch" -> Json.obj(
-          KW_SERIAL_CURRENT_LOCATION ->location_id,
-          KW_SERIAL_OWN_LOCATION -> location_id
+          "$or" -> JsArray(
+            Json.obj(KW_SERIAL_CURRENT_LOCATION ->location_id)::
+              Json.obj(KW_SERIAL_OWN_LOCATION -> location_id):: Nil)
         )
       ),
       "name" -> 1

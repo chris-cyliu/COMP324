@@ -60,8 +60,8 @@ import scala.concurrent.Future
     }
 
     def page = Action {
-      request =>
-        Ok(views.html.layout("User Management",views.html.userManagement()))
+      implicit request =>
+        Ok(views.html.layout("User Management",views.html.userManagement(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
     }
 
     /**

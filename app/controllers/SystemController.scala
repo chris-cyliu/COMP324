@@ -1,9 +1,9 @@
 package controllers
 
-import model.{Session}
+import model.{User, Session}
 import common.Util
 import play.api.Play
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 import play.api.mvc.{Action, Controller}
 import play.modules.reactivemongo.MongoController
 import play.api.Play.current
@@ -19,12 +19,12 @@ object SystemController extends Controller with MongoController {
 //  }
 
   def homepage = Action {
-    request =>
+    implicit request =>
       request.session.get(Session.KW_USER_OBJ) match {
         case None =>
           Ok(views.html.login())
         case Some(e) =>
-          Ok(views.html.layout("Homepage",views.html.homepage()))
+          Ok(views.html.layout("Homepage",views.html.homepage(),User.getMenuItem((Json.parse(request.session.get(Session.KW_USER_OBJ).get) \ "_id" \ "$oid").as[JsString].value)))
       }
   }
 }

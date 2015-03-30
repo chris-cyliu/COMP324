@@ -89,4 +89,27 @@ object User extends AbstractObject{
     else
       Some(ret(0))
   }
+
+  def getMenuItem(user_id:String):Set[String] = {
+    //User and Group acl in feature
+    //Get Group id
+    val group_selector = Json.obj(
+      Group.KW_MEMBER -> user_id
+    )
+    val act_id_list = Group.list(0,Int.MaxValue)(group_selector).map({x=>
+      (x \ KW_ID \ "$oid").as[JsString].value
+    }):+user_id
+
+    val acl_act_id_selector = act_id_list.map({x => Json.obj("acl.id"->x)})
+
+    val feature_selector = Json.obj(
+      "$or" -> JsArray(
+        acl_act_id_selector
+      )
+    )
+
+    Feature.list(0,Int.MaxValue)(feature_selector).map({x=>
+      (x \ "name").as[JsString].value
+    }).toSet
+  }
 }
