@@ -1,4 +1,4 @@
-    var _base_path = "http://127.0.0.1:8080"
+    var _base_path = "http://fafaoc.net:8080"
 
     /**
      * Object for render action
