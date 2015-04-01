@@ -1,5 +1,7 @@
 package controllers
 
+import java.io.File
+import java.nio.charset.Charset
 import java.util.UUID
 
 import play.api.libs.json.{JsString, Json}
@@ -29,5 +31,16 @@ object UploadController extends Controller{
         "path" -> JsString(view_path+"/"+filename)
       ))
     }.get
+  }
+
+  def getFile(file:String) = Action{
+    implicit request =>
+      val src = new File(local_location+File.separator+file)
+      if(src.exists()){
+        val buffer = scala.io.Source.fromFile(src)(Charset.forName("ISO-8859-1")).map(_.toByte).toArray
+        Ok(buffer).as("image")
+      }
+      else
+        NotFound
   }
 }

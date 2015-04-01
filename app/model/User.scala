@@ -79,10 +79,16 @@ object User extends AbstractObject{
     //set user passowrd
     val id_obj = Json.obj("_id"->BSONFormats.toJSON(BSONObjectID.parse(id).get))
     var nUpdate = update.as[JsObject]
-    nUpdate = setPassword(
-      update,
-      (update \ KW_PASSWORD).as[JsString].value
-    )
+
+    (update \ KW_PASSWORD).asOpt[JsString] match{
+      case  Some(e) =>
+        nUpdate = setPassword(
+          update,
+          e.value
+        )
+      case None =>
+    }
+
     //update "UPDATED" timestamp
     nUpdate = nUpdate + (KW_UPDATED , BSONFormats.toJSON(BSONDateTime(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis())))
     Await.result(collection.update(id_obj, Json.obj("$set"->nUpdate)),MAX_WAIT)
