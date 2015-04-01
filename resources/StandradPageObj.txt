@@ -1,34 +1,48 @@
 [
     {
-        "title":"User Management",
-        "href":"#",
-        "acl":{},
-        "child":
-            [{
-                "title":"Create User",
-                "acl":{},
-                "href":"/user/create",
-                "child":[]
-            },
-            {
-                "title":"List User",
-                "acl":{},
-                "href":"/user/listpage",
-                "child":[]
-            }
-
-            ]
+        "name":"Manage User",
+        "acl":[],
+        "href":"/user/create",
+        "child":[]
     },
     {
-            "title":"System",
-            "href":"#",
-            "acl":{},
-            "child":
-                [{
-                    "title":"Logout",
-                    "acl":{},
-                    "href":"/user/logout",
-                    "child":[]
-                }]
-        }
+        "name":"Manage Group",
+        "acl":[],
+        "href":"/user/listpage",
+        "child":[]
+    },
+    {
+        "name":"Manage Item",
+        "acl":[],
+        "href":"/user/logout",
+        "child":[]
+    },
+    {
+        "name":"Manage Location",
+        "acl":[],
+        "href":"/user/logout",
+        "child":[]
+    },
+    {
+        "name":"Item registration",
+        "acl":[],
+        "href":"/user/logout",
+        "child":[]
+    },
+    {
+        "name":"Assign item",
+        "acl":[],
+        "href":"/user/logout",
+        "child":[]
+    },
+    {
+        "name":"Borrow item",
+        "href":"#",
+        "acl":[]
+    },
+    {
+        "name":"Report",
+        "href":"#",
+        "acl":[]
+    }
 ]

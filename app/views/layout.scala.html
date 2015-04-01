@@ -1,4 +1,4 @@
-@(title:String, content:Html)
+@(title:String, content:Html , feature:Set[String])
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,97 +10,172 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>@title</title>
+        <title>Inventory management system</title>
 
-            <!-- Bootstrap Core CSS -->
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+        <!-- jQuery -->
+        <script src="/assets/lib/jquery/dist/jquery.min.js"></script>
+
+
+        <!-- Bootstrap Core CSS -->
+        <link href="/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+            <!-- MetisMenu CSS -->
+        <link href="/assets/lib/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
             <!-- Custom CSS -->
-        <link href="/assets/css/heroic-features.css" rel="stylesheet">
+        <link href="/assets/css/sb-admin-2.css" rel="stylesheet">
 
-            <!-- jQuery -->
-        <script src="/assets/js/jquery-1.11.2.min.js"></script>
+        <!- Bootstrap Select2 -->
+        <link href="/assets/lib/select2/select2.css" rel="stylesheet">
 
+            <!-- Custom Fonts -->
+        <link href="/assets/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+        <link href="/assets/lib/datatables/media/css/jquery.dataTables.min.css" type="text/css">
+        <link href="/assets/lib/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css">
             <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
             <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <!--[if lt IE 9]>
+        <script src="/assets/lib/html5shiv/dist/html5shiv.min.js"></script>
+        <script src="/assets/lib/respond/respond/respond.min.js"></script>
     <![endif]-->
 
     </head>
 
     <body>
 
-            <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                    <!-- Brand and toggle get grouped for better mobile display -->
+        <div id="wrapper">
+
+                <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">HKPMIS</a>
+                    <a class="navbar-brand" href="/">Inventory Management System</a>
                 </div>
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav" data-bind="foreach:menu_items">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-bind="attr:{href:href},text:title" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu" data-bind="foreach:child">
-                                <li>
-                                    <a data-bind="attr:{href:href},text:title"></a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <!-- /.navbar-header -->
+
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li class="divider"></li>
+                            <li><a href="/user/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </li>
+                        </ul>
+                            <!-- /.dropdown-user -->
+                    </li>
+                        <!-- /.dropdown -->
+                </ul>
+                    <!-- /.navbar-top-links -->
+
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            @if(feature.contains("Manage User") || feature.contains("Manage Group")){
+                            <li>
+                                <a href="#"><i class="fa fa-user fa-fw"></i> User Management<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    @if(feature.contains("Manage User")){<li>
+                                        <a href="/user/page"><i class="fa fa-child fa-fw"></i>Mange User</a>
+                                    </li>}
+                                    @if(feature.contains("Manage Group")){<li>
+                                        <a href="/group/page"><i class="fa fa-group fa-fw"></i>Manage Group</a>
+                                    </li>}
+                                </ul>
+                                    <!-- /.nav-second-level -->
+                            </li>
+                            }
+                            @if(feature.contains("Manage Item")|| feature.contains("Manage Location") || feature.contains("Item registration")||feature.contains("Assign item")){
+                            <li>
+                                <a href="#"><i class="fa fa-table fa-fw"></i>Inventory management<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    @if(feature.contains("Manage Item")){<li>
+                                    <li>
+                                        <a href="/item/page"><i class="fa fa-cube fa-fw"></i>Manage item</a>
+                                    </li>}
+                                    @if(feature.contains("Manage Location")){<li>
+                                        <a href="/item/location/page"><i class="fa fa-flag fa-fw"></i>Manage location</a>
+                                    </li>}
+                                    @if(feature.contains("Item registration")){<li>
+                                        <a href="/item/register/page"><i class="fa fa-inbox fa-fw"></i>Item registration</a>
+                                    </li>}
+                                    @if(feature.contains("Assign item")){<li>
+                                        <a href="/item/assign/page"><i class="fa fa-cloud-upload fa-fw"></i>Assign item</a>
+                                    </li>}
+
+                                </ul>
+                            </li>
+                            }
+                            @if(feature.contains("Borrow item")){<li>
+                                <a href="/item/borrow/page"><i class="fa fa-arrows-h fa-fw"></i>Borrow item</a>
+                            </li>}
+                            @if(feature.contains("Report")){<li>
+                                <a href="/item/aduit/page"><i class="fa fa-tachometer fa-fw"></i>Report</a>
+                            </li>}
+                        </ul>
+                    </div>
+                        <!-- /.sidebar-collapse -->
                 </div>
-                    <!-- /.navbar-collapse -->
-            </div>
-                <!-- /.container -->
-        </nav>
+                    <!-- /.navbar-static-side -->
+            </nav>
 
-            <!-- Page Content -->
-        <div class="container">
-
-            <!-- Alert Box -->
-            <div class="alert" role="alert" data-bind="visible:alert_visible,css:{'alert-success':alert_status()=='success', 'alert-danger' : alert_status()=='error'},text:alert_message">
-            </div>
-        @content
-
-            <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                <!-- Page Content -->
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Alert -->
+                            <div id="alert_box" class="alert" role="alert" data-bind="text:alert_message , visible:alert_visible , css:{'alert-danger':alert_status()==1 ,'alert-success':alert_status()==0}"></div>
+                            @content
+                        </div>
+                            <!-- /.col-lg-12 -->
+                    </div>
+                        <!-- /.row -->
                 </div>
+                    <!-- /.container-fluid -->
             </div>
-        </footer>
+                <!-- /#page-wrapper -->
 
         </div>
-            <!-- /.container -->
-
+            <!-- /#wrapper -->
 
             <!-- Bootstrap Core JavaScript -->
-        <script src="/assets/js/bootstrap.min.js"></script>
-        <script src="/assets/js/knockout-3.3.0.js"></script>
-        <script src="/assets/js/main.js"></script>
+        <script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
-        <script type="text/javascript">
-            //for menu
-            var menu_model = new MenuViewModel();
-            ko.applyBindings(menu_model,$("nav.navbar").get(0));
-            menu_model.get();
+            <!-- Metis Menu Plugin JavaScript -->
+        <script src="/assets/lib/metisMenu/dist/metisMenu.min.js"></script>
 
-            //for alert
-            var alert_model = new AlertViewModel();
-            ko.applyBindings(alert_model,$("div.alert").get(0));
-        </script>
+            <!-- Custom Theme JavaScript -->
+        <script src="/assets/js/sb-admin-2.js"></script>
+
+        <script src="/assets/js/sb-admin-2.js"></script>
+
+        <script src="/assets/lib/datatables/media/js/jquery.dataTables.min.js"></script>
+        <script src="/assets/lib/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+        <!-- KnockoutJS -->
+        <script src="/assets/lib/knockoutjs/dist/knockout.js"></script>
+
+        <!- Bootstrap Select2 -->
+        <script src="/assets/lib/select2/select2.js"></script>
+
+        <!-- custom js -->
+        <script src ="/assets/js/main.js"></script>
 
     </body>
 
 </html>
 
+<script type="text/javascript">
+    //binding alert
+    var alert_model = new AlertViewModel()
+    ko.applyBindings(alert_model , $("#alert_box" ).get(0));
+
+</script>

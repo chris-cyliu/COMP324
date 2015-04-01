@@ -8,11 +8,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 object Util {
 
-  val basePath = "http://127.0.0.1:8080"
+  val basePath = "http://fafaoc.net:8080"
 
   val homePagePath = basePath
 
-  val loginPath = basePath + "/assets/html/login.html"
+  val loginPath = basePath
 
   def getRedirectJsObj(path:String):JsObject={
     Json.obj("redirect"->path)

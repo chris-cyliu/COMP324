@@ -1,78 +1,58 @@
+<div id="page_page_wrapper" style="margin-top: 20px">
+    <div class="panel panel-default" >
 
-<!-- Jumbotron Header -->
-<header class="jumbotron hero-spacer">
-    <h1>A Warm Welcome!</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
-    <p><a class="btn btn-primary btn-large">Call to action!</a>
-    </p>
-</header>
+        <div class="panel-heading">
+            <i class="icon-file"></i>
+            Public Notice
+        </div> <!-- /widget-header -->
 
-<hr>
+        <div class="panel-body">
 
-<!-- Title -->
-<div class="row">
-    <div class="col-lg-12">
-        <h3>Latest Features</h3>
+            <p>Operations Bureau</p>
+            <p>Comprises the Operations Division, the Counter-Terrorism and Internal Security Division, and the Key Points and Search Division which includes the Police Dog Unit. It deals mainly with the staffing of operational matters which include the formulation and dissemination of relevant Force orders, boundary security, deployment of resources and liaison with the Hong Kong garrison.</p>
+
+            <p>Police Tactical Unit </p>
+            <p>Includes Training, Administration and the Special Duties Unit. Among other things, it reviews regularly tactics used in crowd management and riot control. </p>
+        </div> <!-- /widget-content -->
+
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <i class="icon-file"></i>
+            Personal message
+        </div> <!-- /widget-header -->
+
+        <div class="panel-body">
+            <ul class="chat" data-bind="template:{name:'template_message',foreach:messageList}">
+
+            </ul>
+        </div> <!-- /widget-content -->
+
     </div>
 </div>
-<!-- /.row -->
 
-<!-- Page Features -->
-<div class="row text-center">
-
-    <div class="col-md-3 col-sm-6 hero-feature">
-        <div class="thumbnail">
-            <img src="http://placehold.it/800x500" alt="">
-            <div class="caption">
-                <h3>Feature Label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                <p>
-                    <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                </p>
+<script type="text/html" id="template_message">
+    <li class="left clearfix">
+        <span class="chat-img pull-left">
+            <img src="/assets/images/fff.gif" alt="User Avatar" class="img-circle">
+        </span>
+        <div class="chat-body clearfix">
+            <div class="header">
+                <strong data-bind="text:title" class="primary-font"></strong>
+                <small class="pull-right text-muted">
+                    <i class="fa fa-clock-o fa-fw"></i> <span data-bind="text:timestamp"></span>
+                </small>
             </div>
+            <p data-bind="html:msg"></p>
+
         </div>
-    </div>
+    </li>
+</script>
 
-    <div class="col-md-3 col-sm-6 hero-feature">
-        <div class="thumbnail">
-            <img src="http://placehold.it/800x500" alt="">
-            <div class="caption">
-                <h3>Feature Label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                <p>
-                    <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 col-sm-6 hero-feature">
-        <div class="thumbnail">
-            <img src="http://placehold.it/800x500" alt="">
-            <div class="caption">
-                <h3>Feature Label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                <p>
-                    <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 col-sm-6 hero-feature">
-        <div class="thumbnail">
-            <img src="http://placehold.it/800x500" alt="">
-            <div class="caption">
-                <h3>Feature Label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                <p>
-                    <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-</div>
-<!-- /.row -->
-
-<hr>
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new HomePageModel(),$("#page_page_wrapper").get(0));
+    })
+</script>

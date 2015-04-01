@@ -1,0 +1,38 @@
+<div id="request_item_wrapper">
+    <h2>Assign item</h2>
+
+    <div class="form-group">
+        <label for="location">From Location:</label>
+        <input type="hidden" id="select_from_location">
+    </div>
+    <div class="form-group">
+        <label for="location">To Location:</label>
+        <input type="hidden" id="select_to_location">
+    </div>
+
+    <table class="table" id="table_main">
+        <thead>
+            <tr>
+                <th>Assign items</th>
+                <th>Serial Number</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-4"><input type="hidden" id="select_item"/></div>
+        <div class="col-md-4"><input type="hidden" id="select_serial_num"/></div>
+        <div class="col-md-4"><button class="btn btn-default" data-bind="click:handle_btn_add_new_item">Add item</button></div>
+    </div>
+    <p align="right"><input data-bind="click:requestConfirm" class="btn btn-success" id ='confirm' type="button" value="Confirm" ></p>
+
+</div>
+<script type="text/javascript">
+    $(function(){
+        ko.applyBindings(new AssignItemModel($("#select_from_location" ).get(0),$("#select_to_location" ).get(0),$("#select_item" ).get(0),$("#select_serial_num" ).get(0),$("#table_main").get(0)),$("#request_item_wrapper" ).get(0));
+    })
+
+</script>
