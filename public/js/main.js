@@ -1930,7 +1930,7 @@
                     for (var x = 0; x < self.table_respond.data().length; x++) {
                         var item_obj  = self.table_respond.row(x).data();
                         var item_id = item_obj.item_id;
-                        var serial = $($(".select_serial").get(x)).select2("val");
+                        var serial = $($(".select_serial")[x+1]).select2("val");
                         if(serial!="")
                             items.push({
                                 item_id: item_id,
