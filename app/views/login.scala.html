@@ -1,3 +1,4 @@
+@import play.api.Play
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,6 +84,7 @@
 </html>
 
 <script type="text/javascript">
+var _base_path = "@{Play.current.configuration.getString("base_url")}"
 $(function () {
     ko.applyBindings(new LoginViewModel())
 })

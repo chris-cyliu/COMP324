@@ -102,7 +102,7 @@ object Item extends AbstractObject{
       "name" -> 1
     )
 
-    val item_list = this.list(0,Int.MaxValue,selector,projection)
+    val item_list = this.list(0,Int.MaxValue)(selector)
     //cal the total of each item in the item_List
     item_list.map({
       item=>

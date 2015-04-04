@@ -1,5 +1,3 @@
-    var _base_path = "http://fafaoc.net:8080"
-
     /**
      * Object for render action
      * */
