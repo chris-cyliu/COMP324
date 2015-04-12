@@ -1,14 +1,16 @@
 package common
 
+import play.api.Play
 import play.api.libs.json._
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.Play.current
 
 /**
  * Created by fafa on 20/2/15.
  */
 object Util {
 
-  val basePath = "http://fafaoc.net:8080"
+  lazy val basePath = Play.configuration.getString("base_url").get
 
   val homePagePath = basePath
 

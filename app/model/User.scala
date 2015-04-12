@@ -26,7 +26,7 @@ object User extends AbstractObject{
   val KW_USERNAME = "username"
   val KW_PASSWORD = "pw"
   val KW_GROUP = "group"
-
+  val KW_DISPLAYNAME = "display_name"
   val collection_name = "user"
 
   def getUserName(in:JsObject):String = {
