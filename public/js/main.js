@@ -1,5 +1,3 @@
-    var _base_path = "http://127.0.0.1:8080"
-
     /**
      * Object for render action
      * */
@@ -23,6 +21,7 @@
     var select2_init = function(select_dom , dt_obj ,select_ajax_path){
         return $(select_dom).select2({
             width:"100%",
+            //placeholder:placeholder,
             ajax:{
                 url:select_ajax_path,
                 type:"get",
@@ -577,6 +576,7 @@
         //init select2
         this.select_item = $(dom_select_item).select2({
             width:"100%",
+            placeholder:"Select item ...",
             ajax:{
                 url:_base_path+"/item",
                 type:"get",
@@ -597,6 +597,7 @@
         this.select_item = dom_select_item;
 
         this.select_location = $(dom_select_location).select2({
+            placeholder:"Select location ...",
             width:"100%",
             ajax:{
                 url:_base_path+"/location",
@@ -1515,6 +1516,7 @@
             ajax:{
                 url:_base_path+"/location",
                 type:"get",
+                placeholder:"Select location",
                 dataType: 'json',
                 results:function(data){
                     var ret = [];
@@ -1574,6 +1576,7 @@
 
         self.select_assgin_item =  $(select_assgin_item_DOM).select2({
             width:"100%",
+            placeholder:"Select item ...",
             ajax:{
                 url:_base_path+"/item",
                 type:"get",
@@ -1595,6 +1598,7 @@
         $(self.select_assgin_item).on("change",self.renewSelectSerial)
 
         self.select_assgin_item_serial =  $(select_assign_item_serial_DOM).select2({
+            placeholder:"Select serial number ...",
             width:"100%",
             data:[]
         });
@@ -1670,6 +1674,7 @@
         self.select_to = init_location(dom_select_to);
         self.select_item = dom_select_item;
         $(dom_select_item).select2({
+            placeholder:"Select Item ...",
             width:"100%",
             ajax: {
                 url: _base_path + "/item",
@@ -1932,7 +1937,7 @@
                     for (var x = 0; x < self.table_respond.data().length; x++) {
                         var item_obj  = self.table_respond.row(x).data();
                         var item_id = item_obj.item_id;
-                        var serial = $($(".select_serial").get(x)).select2("val");
+                        var serial = $($(".select_serial")[x+1]).select2("val");
                         if(serial!="")
                             items.push({
                                 item_id: item_id,
@@ -2019,7 +2024,7 @@
 
         this.select_location = dom_select_location;
         $(dom_select_location).select2({
-            placeholder:"Choose Location",
+            placeholder:"Choose Location ...",
             width:"100%",
             ajax:{
                 url:_base_path+"/location/getViewable",

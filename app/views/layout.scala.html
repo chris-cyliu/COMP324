@@ -1,4 +1,5 @@
 @(title:String, content:Html , feature:Set[String])
+@import play.api.Play
 <!DOCTYPE html>
 <html lang="en">
 
@@ -175,7 +176,19 @@
 
 <script type="text/javascript">
     //binding alert
+    var _base_path = "@{Play.current.configuration.getString("base_url")}"
     var alert_model = new AlertViewModel()
     ko.applyBindings(alert_model , $("#alert_box" ).get(0));
+
+    var location_type = [
+    {
+        id:"divison",
+        text:"divison"
+    },
+    {
+        id:"subunit",
+        text:"subunit"
+    }
+    ]
 
 </script>

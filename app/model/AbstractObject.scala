@@ -165,4 +165,17 @@ abstract class AbstractObject {
 
     this.list(0,Int.MaxValue)(selector)
   }
+
+  /**
+   * check exist items or not
+   * @return
+   */
+  def exist():Boolean = {
+    if(this.list(0,1)(Json.obj()).size == 0){
+      return false
+    }else {
+      return true
+    }
+  }
+
 }

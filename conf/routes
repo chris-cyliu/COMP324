@@ -84,4 +84,5 @@ POST          /upload                                 controllers.UploadControll
 GET           /message                                controllers.MessageController.getMessage()
 
 # Map static resources from the /public folder to the /assets URL path
+GET           /assets/upload/*file                    controllers.UploadController.getFile(file)
 GET           /assets/*file                           controllers.Assets.at(path="/public", file)
