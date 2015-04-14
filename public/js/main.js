@@ -576,8 +576,8 @@
         //init select2
         this.select_item = $(dom_select_item).select2({
             width:"100%",
+            placeholder:"Select item ...",
             ajax:{
-                placeholder:"Select Item ...",
                 url:_base_path+"/item",
                 type:"get",
                 dataType: 'json',
@@ -1576,11 +1576,11 @@
 
         self.select_assgin_item =  $(select_assgin_item_DOM).select2({
             width:"100%",
+            placeholder:"Select item ...",
             ajax:{
                 url:_base_path+"/item",
                 type:"get",
                 dataType: 'json',
-                placholder:"Select item ...",
                 results:function(data){
                     var ret = [];
                     for(var x in data.data){
